@@ -1,9 +1,0 @@
-{
-  "makefile.extensionOutputFolder": "./.vscode",
-  "phpunit.command": "docker compose exec web",
-  "phpunit.phpunit": "vendor/bin/phpunit",
-  "phpunit.paths": {
-    "/backend": "work/backend",
-    "${workspaceFolder}": "/"
-  }
-}

@@ -1,5 +1,6 @@
 version: "3.8"
 volumes:
+  php-fpm-socket:
   db-store:
     driver: local
     driver_opts:
@@ -12,23 +13,36 @@ volumes:
       type: none
       device: $PWD/infra/redis
       o: bind
+  psysh-store:
+
 
 networks:
   backend-net:
     driver: bridge
-  # frontend-net:
-  #   driver: bridge
+  frontend-net:
+    driver: bridge
 
 services:
-  web:
+  app:
     build:
       context: .
       dockerfile: ./infra/docker/backend/php/Dockerfile
-    ports:
-      - ${WEB_PORT:-8080}:80
     volumes:
-      - ./backend:/work/backend
+      - type: volume
+        source: php-fpm-socket
+        target: /var/run/php-fpm
+        volume:
+          nocopy: true
+      - type: bind
+        source: ./backend
+        target: /work/backend
+      - type: volume
+        source: psysh-store
+        target: /root/.config/psysh
+        volume:
+          nocopy: true
     environment:
+      # - DB_CONNECTION=mysql
       - DB_HOST=${DB_HOST:-db}
       - DB_PORT=${DB_PORT:-3306}
       - DB_DATABASE=${DB_DATABASE:-laravel_local}
@@ -41,6 +55,31 @@ services:
     networks:
       - backend-net
     depends_on:
+      - web
+      - db
+      - redis
+
+  web:
+    build:
+      context: .
+      dockerfile: ./infra/docker/backend/nginx/Dockerfile
+    ports:
+      - target: 80
+        published: ${WEB_PORT:-80}
+        protocol: tcp
+        mode: host
+    volumes:
+      - type: volume
+        source: php-fpm-socket
+        target: /var/run/php-fpm
+        volume:
+          nocopy: true
+      - type: bind
+        source: ./backend
+        target: /work/backend
+    networks:
+      - backend-net
+    depends_on:
       - db
       - redis
 
@@ -49,10 +88,17 @@ services:
       context: .
       dockerfile: ./infra/docker/backend/mysql/Dockerfile
     ports:
-      - ${DB_PORT:-3306}:3306
+      - target: 3306
+        published: ${DB_PORT:-3306}
+        protocol: tcp
+        mode: host
     volumes:
       - ./infra/docker/backend/mysql/initdb.d:/docker-entrypoint-initdb.d
-      - db-store:/var/lib/mysql
+      - type: volume
+        source: db-store
+        target: /var/lib/mysql
+        volume:
+          nocopy: true
     environment:
       - MYSQL_DATABASE=${DB_DATABASE:-laravel_local}
       - MYSQL_USER=${DB_USERNAME:-phper}
@@ -123,19 +169,19 @@ services:
   #     - frontend-net
 
   # create-react-appを使用する場合
-  # client:
-  #   build:
-  #     context: .
-  #     dockerfile: ./infra/docker/frontend/node/Dockerfile
-  #   ports:
-  #     - ${CLIENT_PORT:-3001}:3001
-  #   volumes:
-  #     - ./frontend:/work/frontend
-  #   environment:
-  #     - USER_NAME=${UNAME}
-  #     - USER_ID=${UID}
-  #     - GROUP_NAME=${GNAME}
-  #     - GROUP_ID=${GID}
-  #   tty: true
-  #   networks:
-  #     - frontend-net
+  client:
+    build:
+      context: .
+      dockerfile: ./infra/docker/frontend/node/Dockerfile
+    ports:
+      - ${CLIENT_PORT:-3000}:3000
+    volumes:
+      - ./frontend:/work/frontend
+    environment:
+      - USER_NAME=${UNAME}
+      - USER_ID=${UID}
+      - GROUP_NAME=${GNAME}
+      - GROUP_ID=${GID}
+    tty: true
+    networks:
+      - frontend-net

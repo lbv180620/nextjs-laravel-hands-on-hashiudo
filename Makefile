@@ -124,7 +124,7 @@ launch:
 	@make up
 	@make $(db)-set
 	@make useradd
-# @make useradd-client
+	@make useradd-client
 	@make laravel-install
 	@make laravel-env
 	@make laravel-set
@@ -177,7 +177,7 @@ chinfra:
 
 chmk:
 	cp env/configs/wsl/Makefile Makefile
-	
+
 
 # **** Laravelの設定 ****
 
@@ -206,8 +206,8 @@ file-set:
 	touch sqls/sql/query.sql sqls/script/set-query.sh
 	mkdir -p .vscode && cp env/docs/{launch.json,settings.json} .vscode
 	cp env/docs/docker-compose.env .env
-	mkdir -p backend
-# mkdir -p backend frontend
+# mkdir -p backend
+	mkdir -p backend frontend
 
 # phpMyAdmin
 publish-phpmyadmin:
@@ -500,7 +500,7 @@ stop-app:
 web:
 	docker compose exec web bash
 web-sh:
-	docker compose exec web sh	
+	docker compose exec web sh
 web-usr:
 	docker compose exec -u $(USER) web bash
 stop-web:
@@ -576,11 +576,11 @@ laravel-v:
 # artisanコマンドの一覧
 art-l:
 	docker compose exec $(ctr) php artisan list
-	
+
 # 例外の作成
 #^ app/Exceptions配下にファイルが生成される
 mkexcep:
-	docker compose exec $(ctr) php artisan make:exception $(excep)	
+	docker compose exec $(ctr) php artisan make:exception $(excep)
 
 
 # **** Migration関連 ****
@@ -1368,7 +1368,7 @@ pcbf:
 # 静的解析
 analyse:
 	docker compose exec $(ctr) ./vendor/bin/phpstan analyse --memory-limit=2G
-	
+
 
 # ==== Composerコマンド群 ====
 
@@ -1525,7 +1525,7 @@ yarn-ci-v2:
 	docker compose exec web yarn install --immutable --immutable-cache --check-cache
 
 yarn-dev:
-	docker compose exec web yarn dev
+	docker compose exec client yarn dev
 
 yarn-watch:
 	docker compose exec web yarn watch
@@ -2349,7 +2349,7 @@ comp-add-D-phpsatn:
 comp-add-D-larasatn:
 	docker compose exec $(ctr) composer require nunomaduro/larastan$(v) --dev
 
-	
+
 # **** Mockery ****
 
 # https://docs.mockery.io/en/latest/
@@ -3418,7 +3418,7 @@ yarn-add-D-gulp:
 
 mkgulp:
 	cp env/gulpfile.js backend/
-	
+
 
 # ===== webpack関連 =====
 
@@ -4308,7 +4308,7 @@ yarn-add-D-react-tag-input:
 
 yarn-add-D-toastify:
 	docker compose exec web yarn add -D react-toastify
-	
+
 
 # ==== アイコン関連 ====
 
@@ -4316,7 +4316,7 @@ yarn-add-D-toastify:
 
 yarn-add-D-react-icons:
 	docker compose exec web yarn add -D react-icons
-	
+
 
 # ---- tabler-icons-react ----
 
@@ -4326,7 +4326,7 @@ yarn-add-D-react-icons:
 
 yarn-add-D-tabler-icons:
 	docker compose exec web yarn add -D tabler-icons-react
-	
+
 
 # ---- heroicons ----
 
@@ -4336,16 +4336,16 @@ yarn-add-D-tabler-icons:
 
 yarn-add-D-heroicons:
 	docker compose exec web yarn add -D @heroicons/react
-	
-	
+
+
 # ---- Font Awesome ----
 
-# https://fontawesome.com/	
+# https://fontawesome.com/
 
 # CDN
 # https://notes-de-design.com/website/tool/use-cdn-download-fontawesome/#CDN
 # https://cdnjs.com/libraries/font-awesome
-	
+
 
 # ==== Create React App ====
 
