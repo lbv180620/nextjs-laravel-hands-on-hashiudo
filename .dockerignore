@@ -1,0 +1,34 @@
+# https://zenn.dev/mo_ri_regen/articles/how-to-dockerignore
+# https://qiita.com/munisystem/items/b0f08b28e8cc26132212
+# https://qiita.com/yucatio/items/f5d23043228cc35fc763
+# https://engineer-ninaritai.com/docker-dockerignore/
+# https://www.mitomex.blog/docker-dockerignore/
+
+/backend/node_modules
+/backend/public/hot
+/backend/public/storage
+/backend/storage/app/*
+/backend/storage/framework/cache/data/*
+/backend/storage/framework/sessions/*
+/backend/storage/framework/testing/*
+/backend/storage/framework/views/*
+/backend/storage/logs/*
+/backend/storage/*.key
+/backend/vendor
+/backend/.styleci.yml
+/backend/.phpunit.result.cache
+/backend/.php-cs-fixer.cache
+/backend/package.json
+/backend/phpunit.xml
+/backend/README.md
+/backend/phpspec.yml
+/backend/npm-debug.log
+/backend/yarn-error.log
+/.github
+/.git
+/.idea
+/.vscode
+**.env*
+**.editorconfig
+**.gitattributes
+**.gitignore

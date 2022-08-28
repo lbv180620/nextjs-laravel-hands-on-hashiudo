@@ -1,0 +1,36 @@
+# https://editorconfig.org/
+# https://dezanari.com/editorconfig/
+# https://qiita.com/yuki0410_/items/89a059636e2e482e49fe
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 2
+indent_style = space
+max_line_length = 120
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.md]
+max_line_length = 0
+trim_trailing_whitespace = false
+
+[*.{yml,yaml}]
+indent_size = 2
+
+[docker-compose.yml]
+indent_size = 2
+
+[Makefile]
+indent_style = tab
+
+[*.{js,jsx,ts,tsx}]
+indent_size = 2
+
+[{*.{json,config.js},*rc.js,*rc}]
+indent_size = 2
+
+[*.{php,blade.php}]
+indent_size = 2
