@@ -1067,6 +1067,41 @@ install-ja-lang:
 # ⑸ Requstファイルにattributesメソッドを定義
 
 
+# **** API Resource関連 ****
+
+# Laravel 8.x Eloquent：ＡＰＩリソース
+# https://readouble.com/laravel/8.x/ja/eloquent-resources.html
+
+# Laravel の API Resource の使い方（基礎編）
+# https://brightful.jp/blog/programming/laravel-resource-collection/
+
+# Laravel の Resource::collection と ResourceCollection の比較
+# https://brightful.jp/blog/programming/laravel-resourcecollection/
+
+# LaravelでAPIリソースを使う場合はN+1問題に注意する
+# https://zenn.dev/tekihei2317/articles/d788362937eb96
+
+#【Laravel】APIリソースを使う(Json/Resource)
+# https://fresh-engineer.hatenablog.com/entry/2018/07/07/001530
+
+# Laravel API Resource についてのあれこれ
+# https://qiita.com/mikakane/items/e46617b6960a7e77ca2b
+
+
+# ------------------------
+
+# リソースの生成
+mkresource:
+	docker compose exec $(ctr) php artisan make:resource $(model)Resource
+
+# リソースコレクション
+mkresource-c:
+	docker compose exec $(ctr) php artisan make:resource $(model) --collection
+
+mkcollection:
+	docker compose exec $(ctr) php artisan make:resource $(model)Collection
+
+
 # **** Gate & Policy & Middleware関連 ****
 
 # Laravel 8.x 認可 - ReaDouble
@@ -2960,13 +2995,21 @@ install-sail:
 # https://yutaro-blog.net/2021/09/07/nextjs-laravel-sanctum-spa/
 
 # ①インストールとファイルの生成
+# v=:<バージョン指定>
+# Laravel9 → v=:3.x
+# Laravel8 → v=:2.x
 install-sanctum:
-	docker compose exec $(ctr) php -d memory_limit=-1 /usr/bin/composer require laravel/sanctum
+	docker compose exec $(ctr) php -d memory_limit=-1 /usr/bin/composer require laravel/sanctum$(v)
 	docker compose exec $(ctr) php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+
+# Copied Directory [/vendor/laravel/sanctum/database/migrations] To [/database/migrations]
+# Copied File [/vendor/laravel/sanctum/config/sanctum.php] To [/config/sanctum.php]
+
 
 # ②APIトークンを使用する場合は、この後マイグレートする。
 # make mig
 # ※ APIトークンを使用しない場合、2019_12_14_000001_create_personal_access_tokens_table.phpを削除
+
 
 # ③カーネルミドルウェアの設定 - １行目をコメントアウト
 # app/Http/Kernel.php
@@ -2975,6 +3018,7 @@ install-sanctum:
 #     'throttle:api',
 #     \Illuminate\Routing\Middleware\SubstituteBindings::class,
 # ],
+
 
 # ④config/sanctum.php の編集
 # localhostのポートを8080に変更
