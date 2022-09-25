@@ -124,7 +124,7 @@ launch:
 	@make up
 	@make $(db)-set
 	@make useradd
-	@make useradd-client
+# @make useradd-client
 	@make laravel-install
 	@make laravel-env
 	@make laravel-set
@@ -182,6 +182,8 @@ chmk:
 # **** Laravelの設定 ****
 
 # Laravelのインストール
+#^ ※ Mix: v9.18.0以前, Vite: v9.19.0以降
+# Laravel 9でMixを使いたい場合は、laravel_version=9.18 と指定
 laravel-install:
 	docker compose exec $(ctr) php -d memory_limit=-1 /usr/bin/composer create-project --prefer-dist "laravel/laravel=$(laravel_version).*" .
 
@@ -206,8 +208,8 @@ file-set:
 	touch sqls/sql/query.sql sqls/script/set-query.sh
 	mkdir -p .vscode && cp env/docs/{launch.json,settings.json} .vscode
 	cp env/docs/docker-compose.env .env
-# mkdir -p backend
-	mkdir -p backend frontend
+	mkdir -p backend
+# mkdir -p backend frontend
 
 # phpMyAdmin
 publish-phpmyadmin:
@@ -559,6 +561,33 @@ stop-client:
 	docker compose stop clinet
 
 
+# ------------------------
+
+#* テスト用DBコンテナのコマンド群
+
+# db-test
+db-test:
+	docker compose exec db-test bash
+db-test-usr:
+	docker compose exec -u $(USER) db-test bash
+
+# mysql
+sql-test:
+	docker compose exec db-test bash -c 'mysql -u $$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE'
+sql-test-root:
+	docker compose exec db-test bash -c 'mysql -u root -p'
+sqlc-test:
+	@make query
+	docker compose exec db-test bash -c 'mysql -u $$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE < /var/lib/mysql/sql/query.sql'
+
+# postgres
+psql-test:
+	docker compose exec db-test bash -c 'PGPASSWORD=$$POSTGRES_PASSWORD psql -U $$POSTGRES_USER -d $$POSTGRES_DB'
+psqlc-test:
+	@make query
+	docker compose exec db-test bash -c 'PGPASSWORD=$$POSTGRES_PASSWORD psql -U $$POSTGRES_USER -d $$POSTGRES_DB < /var/lib/postgresql/data/sql/query.sql'
+
+
 # ==== Laravel artisanコマンド群 ====
 
 # Laravel 6.x サービスプロバイダ
@@ -575,7 +604,16 @@ laravel-v:
 
 # artisanコマンドの一覧
 art-l:
-	docker compose exec $(ctr) php artisan list
+	docker compose exec $(ctr) php artisan list $(cmd)
+
+# commandを作成する
+#^ app/Console/Commands配下にファイルが生成される
+mkcmd:
+	docker compose exec $(ctr) php artisan make:command $(cmd)
+
+# commandの実行
+runcmd:
+	docker compose exec $(ctr) php artisan $(cmd):$(name)
 
 # 例外の作成
 #^ app/Exceptions配下にファイルが生成される
@@ -616,6 +654,8 @@ mkmigc-%:
 	docker compose exec $(ctr) php artisan make:migration create_$(@:mkmigc-%=%)_table
 
 # カラムの追加: make mkmiga col=<カラム名> table=<テーブル名> --table=<テーブル名>
+#^ カラムを追加したら、rollback時に削除されるようにする！
+# $table->dropColumn('<追加したカラム名>');
 mkmiga:
 	docker compose exec $(ctr) php artisan make:migration add_$(col)_to_$(table)_table --table=$(table)
 
@@ -645,22 +685,23 @@ mig-d-%:
 # fresh: 全テーブルをドロップ → 再マイグレート
 # --seed: ダミーデータも反映
 fresh:
-	docker compose exec $(ctr) php artisan migrate:fresh
+	docker compose exec $(ctr) php artisan migrate:fresh --env=$(env)
 fresh-seed:
-	docker compose exec $(ctr) php artisan migrate:fresh --seed
+	docker compose exec $(ctr) php artisan migrate:fresh --seed --env=$(env)
 
 # refresh: ロールバック → 再マイグレート
 # --seed: ダミーデータも反映
 refresh:
-	docker compose exec $(ctr) php artisan migrate:refresh
+	docker compose exec $(ctr) php artisan migrate:refresh --env=$(env)
 refresh-seed:
-	docker compose exec $(ctr) php artisan migrate:refresh --seed
+	docker compose exec $(ctr) php artisan migrate:refresh --seed --env=$(env)
 
 rollback-test:
 	docker compose exec $(ctr) php artisan migrate:fresh
 	docker compose exec $(ctr) php artisan migrate:refresh
 
 # ロールバック: 同時に実行した最後のマイグレーションをまとめて元に戻す
+#^ デフォルトでは、Batch数が最大のものをrollbackする。
 # ロールバック時にカラムも消したい場合、マイグレーションファイルのdown関数に$table->dropColumn('消したいカラム名'); を書いて置く。
 # ロールバックとdownメソッドに関する参考記事:
 # https://qiita.com/MitsukiYamauchi/items/e43bb38006a4bed230cb
@@ -669,12 +710,15 @@ rollback:
 	docker compose exec $(ctr) php artisan migrate:rollback
 
 # 指定した個数分のマイグレーションファイルまでロールバックする
+#^ make migstでmigrationsテーブルの状態を確認し、下から数えてロールバックしたいマイグレーションファイルの個数を指定
 # --step={ロールバックする個数}
 rollback-s:
 	docker compose exec $(ctr) php artisan migrate:rollback --step=$(step)
 
 
 # 実行されているマイグレーションファイルの確認
+# migrationsテーブルからレコードを全件取得しているだけ。
+# select * from migrations;
 migst:
 	docker compose exec $(ctr) php artisan migrate:status
 
@@ -866,7 +910,7 @@ mkseeder:
 #& Seederの実行
 
 seed:
-	docker compose exec $(ctr) php artisan db:seed
+	docker compose exec $(ctr) php artisan db:seed --env=$(env)
 # 特定のSeederを指定
 seed-class:
 	docker compose exec $(ctr) php artisan db:seed --class=$(model)Seeder
@@ -1060,6 +1104,152 @@ mknotification:
 	docker compose exec $(ctr) php artisan make:notification $(class)Notification
 
 
+# --------------------
+
+#? MailHogのセットアップの手順
+
+# ⑴ Laravel Sailのdocker-compose.ymlからmailhogコンテナの箇所を自身のdocker-compose.ymlにコピペ
+# ⑵ make up
+
+
+# --------------------
+
+#? MailHogを利用したパスワードリセットのやり方
+
+# ⑴ MAIL_FROM_ADDRESSの設定
+# DBに登録したメールアドレスを指定
+# .env
+# MAIL_FROM_ADDRESS=no-reply@example.com
+
+# ⑵ 開発中のパスワードリセットのフォームから、指定したメールアドレスにメールを送信
+
+# ⑶ localhost:8025でMailHogにアクセスし、指定したメールアドレスに送信されたメールを確認
+
+# ⑷ Reset Passwordボタンをクリックして、パスワードリセット
+
+
+#^ パスワードリセットのページのURLの例
+# http://localhost:8080/reset-password/a42e5252bfad217ef0899f9da33017ba4376a7647c039793fd8aaa05500b58ef?email=neko%40neko.com
+# → トークンが自動生成されて、どこからでもアクセスできる。
+# → 一時的にpassword_resetsテーブルにメールアドレスとこのトークンが格納される。
+# → リセットが成功すると削除される。
+# → config/auth.phpのpassordsのexpireでトークンの有効期限を指定できる。デフォルトは60分。
+
+
+# --------------------
+
+#? デフォルトの送信メール本文を編集する方法
+
+# 補足
+# https://www.sejuku.net/plus/question/detail/3415
+# https://qiita.com/usaginooheso/items/9d61361d449a521a5854
+# https://chico-shikaku.com/2020/09/delete-laravel-logo-on-send-mail/
+
+# 送信メール本文のソースのパスは以下の通り。
+# vendor/laravel/framework/src/Illuminate/Notifications/resources/views/email.blade.php
+
+#^ vendorフォルダ配下のソースは原則直接変更しない。
+# 変更したい場合は、以下のコマンドを実行し、resources/vendor配下にソースをコピーし、それを編集する。
+
+# 本文の内容を編集したい場合:
+# Copying directory [vendor/laravel/framework/src/Illuminate/Notifications/resources/views] to [resources/views/vendor/notifications]
+cpnotifications:
+	docker compose exec $(ctr) php artisan vendor:publish --tag=laravel-notifications
+
+# レイアウト等を編集したい場合:
+# Copying directory [vendor/laravel/framework/src/Illuminate/Mail/resources/views] to [resources/views/vendor/mail]
+cpmail:
+	docker compose exec $(ctr) php artisan vendor:publish --tag=laravel-mail
+
+
+#! インデントが崩れると表示がおかしくなる。
+# 対処法1: Format on Saveをoffにしてから保存
+# 対処法2: email.blade.phpの言語モードをMarkdownにして保存
+
+
+# **** Pagination関連 ****
+
+# 【Laravel】独自のページネーションを作成する
+# https://zakkuri.life/laravel-original-pagination/
+
+# [vendor/laravel/framework/src/Illuminate/Pagination/resources/views] to [resources/views/vendor/pagination]
+cppagination:
+	docker compose exec $(ctr) php artisan vendor:publish --tag=laravel-pagination
+
+
+# --------------------
+
+#~ 設定手順
+
+# 1.Controllerを下記にする
+
+# $books = Book::all();
+# ⬇️
+# $books = Book::paginate(10);
+
+
+# .....................
+
+# 2.books.index.blade.phpに書きを追加する
+
+# {{ $books->links() }}
+
+
+# .....................
+
+# 3.ページネーション用のCSSを当てる
+
+# sail php artisan vendor:publish --tag=laravel-pagination
+# ※tailwind.blade.phpがデフォルトで適用される。
+
+
+# .....................
+
+# 4. 26〜40行目をコメントアウト
+
+
+# .....................
+
+# 5 .25行目を変更する
+
+# <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center">
+
+
+# .....................
+
+# 6. ja.jsonを変更する（示すこと → 全 に変更する）
+
+# "Showing": "全"
+
+
+# .....................
+
+# 7.108行目あたりに下記を追加する
+
+# <div class="mt-4">
+#   <p class="text-sm text-gray-700 leading-5">
+#     {!! __('Showing') !!}
+#     <span class="font-medium">{{ $paginator->total() }}</span>
+#     件中
+#     @if ($paginator->firstItem())
+#       <span class="font-medium">{{ $paginator->firstItem() }}</span>
+#       〜
+#       <span class="font-medium">{{ $paginator->lastItem() }}</span>
+#     @else
+#     {{ $paginator->count() }}
+#     @endif
+#     件
+#     </p>
+# </div>
+
+
+# .....................
+
+# 8. navに、flex-colをつける
+
+# <nav role="navigation" aria-label="{{ __('Pagination Navigation') }}" class="flex-col flex items-center justify-between">
+
+
 # **** Cache関連 ****
 
 optimize:
@@ -1121,10 +1311,6 @@ view-clear:
 # https://minememo.work/laravel-localization__
 # https://prograshi.com/framework/laravel/two-underscores/
 
-mkcmp-%:
-	docker compose exec $(ctr) php artisan make:component $(@:mkcmp-%=%)
-mkcmp:
-	docker compose exec $(ctr) php artisan make:component $(component)
 
 # ? レイアウト化に使う命令:
 # - @extends('レイアウトファイル名')
@@ -1147,7 +1333,23 @@ mkcmp:
 
 # ------------
 
-#& ビューコンポーザ
+#& コンポーネント
+
+# https://readouble.com/laravel/8.x/ja/blade.html
+# → コンポーネント
+
+# 独自のViewコンポーネントを生成
+# app/View/Components/
+mkcmp-%:
+	docker compose exec $(ctr) php artisan make:component $(@:mkcmp-%=%)
+
+mkcmp:
+	docker compose exec $(ctr) php artisan make:component $(component)
+
+
+# ------------
+
+#& View Composer
 
 #^ ビューコンポーザとは、ビュー表示のためのビジネスロジックを記述するところ
 
@@ -1164,6 +1366,12 @@ mkcmp:
 # http://vdeep.net/laravel-viewcomposer
 # https://qiita.com/makies/items/bdb5ceef645348aef43a
 # https://minory.org/laravel-view-share.html
+
+# https://qiita.com/bumptakayuki/items/212ec57ffbfb8e71cb60
+# https://qiita.com/youkyll/items/c65af61eb33919b29e97
+# https://tech.arms-soft.co.jp/entry/2020/07/01/090000
+# https://www.webopixel.net/php/1287.html
+# https://biz.addisteria.com/laravel_view_composer/
 
 
 mkprovider:
@@ -1221,11 +1429,23 @@ test-%:
 test-f:
 	docker compose exec $(ctr) php artisan test --filter $(model)Test
 
-test-model:
+testfu:
 	docker compose exec $(ctr) php artisan test tests/$(type)/$(model)Test.php
 
-test-method:
+testfu-f:
 	docker compose exec $(ctr) php artisan test tests/$(type)/$(model)Test.php --filter=$(method)
+
+testf:
+	docker compose exec $(ctr) php artisan test tests/Feature/$(model)Test.php
+
+testu:
+	docker compose exec $(ctr) php artisan test tests/Unit/$(model)Test.php
+
+testf-f:
+	docker compose exec $(ctr) php artisan test tests/Feature/$(model)Test.php --filter=$(method)
+
+testu-f:
+	docker compose exec $(ctr) php artisan test tests/Unit/$(model)Test.php --filter=$(method)
 
 
 # ----------------
@@ -1235,7 +1455,7 @@ test-method:
 mktest-u:
 	docker compose exec $(ctr) php artisan make:test $(model)Test --unit
 mku:
-	@make mkunit
+	@make mktest-u
 
 
 # ----------------
@@ -1348,13 +1568,17 @@ pcs-i:
 pcs-e:
 	docker compose exec $(ctr) ./vendor/bin/phpcs -e
 
-# ファイル別に結果を出力
-pcs-summary:
-	docker compose exec $(ctr) ./vendor/bin/phpcs --report=summary $(path)
+# 通常の出力(Error数,Warning数+違反したルール)
+pcs:
+	docker compose exec $(ctr) ./vendor/bin/phpcs --standard=$(psr) $(path)
 
-# ルール別に結果を出力
+# Error数,Warning数を出力
+pcs-summary:
+	docker compose exec $(ctr) ./vendor/bin/phpcs --report=summary --standard=$(psr) $(path)
+
+# 違反したルールを出力
 pcs-source:
-	docker compose exec $(ctr) ./vendor/bin/phpcs --report=source $(path)
+	docker compose exec $(ctr) ./vendor/bin/phpcs --report=source --standard=$(psr) $(path)
 
 # 結果レポートをファイルとして出力
 pcs-checkstyle:
@@ -1362,8 +1586,15 @@ pcs-checkstyle:
 	docker compose exec $(ctr) ./vendor/bin/phpcs --report=checkstyle --report-file=phpcs/$(name)_phpcs.xml $(path)
 
 # コードの自動修正
+# ex) psr=PSR2
 pcbf:
-	docker compose exec $(ctr) ./vendor/bin/phpcbf --standard=PSR2 $(path)
+	docker compose exec $(ctr) ./vendor/bin/phpcbf --standard=$(psr) $(path)
+
+# phpcs.xml
+pcs-xml:
+	docker compose exec $(ctr) ./vendor/bin/phpcs --standard=phpcs.xml $(path)
+pcbf-xml:
+	docker compose exec $(ctr) ./vendor/bin/phpcbf --standard=phpcs.xml $(path)
 
 # 静的解析
 analyse:
@@ -1525,7 +1756,7 @@ yarn-ci-v2:
 	docker compose exec web yarn install --immutable --immutable-cache --check-cache
 
 yarn-dev:
-	docker compose exec client yarn dev
+	docker compose exec web yarn dev
 
 yarn-watch:
 	docker compose exec web yarn watch
@@ -2001,14 +2232,14 @@ sw:
 
 # 方法①
 # ⑴ make touch-sqlite データ保存用ファイルの作成
-# ⑵ backend/.envの編集 DB_CONNECTION=sqliteとし、その他のDB_はコメントアウト
+# ⑵ backend/.envの編集 DB_CONNECTION=sqliteとし、その他のDB_XXXXはコメントアウト
 # ⑶ backend/config/database.phpの編集 'database' => env(database_path('database.sqlite'), database_path('database.sqlite')), とする
 # ⑷ make mig テーブル作成
 # ⑸ DB Browser for SQLite でdatabase.sqliteを開き、確認
 
 # 方法②
 # ⑴ make touch-sqlite データ保存用ファイルの作成
-# ⑵ backend/.envの編集 DB_CONNECTION=sqliteとし、その他のDB_はコメントアウト
+# ⑵ backend/.envの編集 DB_CONNECTION=sqliteとし、その他のDB_XXXXはコメントアウト
 # ⑶ edit.envを、DB_DATABASE=database/database.sqlite と書き換えて、make chenv
 # ⑷ make mig テーブル作成
 # ⑸ DB Browser for SQLite でdatabase.sqliteを開き、確認
@@ -2518,6 +2749,68 @@ yarn-scaffold:
 	@make yarn-dev
 
 
+# **** Laravel-Lang/lang(言語の変更) ****
+
+# config/app.php
+# 'locale' => 'ja',
+
+
+# --------------------
+
+# 方法1: 10系の最新バージョン10.9.5を同様にzipファイルをダウンロードして利用する
+
+# https://github.com/Laravel-Lang/lang/tree/10.9.5
+
+
+# --------------------
+
+# 方法2: 11系の導入方法を実施する。
+
+# 互換性:
+# https://laravel-lang.com/installation/compatibility.html#laravel-lang
+# https://publisher.laravel-lang.com/installation/compatibility.html
+# 12.0
+# for PHP 8.1
+# composer require laravel-lang/lang:^12.0 laravel-lang/publisher:^14.0
+# 11.0
+# for PHP 8.1
+# composer require laravel-lang/lang:^11.0 laravel-lang/publisher:^14.0
+# 10.0
+# for PHP 8.0-8.1
+# composer require laravel-lang/lang:^10.0 laravel-lang/publisher:^13.0
+# for PHP 7.3-8.1
+# composer require laravel-lang/lang:^10.2 laravel-lang/publisher:^12.0
+
+# ⑴ ライブラリをインストールします。
+# https://publisher.laravel-lang.com/installation/
+# config/lang-publisher.php
+install-lang:
+	docker compose exec $(ctr) composer require laravel-lang/publisher laravel-lang/lang laravel-lang/attributes --dev
+	docker compose exec $(ctr) php artisan vendor:publish --provider="LaravelLang\Publisher\ServiceProvider"
+
+# ⑵ 日本語ファイルを追加します。（日本語の場合なので引数は「ja」です）
+# https://publisher.laravel-lang.com/using/add.html#add-locales
+#^ ちなみに、lang:addした場合には、追加しているパッケージ「Jetstream、Fortify、Cashier、Breeze、Nova、Spark、UIなど」のインストール状況を見て自動的に必要な言語ファイルを配置してくれます。
+langadd:
+	docker compose exec $(ctr) php artisan lang:add $(lang)
+
+
+# ........................
+
+# https://publisher.laravel-lang.com/using/update.html#update-locales
+#^ 新しくパッケージを追加した場合は、下記コマンドを実施すれば情報が更新されます。
+langupdate:
+	docker compose exec $(ctr) php artisan lang:update
+
+# https://publisher.laravel-lang.com/using/reset.html#reset-locales
+langreset:
+	docker compose exec $(ctr) php artisan lang:reset
+
+# https://publisher.laravel-lang.com/using/remove.html#remove-locales
+langrm:
+	docker compose exec $(ctr) php artisan lang:rm $(lang)
+
+
 # ~~~~ マルチログインの実装 ~~~~
 
 # 【Laravel】マルチログイン(ユーザーと管理者など)機能を設定してみた【体験談】
@@ -2554,11 +2847,10 @@ yarn-scaffold:
 # https://readouble.com/laravel/8.x/ja/starter-kits.html#laravel-breeze
 
 # Laravel Breeze ※Laravel 8以降
+# composerでパッケージをインストール → Laravelアプリに雛形をインストール → Laravel Mixでコンパイル
+#^ ※Laravel 9ではViteでコンパイル
 install-breeze:
 	docker compose exec $(ctr) php -d memory_limit=-1 /usr/bin/composer require --dev laravel/breeze
-
-# ※npm-scaffold または yarn-scaffold が必要
-install-breeze-stale:
 	docker compose exec $(ctr) php artisan breeze:install
 	@make yarn-scaffold
 
@@ -2628,6 +2920,22 @@ install-dusk:
 
 install-passport:
 	docker compose exec $(ctr) php -d memory_limit=-1 /usr/bin/composer require laravel/passport
+
+
+# **** Laravel Sail ****
+
+#& インストールの手順
+
+# Laravel & Docker
+# https://laravel.com/docs/9.x/installation#laravel-and-docker
+
+# curl -s "https://laravel.build/<アプリ名>" | bash
+# cd <アプリ名>
+# ./vendor/bin/sail up
+
+install-sail:
+	curl -s "https://laravel.build/$(app)" | bash
+	cd $(app) && ./vendor/bin/sail up
 
 
 # **** Laravel Sanctum ****
@@ -7083,6 +7391,7 @@ yarn-add-node-fetch:
 yarn-add-D-js-base64:
 	docker compose exec web yarn add -D js-base64
 
+
 # ==== Husky & lint-staged ====
 
 # husky:
@@ -7094,6 +7403,7 @@ yarn-add-D-js-base64:
 # lint-staged:
 # https://github.com/okonet/lint-staged
 # commitしたファイル(stagingにあるファイル)にlintを実行することができる
+
 
 # **** v4系 ****
 
@@ -7122,6 +7432,7 @@ yarn-add-D-husky-v4:
 #     ]
 #   }
 
+
 # **** v5系以上 ****
 
 # 記事
@@ -7134,9 +7445,11 @@ yarn-add-D-husky:
 	docker compose exec web yarn add -D husky lint-staged
 # npx husky-init && yarn
 
-# ------------
+
+# --------------------
 
 # ! .git と package.json が同一ディレクトリにいないプロジェクトで husky をつかう場合
+
 # https://github.com/okonet/lint-staged/issues/961
 # https://qiita.com/les-r-pan/items/c03f12bc1693983daa70
 
@@ -7179,9 +7492,11 @@ yarn-add-D-husky:
 #   "*.{js,jsx,ts,tsx,css,md}": "prettier --write"
 # }
 
-# ------------
+
+# --------------------
 
 # ? 特定のファイルをlint-stagedの対象から除外する
+
 # https://github.com/okonet/lint-staged#how-can-i-ignore-files-from-eslintignore
 # https://qiita.com/mu-suke08/items/be6a6d37f443b73cfd58
 
@@ -7230,13 +7545,15 @@ yarn-add-D-husky:
 # babel.config.js
 # jest.config.js
 
-# ------------
+
+# --------------------
 
 # ? next lint を lint-stagedと組み合わせる場合
 # https://nextjs.org/docs/basic-features/eslint#linting-custom-directories-and-files
 # https://qiita.com/manak1/items/900e10742f8e0714a901
 
-# ------------
+
+# --------------------
 
 # ! error  Parsing error: "parserOptions.project" has been set for @typescript-eslint/parser.の対処法
 # https://wonwon-eater.com/ts-eslint-import-error/
@@ -7264,7 +7581,8 @@ yarn-add-D-husky:
 # リンティング対象およびビルド対象にしたい場合
 # 1 番の対応（tsconfig の include にそのファイルを指定）しましょう。
 
-# ------------
+
+# --------------------
 
 # ^ hint: The 'frontend/.husky/pre-commit' hook was ignored because it's not set as executable.
 # ^ hint: You can disable this warning with `git config advice.ignoredHook false`.
@@ -7273,6 +7591,52 @@ yarn-add-D-husky:
 
 # .husky/pre-commitに実行権限を与える
 # chmod +x .husky/pre-commit
+
+
+# --------------------
+
+#? git commit時にCodeSnifferを実行する方法
+
+
+# 設定手順:
+# https://typicode.github.io/husky/#/?id=automatic-recommended
+
+
+# ⑴ huskyのインストール
+husky-init:
+	docker compose exec $(ctr) npx husky-init
+
+
+# ⑵ .huskyを生成
+# npx husky-init → package.jsonを以下のように修正 → yarn | m x
+
+# {
+#   "scripts": {
+#     "prepare": "cd .. && husky install backend/.husky"
+#   },
+# }
+
+
+# ⑶ .husky/pre-commitファイルの編集
+husky-add:
+	docker compose exec $(ctr) npx husky add .husky/pre-commit
+
+# #!/usr/bin/env sh
+# . "$(dirname -- "$0")/_/husky.sh"
+
+# docker compose exec web composer phpcbf
+# docker compose exec web php artisan test
+
+
+# ⑷ composer.jsonのscriptsの編集
+
+# "phpcs": [
+#     "./vendor/bin/phpcs --standard=phpcs.xml ./"
+# ],
+# "phpcbf": [
+#     "./vendor/bin/phpcbf --standard=phpcs.xml ./"
+# ]
+
 
 # ==== Create React App 設定手順 ====
 
