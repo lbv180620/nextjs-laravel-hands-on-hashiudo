@@ -13,8 +13,17 @@ export type LoginFormType = {
 export type ValidationType = LoginFormType & { loginFailed: string };
 
 // post('/login')のレスポンスの型
-export type LoginResponseJsonType = {
+export type UserResourceType = {
   data: {
     id: number;
   };
+};
+
+// get('/api/memos')のレスポンスの型
+export type MemoResourceType = {
+  data: {
+    id: number;
+    title: string;
+    body: string;
+  }[];
 };
