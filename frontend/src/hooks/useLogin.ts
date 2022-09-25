@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 
 import axios from "@/libs/axios";
-import { LoginFormType } from "@/types";
+import { LoginFormType, UserResourceType } from "@/types";
 
 export const useLogin = () => {
   //* router
@@ -26,7 +26,7 @@ export const useLogin = () => {
         // ログイン処理
         await axios
           .post("/login", loginForm)
-          .then(async (res: AxiosResponse) => {
+          .then(async (res: AxiosResponse<UserResourceType>) => {
             console.log(res.data);
             await router.push("/memos");
           })

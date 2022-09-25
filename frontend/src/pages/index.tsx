@@ -5,7 +5,7 @@ import { Auth } from "@/components/templates/auth";
 
 const Home: NextPage = () => {
   return (
-    <Layout title="Login">
+    <Layout title="ログイン">
       <Auth />
     </Layout>
   );
