@@ -1,14 +1,13 @@
-import { NextPage } from 'next';
+import { NextPage } from "next";
 
-import { PasswordInput, PrimaryInput } from '@/components/atoms';
-import { FormLayout } from '@/components/templates';
+import { Layout } from "@/components/templates";
+import { Auth } from "@/components/templates/auth";
 
 const Home: NextPage = () => {
   return (
-    <FormLayout title="ログイン" btnTitle="ログイン">
-      <PrimaryInput text="メールアドレス" name="email" />
-      <PasswordInput />
-    </FormLayout>
+    <Layout title="Login">
+      <Auth />
+    </Layout>
   );
 };
 export default Home;
