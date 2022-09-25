@@ -1685,58 +1685,58 @@ npm:
 	@make npm-install
 
 npm-install:
-	docker compose exec web npm install
+	docker compose exec $(npm) npm install
 
 npm-ci:
-	docker compose exec web npm ci
+	docker compose exec $(npm) npm ci
 
 npm-dev:
-	docker compose exec web npm run dev
+	docker compose exec $(npm) npm run dev
 
 npm-watch:
-	docker compose exec web npm run watch
+	docker compose exec $(npm) npm run watch
 
 npm-watch-poll:
-	docker compose exec web npm run watch-poll
+	docker compose exec $(npm) npm run watch-poll
 
 npm-hot:
-	docker compose exec web npm run hot
+	docker compose exec $(npm) npm run hot
 
 npm-v:
-	docker compose exec web npm -v
+	docker compose exec $(npm) npm -v
 
 npm-init:
-	docker compose exec web npm init -y
+	docker compose exec $(npm) npm init -y
 
 npm-i-D:
-	docker compose exec web npm i -D $(pkg)
+	docker compose exec $(npm) npm i -D $(pkg)
 
 npm-run:
-	docker compose exec web npm run $(cmd)
+	docker compose exec $(npm) npm run $(cmd)
 
 npm-un-D:
-	docker compose exec web npm uninstall -D $(pkg)
+	docker compose exec $(npm) npm uninstall -D $(pkg)
 
 npm-audit-fix:
-	docker compose exec web npm audit fix
+	docker compose exec $(npm) npm audit fix
 
 npm-audit-fix-f:
-	docker compose exec web npm audit fix --force
+	docker compose exec $(npm) npm audit fix --force
 
 
 # **** npx ****
 
 npx-v:
-	docker compose exec web npx -v
+	docker compose exec $(npm) npx -v
 
 npx:
-	docker compose exec web npx $(pkg)
+	docker compose exec $(npm) npx $(pkg)
 
 
 # **** yarn ****
 
 yarn:
-	docker compose exec web yarn
+	docker compose exec $(yarn) yarn
 
 yarn-install:
 	@make yarn
@@ -1745,7 +1745,7 @@ yarn-install:
 #? https://techblg.app/articles/npm-ci-in-yarn/
 #? yarnのバージョンが2未満の場合
 yarn-ci:
-	docker compose exec web yarn install --frozen-lockfile
+	docker compose exec $(yarn) yarn install --frozen-lockfile
 
 yarn-ci-refresh:
 	rm -rf $(env)/node_modules
@@ -1753,52 +1753,52 @@ yarn-ci-refresh:
 
 #? yarnのversionが2以上の場合
 yarn-ci-v2:
-	docker compose exec web yarn install --immutable --immutable-cache --check-cache
+	docker compose exec $(yarn) yarn install --immutable --immutable-cache --check-cache
 
 yarn-dev:
-	docker compose exec web yarn dev
+	docker compose exec $(yarn) yarn dev
 
 yarn-watch:
-	docker compose exec web yarn watch
+	docker compose exec $(yarn) yarn watch
 
 yarn-watch-poll:
-	docker compose exec web yarn watch-poll
+	docker compose exec $(yarn) yarn watch-poll
 
 yarn-hot:
-	docker compose exec web yarn hot
+	docker compose exec $(yarn) yarn hot
 
 yarn-v:
-	docker compose exec web yarn -v
+	docker compose exec $(yarn) yarn -v
 
 yarn-init:
-	docker compose exec web yarn init -y
+	docker compose exec $(yarn) yarn init -y
 
 yarn-add:
-	docker compose exec web yarn add $(pkg)
+	docker compose exec $(yarn) yarn add $(pkg)
 
 yarn-add-%:
-	docker compose exec web yarn add $(@:yarn-add-%=%)
+	docker compose exec $(yarn) yarn add $(@:yarn-add-%=%)
 
 yarn-add-dev:
-	docker compose exec web yarn add -D $(pkg)
+	docker compose exec $(yarn) yarn add -D $(pkg)
 
 yarn-add-dev-%:
-	docker compose exec web yarn add -D $(@:yarn-add-dev-%=%)
+	docker compose exec $(yarn) yarn add -D $(@:yarn-add-dev-%=%)
 
 yarn-run:
-	docker compose exec web yarn run $(cmd)
+	docker compose exec $(yarn) yarn run $(cmd)
 
 yarn-run-s:
-	docker compose exec web yarn run $(pkg)
+	docker compose exec $(yarn) yarn run $(pkg)
 
 yarn-rm:
-	docker compose exec web yarn remove $(pkg)
+	docker compose exec $(yarn) yarn remove $(pkg)
 
 
 # **** node ****
 
 node:
-	docker compose exec web node $(file)
+	docker compose exec $(node) node $(file)
 
 
 # ==== Git & GitHub関連 ====
