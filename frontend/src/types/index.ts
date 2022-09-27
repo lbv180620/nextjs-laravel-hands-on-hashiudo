@@ -12,6 +12,12 @@ export type LoginFormType = {
 // バリデーションメッセージの型
 export type ValidationType = LoginFormType & { loginFailed: string };
 
+// POSTデータの型
+export type MemoFormType = {
+  title: string;
+  body: string;
+};
+
 // post('/login')のレスポンスの型
 export type UserResourceType = {
   data: {

@@ -1413,7 +1413,6 @@ mkprovider:
 	docker compose exec $(ctr) php artisan make:provider $(name)ServiceProvider
 
 
-
 # **** CORS対策 ****
 
 # Laravel7以下
@@ -1423,6 +1422,39 @@ mkprovider:
 
 mkcors:
 	docker compose exec $(ctr) php artisan make:middleware Cors
+
+
+# **** Event関連 ****
+
+# Laravel 8.x イベント
+# https://readouble.com/laravel/8.x/ja/events.html
+
+eventgen:
+	docker compose exec $(ctr) php artisan event:generate
+
+mkevent:
+	docker compose exec $(ctr) php artisan make:event $(name)
+
+mklistener:
+	docker compose exec $(ctr) php artisan make:listener $(name) --event=$(event)
+
+
+# --------------------
+
+# これを読めばLaravelのイベントとリスナーが設定できる
+# https://reffect.co.jp/laravel/laravel-event-listener
+
+# Laravelでイベントとリスナーを使ってみる
+# https://qiita.com/KyuKyu/items/8999d774851261ff0baa
+
+#【随時更新】Laravelのイベント&リスナーを使ってみる
+# https://zenn.dev/jordan23/articles/08b1c48cc0ec11
+
+# Laravelのイベントを使ってみる
+# https://liginc.co.jp/484117
+
+# Laravel イベント 調べてみた
+# https://tech-tech.blog/php/laravel/event/
 
 
 # **** その他 ****
