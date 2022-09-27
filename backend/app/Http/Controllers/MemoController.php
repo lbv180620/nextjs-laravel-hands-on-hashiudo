@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MemoPostRequest;
 use App\Http\Resources\MemoResource;
 use App\Models\Memo;
 use Exception;
@@ -26,11 +27,46 @@ class MemoController extends Controller
         }
 
         try {
-            $memos = Memo::where('user_id', $id)->get();
+            $memos = Memo::where('user_id', $id)
+                ->latest()
+                ->get();
         } catch (\Exception $ex) {
             throw $ex;
         }
 
         return MemoResource::collection($memos);
+    }
+
+    /**
+     * メモの登録
+     *
+     */
+    public function create(MemoPostRequest $request, Memo $memo)
+    {
+        try {
+            // モデルのインスタンス化
+            // $memo = new Memo();
+
+            // パラメータセット
+            $memo->user_id = Auth::id();
+            // $memo->title = $request->title;
+            // $memo->body = $request->body;
+            $memo->fill($request->all());
+
+            // モデルの保存
+            $memo->save();
+
+            // Memo::create([
+            //     'user_id' => Auth::id(),
+            //     'title' => $request->input('title'),
+            //     'body' => $request->input('body'),
+            // ]);
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+
+        return response()->json([
+            'message' => 'メモの登録に成功しました。',
+        ], 201);
     }
 }
