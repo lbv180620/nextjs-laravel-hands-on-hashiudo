@@ -6,9 +6,10 @@ type PropsType = {
   text: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  message: string | undefined;
 };
 
-export const PrimaryTextarea: FC<PropsType> = memo(({ text, value, onChange }) => {
+export const PrimaryTextarea: FC<PropsType> = memo(({ text, value, onChange, message }) => {
   return (
     <div className="mb-5">
       <div className="my-2 flex justify-start">
@@ -22,7 +23,8 @@ export const PrimaryTextarea: FC<PropsType> = memo(({ text, value, onChange }) =
         rows={4}
         onChange={onChange}
         value={value}
-      ></textarea>
+      />
+      {message && <p className="py-3 text-red-500">{message}</p>}
     </div>
   );
 });

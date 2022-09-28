@@ -8,9 +8,10 @@ type PropsType = {
   name: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  message: string | undefined;
 };
 
-export const PrimaryInput: FC<PropsType> = memo(({ text, name, value, onChange }) => {
+export const PrimaryInput: FC<PropsType> = memo(({ text, name, value, onChange, message }) => {
   return (
     <div className="mb-5">
       <div className="my-2 flex justify-start">
@@ -18,6 +19,7 @@ export const PrimaryInput: FC<PropsType> = memo(({ text, name, value, onChange }
         <RequiredMark />
       </div>
       <input className="w-full rounded-md border p-2 outline-none" name={name} value={value} onChange={onChange} />
+      {message && <p className="py-3 text-red-500">{message}</p>}
     </div>
   );
 });
