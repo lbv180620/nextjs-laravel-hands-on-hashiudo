@@ -2,22 +2,13 @@ import { ChangeEvent, FC, memo, useCallback } from "react";
 
 import { PasswordInput, PrimaryInput } from "@/components/atoms";
 import { useLogin } from "@/hooks";
-// import { ValidationType } from "@/types";
 
 import { FormLayout } from "../layout/FormLayout";
 
 export const Auth: FC = memo(() => {
   //* hooks
   // ログイン関係
-  const { loginForm, setLoginForm, login } = useLogin();
-
-  //* local state
-  // バリデーションメッセージのstate
-  // const [validation, setValidation] = useState<ValidationType>({
-  //   email: "",
-  //   password: "",
-  //   loginFailed: "",
-  // });
+  const { loginForm, setLoginForm, login, validation } = useLogin();
 
   //* event
   // POSTデータの更新
@@ -29,9 +20,15 @@ export const Auth: FC = memo(() => {
   );
 
   return (
-    <FormLayout title="ログイン" btnTitle="ログイン" onClick={login}>
-      <PrimaryInput text="メールアドレス" name="email" value={loginForm.email} onChange={updateLoginForm} />
-      <PasswordInput value={loginForm.password} onChange={updateLoginForm} />
+    <FormLayout title="ログイン" btnTitle="ログイン" onClick={login} message={validation.loginFailed}>
+      <PrimaryInput
+        text="メールアドレス"
+        name="email"
+        value={loginForm.email}
+        onChange={updateLoginForm}
+        message={validation.email}
+      />
+      <PasswordInput value={loginForm.password} onChange={updateLoginForm} message={validation.password} />
     </FormLayout>
   );
 });

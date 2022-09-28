@@ -5,9 +5,10 @@ import { RequiredMark } from "../mark/RequiredMark";
 type PropsType = {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  message: string | undefined;
 };
 
-export const PasswordInput: FC<PropsType> = memo(({ value, onChange }) => {
+export const PasswordInput: FC<PropsType> = memo(({ value, onChange, message }) => {
   return (
     <div className="mb-5">
       <div className="my-2 flex justify-start">
@@ -22,6 +23,7 @@ export const PasswordInput: FC<PropsType> = memo(({ value, onChange }) => {
         value={value}
         onChange={onChange}
       />
+      {message && <p className="py-3 text-red-500">{message}</p>}
     </div>
   );
 });

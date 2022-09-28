@@ -10,12 +10,34 @@ export type LoginFormType = {
 };
 
 // バリデーションメッセージの型
-export type ValidationType = LoginFormType & { loginFailed: string };
+export type LoginValidationType = {
+  email?: string;
+  password?: string;
+  loginFailed?: string;
+};
+
+export type LoginValidationResponseType = {
+  errors: {
+    [index: string]: string[];
+  };
+};
 
 // POSTデータの型
 export type MemoFormType = {
   title: string;
   body: string;
+};
+
+// バリデーションメッセージの型
+export type MemoValidationType = {
+  title?: string;
+  body?: string;
+};
+
+export type MemoValidationResponseType = {
+  errors: {
+    [index: string]: string[];
+  };
 };
 
 // post('/login')のレスポンスの型
