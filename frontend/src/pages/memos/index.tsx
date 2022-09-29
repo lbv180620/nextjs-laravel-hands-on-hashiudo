@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+import { Loading } from "@/components/molecules";
 import { Layout } from "@/components/templates";
 import { useAuth } from "@/hooks";
 import axios from "@/libs/axios";
@@ -14,6 +15,7 @@ const MemoPage: NextPage = () => {
 
   //* local state
   const [memos, setMemos] = useState<MemoType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   //* hooks
   const { checkLoggedIn } = useAuth();
@@ -24,6 +26,7 @@ const MemoPage: NextPage = () => {
       const res: boolean = await checkLoggedIn();
       if (!res) {
         await router.push("/");
+        return;
       }
 
       await axios
@@ -34,10 +37,17 @@ const MemoPage: NextPage = () => {
         })
         .catch((err: AxiosError) => {
           console.log(err.response);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     })();
-  }, [router, checkLoggedIn]);
+  }, [router, checkLoggedIn, setIsLoading]);
 
+  //* component
+  if (isLoading) return <Loading />;
+
+  //* JSX
   return (
     <Layout title="メモ一覧">
       <div className="mx-auto mt-32 w-2/3">
