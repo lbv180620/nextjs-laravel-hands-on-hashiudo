@@ -3,34 +3,10 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { useUserState } from "@/atoms";
 import { Layout } from "@/components/templates";
+import { useAuth } from "@/hooks";
 import axios from "@/libs/axios";
 import { MemoResourceType, MemoType } from "@/types";
-
-//* dummy date
-// const tempMemos: MemoType[] = [
-//   {
-//     title: "仮のタイトル1",
-//     body: "仮のメモの内容1",
-//   },
-//   {
-//     title: "仮のタイトル2",
-//     body: "仮のメモの内容2",
-//   },
-//   {
-//     title: "仮のタイトル3",
-//     body: "仮のメモの内容3",
-//   },
-//   {
-//     title: "仮のタイトル4",
-//     body: "仮のメモの内容4",
-//   },
-//   {
-//     title: "仮のタイトル5",
-//     body: "仮のメモの内容5",
-//   },
-// ];
 
 const MemoPage: NextPage = () => {
   //* router
@@ -39,19 +15,17 @@ const MemoPage: NextPage = () => {
   //* local state
   const [memos, setMemos] = useState<MemoType[]>([]);
 
-  //* global state
-  const { user } = useUserState();
+  //* hooks
+  const { checkLoggedIn } = useAuth();
 
   //* DidMount
   useEffect(() => {
-    // 未ログインの場合、ログインページに遷移
-    if (!user) {
-      void (async () => {
-        await router.push("/");
-      })();
-    }
-
     void (async () => {
+      const res: boolean = await checkLoggedIn();
+      if (!res) {
+        await router.push("/");
+      }
+
       await axios
         .get("/api/memos")
         .then((res: AxiosResponse<MemoResourceType>) => {
@@ -62,7 +36,7 @@ const MemoPage: NextPage = () => {
           console.log(err.response);
         });
     })();
-  }, [router, user]);
+  }, [router, checkLoggedIn]);
 
   return (
     <Layout title="メモ一覧">

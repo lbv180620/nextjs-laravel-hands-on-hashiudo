@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MemoController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,9 @@ Route::get('/memos', [MemoController::class, 'fetch'])->name('fetch');
 
 // メモ登録
 Route::post('/memos', [MemoController::class, 'create'])->name('create');
+
+// ログインユーザー取得
+Route::get('/user', function () {
+    $user = Auth::user();
+    return $user ? new UserResource($user) : null;
+});
