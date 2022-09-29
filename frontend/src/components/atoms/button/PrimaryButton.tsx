@@ -1,22 +1,16 @@
-import { memo, FC } from "react";
+import { memo, FC, ReactNode } from "react";
 
 //* props type
 type PropsType = {
-  text: string;
-  onClick: () => Promise<void>;
+  children: ReactNode;
   message?: string | undefined;
 };
 
-export const PrimaryButton: FC<PropsType> = memo(({ text, onClick, message }) => {
+export const PrimaryButton: FC<PropsType> = memo(({ children, message }) => {
   return (
     <div className="mt-12 text-center">
       {message !== undefined && message && <p className="py-3 text-red-500">{message}</p>}
-      <button
-        className="cursor-pointer rounded-xl bg-gray-700 py-3 px-10 text-gray-50 drop-shadow-md hover:bg-gray-600 sm:px-20"
-        onClick={onClick}
-      >
-        {text}
-      </button>
+      {children}
     </div>
   );
 });

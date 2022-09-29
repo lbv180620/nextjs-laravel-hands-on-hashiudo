@@ -1,27 +1,28 @@
+import { ErrorMessage } from "@hookform/error-message";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { ChangeEvent, useCallback, useEffect } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
-import { PrimaryInput, PrimaryTextarea } from "@/components/atoms";
+import { PrimaryButton, PrimaryInput, PrimaryTextarea } from "@/components/atoms";
 import { FormLayout, Layout } from "@/components/templates";
 import { useAuth, useMemoPost } from "@/hooks";
+import { MemoFormType } from "@/types";
 
 const PostPage: NextPage = () => {
   //* router
   const router = useRouter();
 
   //* hooks
-  const { memoForm, setMemoForm, createMemo, validation } = useMemoPost();
+  const { createMemo, validation } = useMemoPost();
   const { checkLoggedIn } = useAuth();
 
-  //* event
-  // POSTデータの更新
-  const updateMemoForm = useCallback(
-    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setMemoForm({ ...memoForm, [e.target.name]: e.target.value });
-    },
-    [memoForm, setMemoForm]
-  );
+  //* react-hook-form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<MemoFormType>();
 
   //* DidMount
   useEffect(() => {
@@ -37,15 +38,39 @@ const PostPage: NextPage = () => {
 
   return (
     <Layout title="メモの登録">
-      <FormLayout title="メモの登録" btnTitle="登録する" onClick={createMemo}>
-        <PrimaryInput
-          text="タイトル"
-          name="title"
-          value={memoForm.title}
-          onChange={updateMemoForm}
-          message={validation?.title}
-        />
-        <PrimaryTextarea text="メモの内容" value={memoForm.body} onChange={updateMemoForm} message={validation?.body} />
+      <FormLayout title="メモの登録">
+        <PrimaryInput text="タイトル" message={validation?.title}>
+          <input
+            className="w-full rounded-md border p-2 outline-none"
+            {...register("title", { required: "必須入力です。" })}
+          />
+          <ErrorMessage
+            errors={errors}
+            name={"title"}
+            render={({ message }) => <p className="py-3 text-red-500">{message}</p>}
+          />
+        </PrimaryInput>
+        <PrimaryTextarea text="メモの内容" message={validation?.body}>
+          <textarea
+            className="w-full rounded-md border p-2 outline-none"
+            cols={30}
+            rows={4}
+            {...register("body", { required: "必須入力です。" })}
+          />
+          <ErrorMessage
+            errors={errors}
+            name={"body"}
+            render={({ message }) => <p className="py-3 text-red-500">{message}</p>}
+          />
+        </PrimaryTextarea>
+        <PrimaryButton>
+          <button
+            className="cursor-pointer rounded-xl bg-gray-700 py-3 px-10 text-gray-50 drop-shadow-md hover:bg-gray-600 sm:px-20"
+            onClick={handleSubmit(createMemo)}
+          >
+            登録する
+          </button>
+        </PrimaryButton>
       </FormLayout>
     </Layout>
   );
