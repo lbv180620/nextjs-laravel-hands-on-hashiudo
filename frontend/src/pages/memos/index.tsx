@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+import { useUserState } from "@/atoms";
 import { Layout } from "@/components/templates";
 import axios from "@/libs/axios";
 import { MemoResourceType, MemoType } from "@/types";
@@ -38,8 +39,18 @@ const MemoPage: NextPage = () => {
   //* local state
   const [memos, setMemos] = useState<MemoType[]>([]);
 
+  //* global state
+  const { user } = useUserState();
+
   //* DidMount
   useEffect(() => {
+    // 未ログインの場合、ログインページに遷移
+    if (!user) {
+      void (async () => {
+        await router.push("/");
+      })();
+    }
+
     void (async () => {
       await axios
         .get("/api/memos")
@@ -51,7 +62,7 @@ const MemoPage: NextPage = () => {
           console.log(err.response);
         });
     })();
-  }, []);
+  }, [router, user]);
 
   return (
     <Layout title="メモ一覧">
