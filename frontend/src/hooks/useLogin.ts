@@ -2,6 +2,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 
+import { useUserState } from "@/atoms";
 import axios from "@/libs/axios";
 import { LoginFormType, LoginValidationResponseType, UserResourceType, LoginValidationType } from "@/types";
 
@@ -15,6 +16,9 @@ export const useLogin = () => {
     email: "",
     password: "",
   });
+
+  //* global state
+  const { setUser } = useUserState();
 
   // バリデーションメッセージのstate
   const [validation, setValidation] = useState<LoginValidationType>({});
@@ -38,6 +42,7 @@ export const useLogin = () => {
           .post("/login", loginForm)
           .then(async (res: AxiosResponse<UserResourceType>) => {
             console.log(res.data);
+            setUser(res.data.data);
             await router.push("/memos");
           })
           .catch((err: AxiosError<LoginValidationResponseType>) => {
@@ -62,7 +67,7 @@ export const useLogin = () => {
             }
           });
       });
-  }, [loginForm, router]);
+  }, [loginForm, router, setUser]);
 
   return { loginForm, setLoginForm, login, validation };
 };
