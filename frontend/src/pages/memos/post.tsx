@@ -2,10 +2,9 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect } from "react";
 
-import { useUserState } from "@/atoms";
 import { PrimaryInput, PrimaryTextarea } from "@/components/atoms";
 import { FormLayout, Layout } from "@/components/templates";
-import { useMemoPost } from "@/hooks";
+import { useAuth, useMemoPost } from "@/hooks";
 
 const PostPage: NextPage = () => {
   //* router
@@ -13,9 +12,7 @@ const PostPage: NextPage = () => {
 
   //* hooks
   const { memoForm, setMemoForm, createMemo, validation } = useMemoPost();
-
-  //* global state
-  const { user } = useUserState();
+  const { checkLoggedIn } = useAuth();
 
   //* event
   // POSTデータの更新
@@ -28,12 +25,14 @@ const PostPage: NextPage = () => {
 
   //* DidMount
   useEffect(() => {
-    if (!user) {
-      void (async () => {
+    void (async () => {
+      // ログイン中か判定
+      const res: boolean = await checkLoggedIn();
+      if (!res) {
         await router.push("/");
-      })();
-    }
-  }, [router, user]);
+      }
+    })();
+  }, [router, checkLoggedIn]);
 
   return (
     <Layout title="メモの登録">
