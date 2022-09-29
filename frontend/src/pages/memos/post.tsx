@@ -30,6 +30,7 @@ const PostPage: NextPage = () => {
       const res: boolean = await checkLoggedIn();
       if (!res) {
         await router.push("/");
+        return;
       }
     })();
   }, [router, checkLoggedIn]);
