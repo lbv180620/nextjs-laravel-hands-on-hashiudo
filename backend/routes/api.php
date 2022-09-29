@@ -23,8 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // メモ全件取得
 Route::get('/memos', [MemoController::class, 'fetch'])->name('fetch');
 
-// メモ登録
-Route::post('/memos', [MemoController::class, 'create'])->name('create');
+Route::middleware(['throttle:relief'])->group(function () {
+    // メモ登録
+    Route::post('/memos', [MemoController::class, 'create'])->name('create');
+});
 
 // ログインユーザー取得
 Route::get('/user', function () {
