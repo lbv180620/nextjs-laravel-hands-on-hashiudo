@@ -78,8 +78,8 @@ module.exports = {
      * ^ @typescript-eslint/no-misused-promisesの回避策
      * https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/no-misused-promises.md
      */
-    '@typescript-eslint/no-misused-promises': [
-      'error',
+    "@typescript-eslint/no-misused-promises": [
+      "error",
       {
         checksVoidReturn: false,
       },

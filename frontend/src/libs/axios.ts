@@ -11,11 +11,12 @@ import Axios from "axios";
 //   });
 
 const axios = Axios.create({
-  baseURL: "http://localhost:8080",
-  // headers: {
-  //   'Content-Type': 'application/json',
-  //   'X-Requested-With': 'XMLHttpRequest',
-  // },
+  // baseURL: "http://localhost:8080",
+  baseURL: "https://nextjs-laravel-hands-on.herokuapp.com/",
+  headers: {
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+  },
   withCredentials: true,
 });
 
