@@ -36,15 +36,11 @@ const Home: NextPage = () => {
           <ErrorMessage
             errors={errors}
             name={"email"}
-            render={({ message }) => (
-              <p className="py-3 text-red-500">{message}</p>
-            )}
+            render={({ message }) => <p className="py-3 text-red-500">{message}</p>}
           />
         </PrimaryInput>
         <PrimaryInput text="パスワード" message={validation.password}>
-          <small className="mb-2 block text-gray-500">
-            8文字以上の半角英数字で入力してください
-          </small>
+          <small className="mb-2 block text-gray-500">8文字以上の半角英数字で入力してください</small>
           <input
             className="w-full rounded-md border p-2 outline-none"
             type="password"
@@ -59,9 +55,7 @@ const Home: NextPage = () => {
           <ErrorMessage
             errors={errors}
             name={"password"}
-            render={({ message }) => (
-              <p className="py-3 text-red-500">{message}</p>
-            )}
+            render={({ message }) => <p className="py-3 text-red-500">{message}</p>}
           />
         </PrimaryInput>
         <PrimaryButton message={validation?.loginFailed}>

@@ -4,12 +4,7 @@ import { useCallback, useState } from "react";
 
 import { useUserState } from "@/atoms";
 import axios from "@/libs/axios";
-import {
-  LoginFormType,
-  LoginValidationResponseType,
-  UserResourceType,
-  LoginValidationType,
-} from "@/types";
+import { LoginFormType, LoginValidationResponseType, UserResourceType, LoginValidationType } from "@/types";
 
 export const useLogin = () => {
   //* router
@@ -52,8 +47,7 @@ export const useLogin = () => {
                 // バリデーションのレスポンスの構造を整形する処理
                 const errors = err.response?.data.errors;
                 // state更新用のオブジェクトを別で定義(整形されたレスポンスが入る変数)
-                const validationMessages: { [index: string]: string } =
-                  {} as LoginValidationType;
+                const validationMessages: { [index: string]: string } = {} as LoginValidationType;
                 // ここで整形する
                 Object.keys(errors).map((key: string) => {
                   validationMessages[key] = errors[key][0];

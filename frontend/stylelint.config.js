@@ -1,9 +1,5 @@
 module.exports = {
-  extends: [
-    "stylelint-config-standard",
-    "stylelint-config-recess-order",
-    "stylelint-config-prettier",
-  ],
+  extends: ["stylelint-config-standard", "stylelint-config-recess-order", "stylelint-config-prettier"],
   plugins: ["stylelint-scss"],
   customSyntax: "postcss-scss",
   ignoreFiles: ["**/node_modules/**", "/public/", "/.next/"],
@@ -12,26 +8,13 @@ module.exports = {
     "at-rule-no-unknown": [
       true,
       {
-        ignoreAtRules: [
-          "tailwind",
-          "apply",
-          "variants",
-          "responsive",
-          "screen",
-          "use",
-        ],
+        ignoreAtRules: ["tailwind", "apply", "variants", "responsive", "screen", "use"],
       },
     ],
     "scss/at-rule-no-unknown": [
       true,
       {
-        ignoreAtRules: [
-          "tailwind",
-          "apply",
-          "variants",
-          "responsive",
-          "screen",
-        ],
+        ignoreAtRules: ["tailwind", "apply", "variants", "responsive", "screen"],
       },
     ],
     "declaration-block-trailing-semicolon": null,
