@@ -155,8 +155,7 @@ return [
     |
     */
 
-    // 'domain' => env('SESSION_DOMAIN', null),
-    'domain' => '.nextjs-laravel-hands-on-hashiudo.vercel.app',
+    'domain' => env('SESSION_DOMAIN', null),
 
     /*
     |--------------------------------------------------------------------------
