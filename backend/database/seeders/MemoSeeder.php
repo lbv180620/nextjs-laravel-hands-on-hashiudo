@@ -17,6 +17,7 @@ class MemoSeeder extends Seeder
         //
         DB::table('memos')->insert([
             [
+                'id' => 1,
                 'user_id' => 1,
                 'title' => 'タイトル1',
                 'body' => 'サンプルメモ1',
@@ -24,6 +25,7 @@ class MemoSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'id' => 2,
                 'user_id' => 1,
                 'title' => 'タイトル2',
                 'body' => 'サンプルメモ2',
@@ -31,6 +33,7 @@ class MemoSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'id' => 3,
                 'user_id' => 1,
                 'title' => 'タイトル3',
                 'body' => 'サンプルメモ3',
@@ -38,6 +41,7 @@ class MemoSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'id' => 4,
                 'user_id' => 1,
                 'title' => 'タイトル4',
                 'body' => 'サンプルメモ4',
@@ -45,6 +49,7 @@ class MemoSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'id' => 5,
                 'user_id' => 1,
                 'title' => 'タイトル5',
                 'body' => 'サンプルメモ5',
@@ -52,6 +57,7 @@ class MemoSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'id' => 6,
                 'user_id' => 1,
                 'title' => 'タイトル6',
                 'body' => 'サンプルメモ6',
