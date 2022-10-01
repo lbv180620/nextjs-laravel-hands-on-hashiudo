@@ -9,7 +9,9 @@ type PropsType = {
 export const PrimaryButton: FC<PropsType> = memo(({ children, message }) => {
   return (
     <div className="mt-12 text-center">
-      {message !== undefined && message && <p className="py-3 text-red-500">{message}</p>}
+      {message !== undefined && message && (
+        <p className="py-3 text-red-500">{message}</p>
+      )}
       {children}
     </div>
   );

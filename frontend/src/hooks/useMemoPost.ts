@@ -3,7 +3,11 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 
 import axios from "@/libs/axios";
-import { MemoFormType, MemoValidationResponseType, MemoValidationType } from "@/types";
+import {
+  MemoFormType,
+  MemoValidationResponseType,
+  MemoValidationType,
+} from "@/types";
 
 export const useMemoPost = () => {
   //* router
@@ -34,7 +38,8 @@ export const useMemoPost = () => {
               if (err.response?.status === 422) {
                 const errors = err.response.data.errors;
                 // state更新用のオブジェクトを別で定義
-                const validationMessages: { [index: string]: string } = {} as MemoValidationType;
+                const validationMessages: { [index: string]: string } =
+                  {} as MemoValidationType;
                 Object.keys(errors).map((key: string) => {
                   validationMessages[key] = errors[key][0];
                 });

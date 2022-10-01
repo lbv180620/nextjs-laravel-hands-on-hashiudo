@@ -27,7 +27,6 @@ module.exports = {
   // vueIndentScriptAndStyle: false,
   // endOfLine: "lf",
   // embeddedLanguageFormatting: "auto"
-
   //* カスタイマイズ設定
   // trailingComma: 'all', // 末尾のカンマあり
   // semi: false,
@@ -35,7 +34,6 @@ module.exports = {
   // doubleQuote: true, // ダブルクォーテーションに統一
   // bracketSameLine: true,
   // jsxSingleQuote: true, //jsx もシングルクォーテーションに統一
-  
   //^ 以下はEditorConfigで設定できる
   // printWidth: 120,
   // tabWidth: 2,

@@ -4,7 +4,11 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-import { PrimaryButton, PrimaryInput, PrimaryTextarea } from "@/components/atoms";
+import {
+  PrimaryButton,
+  PrimaryInput,
+  PrimaryTextarea,
+} from "@/components/atoms";
 import { FormLayout, Layout } from "@/components/templates";
 import { useAuth, useMemoPost } from "@/hooks";
 import { MemoFormType } from "@/types";
@@ -47,7 +51,9 @@ const PostPage: NextPage = () => {
           <ErrorMessage
             errors={errors}
             name={"title"}
-            render={({ message }) => <p className="py-3 text-red-500">{message}</p>}
+            render={({ message }) => (
+              <p className="py-3 text-red-500">{message}</p>
+            )}
           />
         </PrimaryInput>
         <PrimaryTextarea text="メモの内容" message={validation?.body}>
@@ -60,7 +66,9 @@ const PostPage: NextPage = () => {
           <ErrorMessage
             errors={errors}
             name={"body"}
-            render={({ message }) => <p className="py-3 text-red-500">{message}</p>}
+            render={({ message }) => (
+              <p className="py-3 text-red-500">{message}</p>
+            )}
           />
         </PrimaryTextarea>
         <PrimaryButton>

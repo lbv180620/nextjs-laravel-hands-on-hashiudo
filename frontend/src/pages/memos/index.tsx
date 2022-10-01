@@ -64,7 +64,10 @@ const MemoPage: NextPage = () => {
         <div className="mt-3">
           <div className="mx-auto grid w-2/3 grid-cols-2 gap-4  ">
             {memos?.map((memo: MemoType, idx) => (
-              <div className="mb-5 bg-gray-100 p-4 shadow-lg" key={idx.toString()}>
+              <div
+                className="mb-5 bg-gray-100 p-4 shadow-lg"
+                key={idx.toString()}
+              >
                 <p className="mb-1 text-lg font-bold">{memo.title}</p>
                 <p className="">{memo.body}</p>
               </div>
