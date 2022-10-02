@@ -4,6 +4,13 @@ use Illuminate\Support\Str;
 
 $db = parse_url(env('DATABASE_URL'));
 
+if (getenv('REDIS_URL')) {
+    $url = parse_url(getenv('REDIS_URL'));
+    putenv('REDIS_HOST=' . $url['host']);
+    putenv('REDIS_PORT=' . $url['port']);
+    putenv('REDIS_PASSWORD=' . $url['pass']);
+}
+
 return [
 
     /*
