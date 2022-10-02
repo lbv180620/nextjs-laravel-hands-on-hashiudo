@@ -5,6 +5,12 @@ use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// header("Access-Control-Allow-Origin: *");
+// header('Access-Control-Allow-Credentials: true'); // キャッシュを許可
+// header('Access-Control-Allow-Headers: content-type, x-requested-with'); // 許可するヘッダー情報
+// header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE'); // すべてのメソッドを許可
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
