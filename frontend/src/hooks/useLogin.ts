@@ -32,12 +32,11 @@ export const useLogin = () => {
         // CSRF保護の初期化
         .get("/sanctum/csrf-cookie")
         .then(async () => {
-          const token = decodeURIComponent(document.cookie).replace("XSRF-TOKEN=", "");
           // ログイン処理
           await axios
             .post("/login", data, {
               headers: {
-                "X-XSRF-TOKEN": token,
+                "X-XSRF-TOKEN2": decodeURIComponent(document.cookie).replace("XSRF-TOKEN=", ""),
               },
             })
             .then(async (res: AxiosResponse<UserResourceType>) => {
