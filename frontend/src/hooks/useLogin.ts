@@ -31,8 +31,8 @@ export const useLogin = () => {
       await axios
         // CSRF保護の初期化
         .get("/sanctum/csrf-cookie")
-        .then(async (res) => {
-          const token = decodeURIComponent(document.cookie).replace(`${res.config.xsrfCookieName as string}=`, "");
+        .then(async () => {
+          const token = decodeURIComponent(document.cookie).replace("XSRF-TOKEN=", "");
           // ログイン処理
           await axios
             .post("/login", data, {
