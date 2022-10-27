@@ -20,7 +20,7 @@ return [
     'allowed_methods' => ['*'],
 
     // 'allowed_origins' => ['*'],
-    'allowed_origins' => ['https://nextjs-laravel-hands-on-hashiudo.vercel.app'],
+    'allowed_origins' => [env('FRONTEND_URL', 'localhost')],
 
     'allowed_origins_patterns' => [],
 

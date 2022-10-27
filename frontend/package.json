@@ -72,5 +72,10 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "npm run lint-format"
+  },
+  "engines": {
+    "node": "14.x",
+    "npm": "8.x",
+    "yarn": "1.22.x"
   }
 }

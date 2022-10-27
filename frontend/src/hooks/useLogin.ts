@@ -34,11 +34,7 @@ export const useLogin = () => {
         .then(async () => {
           // ログイン処理
           await axios
-            .post("/login", data, {
-              headers: {
-                "X-XSRF-TOKEN2": decodeURIComponent(document.cookie).replace("XSRF-TOKEN=", ""),
-              },
-            })
+            .post("/login", data)
             .then(async (res: AxiosResponse<UserResourceType>) => {
               console.log(res.data);
               setUser(res.data.data);
