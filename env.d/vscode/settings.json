@@ -1,0 +1,228 @@
+{
+  // デバッグ中に行内に変数値を表示
+  "debug.inlineValues": "on",
+  // デバッグコンソールの表示方法
+  "debug.internalConsoleOptions": "openOnSessionStart",
+  // デバッグビューの表示方法
+  "debug.openDebug": "openOnSessionStart",
+  // テキストコピー時に書式設定を含める
+  "editor.copyWithSyntaxHighlighting": false,
+  // ドラッグアンドドロップで選択範囲のテキストを移動できるようにする
+  "editor.dragAndDrop": false,
+  // 貼り付けを行ったときに自動でフォーマット
+  "editor.formatOnPaste": true,
+  // 入力した行を自動でフォーマット
+  "editor.formatOnType": true,
+  // ミニマップの最大幅
+  "editor.minimap.maxColumn": 60,
+  // ミニマップのスライダーの表示方法
+  "editor.minimap.showSlider": "always",
+  // ミニマップのサイズ
+  "editor.minimap.size": "fit",
+  // 制御文字を表示
+  "editor.renderControlCharacters": true,
+  // エディター上での空白文字の表示方法
+  "editor.renderWhitespace": "all",
+  // 行の折りたたみ記号の表示方法
+  "editor.showFoldingControls": "always",
+  // 単語の区切り文字
+  "editor.wordSeparators": "`~!@#%^&*()-=+[{]}\\|;:'\",.<>/?　、。！？「」【】『』（）",
+  // 行の折り返し表示
+  "editor.wordWrap": "on",
+  // 名前重複時の名前付け規則
+  "explorer.incrementalNaming": "smart",
+  // 言語に対するファイルの関連付け
+  "files.associations": {
+    "*.css": "css",
+    "styles": "css",
+    "*.postcss": "postcss",
+    "*.php": "php",
+    "*.jsx": "javascriptreact",
+    "*.json": "jsonc",
+    "*.ejs": "html",
+    ".prettierrc": "jsonc",
+    "*.blade.php": "blade",
+    "*.go": "go",
+    ".env": "dotenv",
+    "*.vue": "vue",
+    ".eslintignore": "ignore"
+  },
+  // 改行コードの規定値
+  "files.eol": "\n",
+  // 非表示にするファイル・ディレクトリのパスのパターン
+  "files.exclude": {
+    // あれば記述する
+  },
+  // ファイル保存時に行末に改行を挿入
+  "files.insertFinalNewline": true,
+  // ファイル保存時に最終行以降の空行を削除
+  "files.trimFinalNewlines": false,
+  // ファイル保存時に各行の末尾にある半角スペースを削除
+  "files.trimTrailingWhitespace": true,
+  // 監視対象から外すファイル・ディレクトリのパスのパターン
+  "files.watcherExclude": {
+    // あれば記述する
+  },
+  // 検索対象から外すファイル・ディレクトリのパスのパターン
+  "search.exclude": {
+    //あれば記述する
+  },
+  // 検索ビューの検索結果に行数を併記
+  "search.showLineNumbers": true,
+  // アクティブなターミナルセッションがある場合、終了時に確認を行う
+  "terminal.integrated.confirmOnExit": "always",
+  // ターミナルで選択したテキストをクリップボードにコピー
+  "terminal.integrated.copyOnSelection": true,
+  // エディターのタブのサイズ
+  "workbench.editor.tabSizing": "shrink",
+  // ファイルアイコンテーマ
+  "workbench.iconTheme": "material-icon-theme",
+  // 起動時に表示するエディター
+  "workbench.startupEditor": "readme",
+  /* 各言語、ファイル固有の設定 */
+  "[csv]": {
+    // 行の折り返し表示
+    "editor.wordWrap": "off"
+  },
+  "[json]": {
+    // 既定のフォーマッター
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[log]": {
+    // 行の折り返し表示
+    "editor.wordWrap": "off"
+  },
+  "[python]": {
+    // 1つのタブに相当する半角スペースの数
+    "editor.tabSize": 4
+  },
+  "[tsv]": {
+    // Tabキーで半角スペースを挿入
+    "editor.insertSpaces": false,
+    // 行の折り返し表示
+    "editor.wordWrap": "off"
+  },
+  // lang=”ja”に変更する
+  "emmet.variables": {
+    "lang": "ja"
+  },
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "bracket-pair-colorizer-2.depreciation-notice": false,
+  "javascript.suggest.completeFunctionCalls": true,
+  "typescript.suggest.completeFunctionCalls": true,
+  "editor.fontFamily": "Ricty Diminished",
+  "editor.fontSize": 14,
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "emmet.triggerExpansionOnTab": true,
+  "editor.detectIndentation": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // Enable per-language basis by scoping for Prettier
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    // "editor.defaultFormatter": "vscode.typescript-language-features",
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    // "editor.defaultFormatter": "vscode.typescript-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.formatOnSave": true,
+    // "editor.defaultFormatter": "vscode.typescript-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[php]": {
+    "cSpell.fixSpellingWithRenameProvider": false,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  },
+  "[go]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "golang.go"
+  },
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "ejs": "html",
+    "blade": "html",
+    "php": "html",
+    "ts": "javascript",
+    // "jsx": "html",
+    // "tsx": "html"
+  },
+  "emmet.syntaxProfiles": {
+    "blade": "html"
+  },
+  "stylelint.enable": true,
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "workbench.preferredHighContrastColorTheme": "Default Dark+",
+  "blade.format.enable": true,
+  "[blade]": {
+    "editor.autoClosingBrackets": "always",
+    "editor.defaultFormatter": "shufo.vscode-blade-formatter",
+  },
+  "workbench.colorCustomizations": {},
+  "editor.tokenColorCustomizations": {},
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "material-ui-snippets.showNotesOnStartup": false,
+  "intelephense.diagnostics.undefinedClassConstants": false,
+  "bladeFormatter.format.indentSize": 2,
+  "editor.tabSize": 2,
+  "prettier.printWidth": 120,
+  "intelephense.diagnostics.undefinedConstants": false,
+  "intelephense.diagnostics.undefinedFunctions": false,
+  "intelephense.diagnostics.undefinedMethods": false,
+  "intelephense.diagnostics.undefinedProperties": false,
+  "intelephense.diagnostics.undefinedTypes": false,
+  "[dockercompose]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "go.toolsManagement.autoUpdate": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "[env]": {
+    "editor.defaultFormatter": "IronGeek.vscode-env"
+  },
+  "[sql]": {
+    "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+  },
+  "vsicons.dontShowNewVersionMessage": true,
+  "prettier.requireConfig": true,
+  "editor.formatOnSave": true,
+  "cSpell.userWords": [
+    "libpq"
+  ],
+  // VSCodeのデフォルトターミナルをzshからfishに変更
+  "terminal.integrated.profiles.osx": {
+    "fish": {
+      "path": "/usr/local/bin/fish",
+      "args": [
+        "-l"
+      ]
+    }
+  },
+  "terminal.integrated.defaultProfile.osx": "fish",
+  // NeoVim拡張子が読み込むnvimのパスとinit.luaの設定
+  // MacOS
+  "vscode-neovim.neovimExecutablePaths.darwin": "/usr/local/bin/nvim",
+  "vscode-neovim.neovimInitVimPaths.darwin": "~/.config/nvim/init.lua",
+  // WSL
+  // "useWSL" 設定がオンになっている場合、vscode-neovim は WSL でこのパスを検索する 
+  "vscode-neovim.useWSL": true,
+  "vscode-neovim.neovimExecutablePaths.linux": "/home/linuxbrew/.linuxbrew/bin/nvim",
+}

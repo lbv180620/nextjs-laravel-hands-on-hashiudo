@@ -1,0 +1,133 @@
+[user]
+	name = kazuaki
+	email = 0chlbv7420t18063263g7t20@gmail.com
+[core]
+	excludesfile = ~/.gitignore
+	# excludesfile = ~/.gitignore_global
+	editor = nvim
+	# editor = vim -c \"set fenc=utf-8\"
+	quotepath = false
+	ignorecase = false
+	precomposeunicode = true
+[status]
+	showUntrackedFiles = all
+[color]
+  status = auto
+  diff = auto
+  branch = auto
+  interactive = auto
+  grep = auto
+  ui = auto
+  # ui = true
+[merge]
+	conflictStyle = diff3
+	ff = false
+[push]
+  default = simple
+[diff]
+  tool = nvimdiff
+[difftool "nvimdiff"]
+	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
+	path =
+# [difftool "sourcetree"]
+# 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+# 	path =
+[mergetool "nvimdiff"]
+	cmd = nvim -d \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+# [mergetool "sourcetree"]
+# 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+# 	trustExitCode = true
+[commit]
+	template = /Users/kazuaki/.stCommitMsg
+[pull]
+	rebase = true
+[alias]
+  a = "!git status --short | peco | awk '{print $2}' | xargs git add"
+  d = diff
+  co = checkout
+  ci = commit
+  ca = commit -a
+  # ps = "!git push origin $(git rev-parse --abbrev-ref HEAD)"
+  # pl = "!git pull origin $(git rev-parse --abbrev-ref HEAD)"
+  st = status
+  br = branch
+  ba = branch -a
+  bm = branch --merged
+  bn = branch --no-merged
+  df = "!git hist | peco | awk '{print $2}' | xargs -I {} git diff {}^ {}"
+  hist = log --pretty=format:\"%Cgreen%h %Creset%cd %Cblue[%cn] %Creset%s%C(yellow)%d%C(reset)\" --graph --date=relative --decorate --all
+  llog = log --graph --name-status --pretty=format:\"%C(red)%h %C(reset)(%cd) %C(green)%an %Creset%s %C(yellow)%d%Creset\" --date=relative
+  open = "!hub browse"
+  type = cat-file -t
+  dump = cat-file -p
+  find = "!f() { git log --pretty=format:\"%h %cd [%cn] %s%d\" --date=relative -S'pretty' -S\"$@\" | peco | awk '{print $1}' | xargs -I {} git diff {}^ {}; }; f"
+  # edit conflicted file on merge
+  edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
+  # add conflicted file on merge
+  add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+  sw = switch
+  re = restore
+  c = commit
+  ps = push
+  pl = pull
+  r = remote
+  cl = clone
+[hub]
+  protocol = https
+[github]
+	user = lbv180620
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	required = true
+	process = git-lfs filter-process
+[ghq]
+  root = ~/.ghq
+  # root = ~/go/src
+
+
+# -----------------
+
+# [ghq]
+# 	root = /Users/kazuaki/go/src
+# [user]
+# 	name = kazuaki
+# 	email = 0chlbv7420t18063263g7t20@gmail.com
+# [core]
+# 	editor = vim -c \"set fenc=utf-8\"
+# 	quotepath = false
+# 	ignorecase = false
+# 	precomposeunicode = true
+# 	excludesfile = /Users/kazuaki/.gitignore_global
+# [status]
+# 	showUntrackedFiles = all
+# [color]
+# 	ui = true
+# 	diff = auto
+# 	status = auto
+# 	branch = auto
+# [merge]
+# 	conflictStyle = diff3
+# 	ff = false
+# [push]
+# 	default = simple
+# [difftool "sourcetree"]
+# 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+# 	path =
+# [mergetool "sourcetree"]
+# 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+# 	trustExitCode = true
+# [commit]
+# 	template = /Users/kazuaki/.stCommitMsg
+# [pull]
+# 	rebase = true
+# [alias]
+# 	st = status
+# 	br = branch
+# 	sw = switch
+# 	re = restore
+# 	c = commit
+# 	co = checkout
+# 	p = push
+# 	r = remote

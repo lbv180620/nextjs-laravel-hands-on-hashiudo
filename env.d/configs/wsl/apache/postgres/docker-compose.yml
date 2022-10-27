@@ -1,0 +1,147 @@
+version: "3.8"
+volumes:
+  db-store:
+    # driver: local
+    # driver_opts:
+    #   type: none
+    #   device: ${PWD}/infra/data
+    #   o: bind
+  redis-store:
+    driver: local
+    driver_opts:
+      type: none
+      device: $PWD/infra/redis
+      o: bind
+  pgadmin4-store:
+    driver: local
+    driver_opts:
+      type: none
+      device: $PWD/infra/pgadmin4
+      o: bind
+
+networks:
+  backend-net:
+    driver: bridge
+  # frontend-net:
+  #   driver: bridge
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./infra/docker/backend/php/Dockerfile
+    ports:
+      - ${WEB_PORT:-8080}:80
+      # - 3000:3000 # Laravel MixでbrowserSync(hot reload)を使用する場合は、アンコメントして make up
+    volumes:
+      - ./backend:/work/backend
+    environment:
+      # - DB_HOST=${DB_HOST:-db}
+      - DB_PORT=${DB_PORT:-5432}
+      # - DB_DATABASE=${DB_DATABASE:-laravel_local}
+      - DB_USERNAME=${DB_USERNAME:-phper}
+      - DB_PASSWORD=${DB_PASSWORD:-secret}
+      - USER_NAME=${UNAME}
+      - USER_ID=${UID}
+      - GROUP_NAME=${GNAME}
+      - GROUP_ID=${GID}
+    networks:
+      - backend-net
+    depends_on:
+      - db
+      - redis
+
+  db:
+    build:
+      context: .
+      dockerfile: ./infra/docker/backend/postgres/Dockerfile
+    ports:
+      - ${DB_PORT:-5432}:5432
+    volumes:
+      - ./infra/docker/backend/postgres/initdb.d:/docker-entrypoint-initdb.d
+      - db-store:/var/lib/postgres/data
+    environment:
+      - POSTGRES_DB=${DB_DATABASE:-laravel_local}
+      - POSTGRES_USER=${DB_USERNAME:-phper}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-secret}
+      - POSTGRES_INITDB_ARGS="--encoding=UTF-8"
+      - USER_NAME=${UNAME}
+      - USER_ID=${UID}
+      - GROUP_NAME=${GNAME}
+      - GROUP_ID=${GID}
+    networks:
+      - backend-net
+
+  pgadmin4:
+    image: dpage/pgadmin4
+    ports:
+      - ${PGA_PORT:-4040}:80
+    volumes:
+      - pgadmin4-store:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGA_EMAIL:-phper@gmail.com}
+      - PGADMIN_DEFAULT_PASSWORD=${PGA_PASS:-secret}
+    networks:
+      - backend-net
+    depends_on:
+      - db
+    restart: always
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - "redis-store:/data"
+    networks:
+      - backend-net
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      retries: 3
+      timeout: 5s
+
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./infra/redisinsight:/db
+    networks:
+      - backend-net
+    depends_on:
+      - redis
+  # webpackを使用する場合
+  # client:
+  #   build:
+  #     context: .
+  #     dockerfile: ./infra/docker/frontend/php/Dockerfile
+  #   ports:
+  #     - ${CLIENT_PORT:-8081}:80
+  #   volumes:
+  #     - ./frontend:/work/frontend
+  #   environment:
+  #     - USER_NAME=${UNAME}
+  #     - USER_ID=${UID}
+  #     - GROUP_NAME=${GNAME}
+  #     - GROUP_ID=${GID}
+  #   networks:
+  #     - frontend-net
+
+  # create-react-appを使用する場合
+  # client:
+  #   build:
+  #     context: .
+  #     dockerfile: ./infra/docker/frontend/node/Dockerfile
+  #   ports:
+  #     - ${CLIENT_PORT:-3001}:3001
+  #   volumes:
+  #     - ./frontend:/work/frontend
+  #   environment:
+  #     - USER_NAME=${UNAME}
+  #     - USER_ID=${UID}
+  #     - GROUP_NAME=${GNAME}
+  #     - GROUP_ID=${GID}
+  #   tty: true
+  #   networks:
+  #     - frontend-net

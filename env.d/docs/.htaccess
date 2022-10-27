@@ -1,0 +1,16 @@
+# リライトを有効
+RewriteEngine On
+# リクエストのパスのファイル名が存在しない場合、true
+RewriteCond %{REQUEST_FILENAME} !-f
+# リクエストのパスのディレクトリが存在しない場合、true
+RewriteCond %{REQUEST_FILENAME} !-d
+# 上記のRewriteCondが全てtrueなら、RewriteRuleでindex.htmlにリダイレクト
+# [QSA]はクエリストリング(?var=1)などを引き継ぐ
+# [L]は処理はここで終了
+RewriteRule ^ index.html [QSA,L]
+# RewriteRule ^ index.php [QSA,L]
+
+
+# SPA Apache 404問題対策
+# 参考資料
+# https://tech-it.r-net.info/program/react/271/
