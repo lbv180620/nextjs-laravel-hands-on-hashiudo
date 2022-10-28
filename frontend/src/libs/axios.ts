@@ -11,8 +11,6 @@ import Axios from "axios";
 //   });
 
 const axios = Axios.create({
-  // baseURL: "http://localhost:8080",
-  // baseURL: "https://nextjs-laravel-hands-on.herokuapp.com",
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     // "Content-Type": "application/json",
