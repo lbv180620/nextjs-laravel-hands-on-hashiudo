@@ -8,10 +8,7 @@ FROM php:8.1.5-apache
 
 RUN apt-get update && apt-get install -y zip unzip git
 
-RUN docker-php-ext-install -j "$(nproc)" opcache && docker-php-ext-enable opcache
-
-# RUN docker-php-ext-install intl pdo pdo_pgsql pgsql bcmath && docker-php-ext-enable intl pdo pdo_pgsql pgsql bcmath
-RUN docker-php-ext-install pdo pdo_pgsql pgsql
+RUN docker-php-ext-install -j "$(nproc)" opcache pdo_pgsql && docker-php-ext-enable opcache pdo_pgsql
 
 RUN sed -i 's/80/8080/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
 RUN sed -i 's#/var/www/html#/var/www/html/public#g' /etc/apache2/sites-available/000-default.conf
