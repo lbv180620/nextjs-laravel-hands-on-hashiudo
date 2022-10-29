@@ -4,12 +4,13 @@ COPY . ./app
 RUN cd /app && yarn && yarn run prod
 
 
-FROM php:8.1.5-apache-buster
+FROM php:8.1.5-apache
 
-RUN apt-get update && apt-get install -y --no-install-recommends libicu-dev libonig-dev libzip-dev unzip git && \
-docker-php-ext-install intl opcache pdo pdo_pgsql pgsql zip bcmat
+RUN apt-get update && apt-get install -y zip unzip git
 
 RUN docker-php-ext-install -j "$(nproc)" opcache && docker-php-ext-enable opcache
+
+RUN docker-php-ext-install intl pdo pdo_pgsql pgsql bcmath && docker-php-ext-enable intl pdo pdo_pgsql pgsql bcmath
 
 RUN sed -i 's/80/8080/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
 RUN sed -i 's#/var/www/html#/var/www/html/public#g' /etc/apache2/sites-available/000-default.conf
@@ -22,5 +23,6 @@ COPY . ./
 COPY --from=node-builder /app/public ./public
 RUN composer update && composer install
 RUN chown -Rf www-data:www-data ./
+
 RUN php artisan migrate --force
 RUN php artisan db:seed
