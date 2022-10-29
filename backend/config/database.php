@@ -119,6 +119,21 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
+
+        'postgres' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => $db['host'],
+            'port' => env('DB_PORT', '5432'),
+            'database' => ltrim($db['path'], '/'),
+            'username' => $db['user'],
+            'password' => $db['pass'],
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
     ],
 
     /*
