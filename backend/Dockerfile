@@ -6,10 +6,8 @@ RUN cd /app && yarn && yarn run prod
 
 FROM php:8.1.5-apache
 
-RUN apt-get update && apt-get install -y \
-  zip \
-  unzip \
-  git
+RUN apt-get update && apt-get install -y --no-install-recommends libicu-dev libonig-dev libzip-dev unzip git && \
+docker-php-ext-install intl opcache pdo pdo_pgsql pgsql zip bcmat
 
 RUN docker-php-ext-install -j "$(nproc)" opcache && docker-php-ext-enable opcache
 
