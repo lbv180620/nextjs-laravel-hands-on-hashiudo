@@ -24,3 +24,5 @@ COPY . ./
 COPY --from=node-builder /app/public ./public
 RUN composer install
 RUN chown -Rf www-data:www-data ./
+RUN php artisan migrate
+RUN php artisan db:seed
