@@ -1,5 +1,4 @@
-vendor/
-node_modules/
-.dockerignore
-.gitignore
-.git
+/README.md
+/.git
+/vendor
+/node_modules
