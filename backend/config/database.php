@@ -120,7 +120,7 @@ return [
         //     ]) : [],
         // ],
 
-        'postgres' => [
+        'supabase' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
             'host' => $db["host"],
