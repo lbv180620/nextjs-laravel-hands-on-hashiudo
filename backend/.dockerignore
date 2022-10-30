@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-/README.md
-/.git
-/vendor
-/node_modules
-||||||| parent of 722bec3 (save)
-/README.md
-/.git
-/vendor
-/node_modules
-=======
 # excludes from the docker image/build
 
 # 1. Ignore Laravel-specific files we don't need
@@ -34,4 +23,3 @@ vendor
 **/*.log
 **/.DS_Store
 **/Thumbs.db
->>>>>>> 722bec3 (save)
