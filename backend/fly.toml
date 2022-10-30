@@ -24,8 +24,8 @@ processes = []
   SESSION_DOMAIN = ".hashiudo.ml"
   SESSION_DRIVER = "cookie"
   SESSION_LIFETIME = 120
-  API_KEY = "base64:Q4+6AUlDcZCOL+i3AzUl5TPFKxf2umD+hJlreX5n7gU="
-  DATABASE_URL = "postgresql://postgres:NZQX3q0byngOK3d6@db.kelvadwmcivzycokhixy.supabase.co:5432/postgres"
+#   API_KEY = "base64:Q4+6AUlDcZCOL+i3AzUl5TPFKxf2umD+hJlreX5n7gU="
+#   DATABASE_URL = "postgresql://postgres:NZQX3q0byngOK3d6@db.kelvadwmcivzycokhixy.supabase.co:5432/postgres"
 
 [experimental]
   allowed_public_ports = []
