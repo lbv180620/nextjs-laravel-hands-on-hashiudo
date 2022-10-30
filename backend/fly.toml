@@ -14,7 +14,7 @@ buildpacks = [
 ]
 
 [env]
-APP_DEBUG = false
+APP_DEBUG = "false"
 APP_ENV = "production"
 APP_URL = "https://fly.hashiudo.ga"
 DB_CONNECTION = "postgres"
