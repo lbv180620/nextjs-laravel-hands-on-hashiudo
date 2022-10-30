@@ -16,12 +16,12 @@ processes = []
 [env]
   APP_DEBUG = "false"
   APP_ENV = "production"
-  APP_URL = "https://fly.hashiudo.ga"
+  APP_URL = "https://nextjs-laravel-hands-on-hashiudo-backend.fly.dev"
   DB_CONNECTION = "postgres"
-  FRONTEND_URL = "https://vercel.hashiudo.ga"
+  FRONTEND_URL = "https://vercel.hashiudo.ml"
   LOG_CHANNEL = "errorlog"
-  SANCTUM_STATEFUL_DOMAINS = "vercel.hashiudo.ga"
-  SESSION_DOMAIN = ".hashiudo.ga"
+  SANCTUM_STATEFUL_DOMAINS = "vercel.hashiudo.ml"
+  SESSION_DOMAIN = ".hashiudo.ml"
   SESSION_DRIVER = "cookie"
   SESSION_LIFETIME = 120
 
