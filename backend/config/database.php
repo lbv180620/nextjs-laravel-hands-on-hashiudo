@@ -100,6 +100,7 @@ return [
             'prefix_indexes' => true,
         ],
 
+<<<<<<< HEAD
         // 'cleardb' => [
         //     'driver' => 'mysql',
         //     'url' => env('DATABASE_URL'),
@@ -122,13 +123,57 @@ return [
 
         'postgres' => [
             'driver' => 'pgsql',
+||||||| parent of 722bec3 (save)
+        'cleardb' => [
+            'driver' => 'mysql',
+=======
+        // 'cleardb' => [
+        //     'driver' => 'mysql',
+        //     'url' => env('DATABASE_URL'),
+        //     'host' => $db['host'],
+        //     'port' => env('DB_PORT', '3306'),
+        //     'database' => ltrim($db['path'], '/'),
+        //     'username' => $db['user'],
+        //     'password' => $db['pass'],
+        //     'unix_socket' => env('DB_SOCKET', ''),
+        //     'charset' => 'utf8mb4',
+        //     'collation' => 'utf8mb4_unicode_ci',
+        //     'prefix' => '',
+        //     'prefix_indexes' => true,
+        //     'strict' => true,
+        //     'engine' => null,
+        //     'options' => extension_loaded('pdo_mysql') ? array_filter([
+        //         PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+        //     ]) : [],
+
+        'postgres' => [
+            'driver' => 'pgsql',
+>>>>>>> 722bec3 (save)
             'url' => env('DATABASE_URL'),
+<<<<<<< HEAD
             'host' => $db["host"],
             'port' => env('DB_PORT', '5432'),
             'database' => ltrim($db["path"], '/'),
             'username' => $db["user"],
             'password' => $db["path"],
             'charset' => 'utf8',
+||||||| parent of 722bec3 (save)
+            'host' => $db['host'],
+            'port' => env('DB_PORT', '3306'),
+            'database' => ltrim($db['path'], '/'),
+            'username' => $db['user'],
+            'password' => $db['pass'],
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+=======
+            'host' => $db['host'],
+            'port' => $db['port'],
+            'database' => ltrim($db['path'], '/'),
+            'username' => $db['user'],
+            'password' => $db['pass'],
+            'charset' => 'utf8',
+>>>>>>> 722bec3 (save)
             'prefix' => '',
             'prefix_indexes' => true,
             'schema' => 'public',
