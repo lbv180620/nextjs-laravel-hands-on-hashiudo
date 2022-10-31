@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::connection('public')->create('users', function (Blueprint $table) {
             $table->unsignedBigInteger('id', true);
 
             $table->string('name');
@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 
             // 関数の定義
-            DB::statement("
+            DB::connection('public')->statement("
                 create or replace function set_update_time() returns trigger language plpgsql as
                 $$
                     begin
@@ -39,7 +39,7 @@ class CreateUsersTable extends Migration
             ");
 
             // トリガーの定義
-            DB::statement("
+            DB::connection('public')->statement("
                 create trigger update_trigger before update on users for each row
                     execute procedure set_update_time();
             ");
@@ -53,14 +53,14 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::connection('public')->dropIfExists('users');
 
         // 関数とトリガーの削除処理
-        DB::statement("
+        DB::connection('public')->statement("
             DROP TRIGGER update_trigger ON users;
         ");
 
-        DB::statement("
+        DB::connection('public')->statement("
             DROP FUNCTION set_update_time();
         ");
     }

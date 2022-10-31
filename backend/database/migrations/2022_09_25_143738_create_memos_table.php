@@ -14,7 +14,7 @@ class CreateMemosTable extends Migration
      */
     public function up()
     {
-        Schema::create('memos', function (Blueprint $table) {
+        Schema::connection('public')->create('memos', function (Blueprint $table) {
             $table->unsignedBigInteger('id', true);
 
             $table->foreignId('user_id')
@@ -33,7 +33,7 @@ class CreateMemosTable extends Migration
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 
             // 関数の定義
-            DB::statement("
+            DB::connection('public')->statement("
                 create or replace function set_update_time() returns trigger language plpgsql as
                 $$
                     begin
@@ -44,7 +44,7 @@ class CreateMemosTable extends Migration
             ");
 
             // トリガーの定義
-            DB::statement("
+            DB::connection('public')->statement("
                 create trigger update_trigger before update on memos for each row
                     execute procedure set_update_time();
             ");
@@ -58,14 +58,14 @@ class CreateMemosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('memos');
+        Schema::connection('public')->dropIfExists('memos');
 
         // 関数とトリガーの削除処理
-        DB::statement("
+        DB::connection('public')->statement("
             DROP TRIGGER update_trigger ON memos;
         ");
 
-        DB::statement("
+        DB::connection('public')->statement("
             DROP FUNCTION set_update_time();
         ");
     }
