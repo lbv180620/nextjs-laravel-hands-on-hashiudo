@@ -72,16 +72,5 @@ class CreateMemosTable extends Migration
         DB::statement("
             DROP TRIGGER IF EXISTS refresh_memos_updated_at_step3 ON memos;
         ");
-
-        // 関数の削除処理
-        // DB::statement("
-        //     DROP FUNCTION IF EXISTS refresh_updated_at_step1();
-        // ");
-        // DB::statement("
-        //     DROP FUNCTION IF EXISTS refresh_updated_at_step2();
-        // ");
-        // DB::statement("
-        //     DROP FUNCTION IF EXISTS refresh_updated_at_step3();
-        // ");
     }
 }
