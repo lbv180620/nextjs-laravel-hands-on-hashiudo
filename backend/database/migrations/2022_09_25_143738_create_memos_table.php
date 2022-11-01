@@ -35,43 +35,6 @@ class CreateMemosTable extends Migration
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
 
-        // 関数の定義
-        // DB::statement("
-        //         CREATE FUNCTION refresh_updated_at_step1() RETURNS trigger AS
-        //         $$
-        //         BEGIN
-        //             IF NEW.updated_at = OLD.updated_at THEN
-        //                 NEW.updated_at := NULL;
-        //             END IF;
-        //             RETURN NEW;
-        //         END;
-        //         $$ LANGUAGE plpgsql;
-        //     ");
-
-        // DB::statement("
-        //         CREATE FUNCTION refresh_updated_at_step2() RETURNS trigger AS
-        //         $$
-        //         BEGIN
-        //             IF NEW.updated_at IS NULL THEN
-        //                 NEW.updated_at := OLD.updated_at;
-        //             END IF;
-        //             RETURN NEW;
-        //         END;
-        //         $$ LANGUAGE plpgsql;
-        //     ");
-
-        // DB::statement("
-        //         CREATE FUNCTION refresh_updated_at_step3() RETURNS trigger AS
-        //         $$
-        //         BEGIN
-        //             IF NEW.updated_at IS NULL THEN
-        //                 NEW.updated_at := CURRENT_TIMESTAMP;
-        //             END IF;
-        //             RETURN NEW;
-        //         END;
-        //         $$ LANGUAGE plpgsql;
-        //     ");
-
         // トリガーの定義
         DB::statement("
             CREATE TRIGGER refresh_memos_updated_at_step1
@@ -111,14 +74,14 @@ class CreateMemosTable extends Migration
         ");
 
         // 関数の削除処理
-        DB::statement("
-            DROP FUNCTION IF EXISTS refresh_updated_at_step1();
-        ");
-        DB::statement("
-            DROP FUNCTION IF EXISTS refresh_updated_at_step2();
-        ");
-        DB::statement("
-            DROP FUNCTION IF EXISTS refresh_updated_at_step3();
-        ");
+        // DB::statement("
+        //     DROP FUNCTION IF EXISTS refresh_updated_at_step1();
+        // ");
+        // DB::statement("
+        //     DROP FUNCTION IF EXISTS refresh_updated_at_step2();
+        // ");
+        // DB::statement("
+        //     DROP FUNCTION IF EXISTS refresh_updated_at_step3();
+        // ");
     }
 }
