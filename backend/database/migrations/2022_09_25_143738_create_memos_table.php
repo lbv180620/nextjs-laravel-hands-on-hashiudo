@@ -77,9 +77,13 @@ class CreateMemosTable extends Migration
             CREATE TRIGGER refresh_memos_updated_at_step1
                 BEFORE UPDATE ON memos FOR EACH ROW
                 EXECUTE PROCEDURE refresh_updated_at_step1();
+        ");
+        DB::statement("
             CREATE TRIGGER refresh_memos_updated_at_step2
                 BEFORE UPDATE OF updated_at ON memos FOR EACH ROW
                 EXECUTE PROCEDURE refresh_updated_at_step2();
+        ");
+        DB::statement("
             CREATE TRIGGER refresh_memos_updated_at_step3
                 BEFORE UPDATE ON memos FOR EACH ROW
                 EXECUTE PROCEDURE refresh_updated_at_step3();
@@ -95,16 +99,25 @@ class CreateMemosTable extends Migration
     {
         Schema::dropIfExists('memos');
 
-        // 関数とトリガーの削除処理
+        // トリガーの削除処理
         DB::statement("
             DROP TRIGGER IF EXISTS refresh_memos_updated_at_step1 ON memos;
+        ");
+        DB::statement("
             DROP TRIGGER IF EXISTS refresh_memos_updated_at_step2 ON memos;
+        ");
+        DB::statement("
             DROP TRIGGER IF EXISTS refresh_memos_updated_at_step3 ON memos;
         ");
 
+        // 関数の削除処理
         DB::statement("
             DROP FUNCTION IF EXISTS refresh_updated_at_step1();
+        ");
+        DB::statement("
             DROP FUNCTION IF EXISTS refresh_updated_at_step2();
+        ");
+        DB::statement("
             DROP FUNCTION IF EXISTS refresh_updated_at_step3();
         ");
     }

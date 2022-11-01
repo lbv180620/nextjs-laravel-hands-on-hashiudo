@@ -72,9 +72,13 @@ class CreateUsersTable extends Migration
             CREATE TRIGGER refresh_users_updated_at_step1
                 BEFORE UPDATE ON users FOR EACH ROW
                 EXECUTE PROCEDURE refresh_updated_at_step1();
+        ");
+        DB::statement("
             CREATE TRIGGER refresh_users_updated_at_step2
                 BEFORE UPDATE OF updated_at ON users FOR EACH ROW
                 EXECUTE PROCEDURE refresh_updated_at_step2();
+        ");
+        DB::statement("
             CREATE TRIGGER refresh_users_updated_at_step3
                 BEFORE UPDATE ON users FOR EACH ROW
                 EXECUTE PROCEDURE refresh_updated_at_step3();
@@ -90,16 +94,25 @@ class CreateUsersTable extends Migration
     {
         Schema::dropIfExists('users');
 
-        // 関数とトリガーの削除処理
+        // トリガーの削除処理
         DB::statement("
             DROP TRIGGER IF EXISTS refresh_users_updated_at_step1 ON users;
+        ");
+        DB::statement("
             DROP TRIGGER IF EXISTS refresh_users_updated_at_step2 ON users;
+        ");
+        DB::statement("
             DROP TRIGGER IF EXISTS refresh_users_updated_at_step3 ON users;
         ");
 
+        // 関数との削除処理
         DB::statement("
             DROP FUNCTION IF EXISTS refresh_updated_at_step1();
+        ");
+        DB::statement("
             DROP FUNCTION IF EXISTS refresh_updated_at_step2();
+        ");
+        DB::statement("
             DROP FUNCTION IF EXISTS refresh_updated_at_step3();
         ");
     }
