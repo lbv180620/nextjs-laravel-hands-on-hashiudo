@@ -14,35 +14,37 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::connection('public')->create('users', function (Blueprint $table) {
+        Schema::connection(env('DB_CONNECTION'))->create('users', function (Blueprint $table) {
             $table->unsignedBigInteger('id', true);
 
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
 
+            $table->timestamps();
+
             // $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             // $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
 
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            // $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            // $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 
-            // 関数の定義
-            DB::connection('public')->statement("
-                create or replace function set_update_time() returns trigger language plpgsql as
-                $$
-                    begin
-                        new.updated_at = CURRENT_TIMESTAMP;
-                        return new;
-                    end;
-                $$;
-            ");
+            // // 関数の定義
+            // DB::connection(env('DB_CONNECTION'))->statement("
+            //     create or replace function set_update_time() returns trigger language plpgsql as
+            //     $$
+            //         begin
+            //             new.updated_at = CURRENT_TIMESTAMP;
+            //             return new;
+            //         end;
+            //     $$;
+            // ");
 
-            // トリガーの定義
-            DB::connection('public')->statement("
-                create trigger update_trigger before update on users for each row
-                    execute procedure set_update_time();
-            ");
+            // // トリガーの定義
+            // DB::connection(env('DB_CONNECTION'))->statement("
+            //     create trigger update_trigger before update on users for each row
+            //         execute procedure set_update_time();
+            // ");
         });
     }
 
@@ -53,15 +55,17 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::connection('public')->dropIfExists('users');
+        Schema::dropIfExists('users');
 
-        // 関数とトリガーの削除処理
-        DB::connection('public')->statement("
-            DROP TRIGGER update_trigger ON users;
-        ");
+        // Schema::connection(env('DB_CONNECTION'))->dropIfExists('users');
 
-        DB::connection('public')->statement("
-            DROP FUNCTION set_update_time();
-        ");
+        // // 関数とトリガーの削除処理
+        // DB::connection(env('DB_CONNECTION'))->statement("
+        //     DROP TRIGGER update_trigger ON users;
+        // ");
+
+        // DB::connection(env('DB_CONNECTION'))->statement("
+        //     DROP FUNCTION set_update_time();
+        // ");
     }
 }
