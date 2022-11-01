@@ -1,0 +1,67 @@
+# fly.toml file generated for nextjs-laravel-hands-on-hashiudo-backend on 2022-10-31T08:25:20+09:00
+
+app = "nextjs-laravel-hands-on-hashiudo-backend"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[build]
+  [build.args]
+    NODE_VERSION = "14"
+    PHP_VERSION = "8.1"
+  builder = "heroku/buildpacks:20"
+  buildpacks = [
+    "heroku/php",
+    "heroku/procfile@1.0.1",
+    "heroku/nodejs"
+  ]
+
+# [env]
+#   APP_ENV = "production"
+#   LOG_CHANNEL = "stderr"
+#   LOG_LEVEL = "info"
+#   LOG_STDERR_FORMATTER = "Monolog\\Formatter\\JsonFormatter"
+
+[env]
+  APP_DEBUG = "false"
+  APP_ENV = "production"
+  APP_URL = "https://fly.hashiudo.ml"
+  DB_CONNECTION = "supabase"
+  FRONTEND_URL = "https://vercel.hashiudo.ml"
+  LOG_CHANNEL = "errorlog"
+  SANCTUM_STATEFUL_DOMAINS = "vercel.hashiudo.ml"
+  SESSION_DOMAIN = ".hashiudo.ml"
+  SESSION_DRIVER = "cookie"
+  SESSION_LIFETIME = 120
+#   API_KEY = "base64:Q4+6AUlDcZCOL+i3AzUl5TPFKxf2umD+hJlreX5n7gU="
+#   DATABASE_URL = "postgresql://postgres:NZQX3q0byngOK3d6@db.kelvadwmcivzycokhixy.supabase.co:5432/postgres"
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[[services]]
+  http_checks = []
+  internal_port = 8080
+  processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
