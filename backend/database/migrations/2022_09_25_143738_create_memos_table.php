@@ -26,31 +26,64 @@ class CreateMemosTable extends Migration
             $table->string('title', 50)->comment('タイトル');
             $table->string('body', 255)->comment('メモの内容');
 
-            $table->timestamps();
-
+            // MySQL
             // $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             // $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
 
-            // $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            // $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-
-            // // 関数の定義
-            // DB::connection(env('DB_CONNECTION'))->statement("
-            //     create or replace function set_update_time() returns trigger language plpgsql as
-            //     $$
-            //         begin
-            //             new.updated_at = CURRENT_TIMESTAMP;
-            //             return new;
-            //         end;
-            //     $$;
-            // ");
-
-            // // トリガーの定義
-            // DB::connection(env('DB_CONNECTION'))->statement("
-            //     create trigger update_trigger before update on memos for each row
-            //         execute procedure set_update_time();
-            // ");
+            // PostgreSQL
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
+
+        // 関数の定義
+        DB::statement("
+                CREATE FUNCTION refresh_updated_at_step1() RETURNS trigger AS
+                $$
+                BEGIN
+                    IF NEW.updated_at = OLD.updated_at THEN
+                        NEW.updated_at := NULL;
+                    END IF;
+                    RETURN NEW;
+                END;
+                $$ LANGUAGE plpgsql;
+            ");
+
+        DB::statement("
+                CREATE FUNCTION refresh_updated_at_step2() RETURNS trigger AS
+                $$
+                BEGIN
+                    IF NEW.updated_at IS NULL THEN
+                        NEW.updated_at := OLD.updated_at;
+                    END IF;
+                    RETURN NEW;
+                END;
+                $$ LANGUAGE plpgsql;
+            ");
+
+        DB::statement("
+                CREATE FUNCTION refresh_updated_at_step3() RETURNS trigger AS
+                $$
+                BEGIN
+                    IF NEW.updated_at IS NULL THEN
+                        NEW.updated_at := CURRENT_TIMESTAMP;
+                    END IF;
+                    RETURN NEW;
+                END;
+                $$ LANGUAGE plpgsql;
+            ");
+
+        // トリガーの定義
+        DB::statement("
+            CREATE TRIGGER refresh_memos_updated_at_step1
+                BEFORE UPDATE ON memos FOR EACH ROW
+                EXECUTE PROCEDURE refresh_updated_at_step1();
+            CREATE TRIGGER refresh_memos_updated_at_step2
+                BEFORE UPDATE OF updated_at ON memos FOR EACH ROW
+                EXECUTE PROCEDURE refresh_updated_at_step2();
+            CREATE TRIGGER refresh_memos_updated_at_step3
+                BEFORE UPDATE ON memos FOR EACH ROW
+                EXECUTE PROCEDURE refresh_updated_at_step3();
+        ");
     }
 
     /**
@@ -62,15 +95,17 @@ class CreateMemosTable extends Migration
     {
         Schema::dropIfExists('memos');
 
-        //     Schema::connection(env('DB_CONNECTION'))->dropIfExists('memos');
+        // 関数とトリガーの削除処理
+        DB::statement("
+            DROP TRIGGER IF EXISTS refresh_memos_updated_at_step1 ON memos;
+            DROP TRIGGER IF EXISTS refresh_memos_updated_at_step2 ON memos;
+            DROP TRIGGER IF EXISTS refresh_memos_updated_at_step3 ON memos;
+        ");
 
-        //     // 関数とトリガーの削除処理
-        //     DB::connection(env('DB_CONNECTION'))->statement("
-        //         DROP TRIGGER update_trigger ON memos;
-        //     ");
-
-        //     DB::connection(env('DB_CONNECTION'))->statement("
-        //         DROP FUNCTION set_update_time();
-        //     ");
+        DB::statement("
+            DROP FUNCTION IF EXISTS refresh_updated_at_step1();
+            DROP FUNCTION IF EXISTS refresh_updated_at_step2();
+            DROP FUNCTION IF EXISTS refresh_updated_at_step3();
+        ");
     }
 }
