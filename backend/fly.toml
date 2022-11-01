@@ -25,7 +25,7 @@ processes = []
 [env]
   APP_DEBUG = "false"
   APP_ENV = "production"
-  APP_URL = "https://nextjs-laravel-hands-on-hashiudo-backend.fly.dev"
+  APP_URL = "https://fly.hashiudo.ml"
   DB_CONNECTION = "supabase"
   FRONTEND_URL = "https://vercel.hashiudo.ml"
   LOG_CHANNEL = "errorlog"
