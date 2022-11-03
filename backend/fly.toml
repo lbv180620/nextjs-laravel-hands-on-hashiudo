@@ -31,8 +31,8 @@ processes = []
   LOG_CHANNEL = "errorlog"
   SANCTUM_STATEFUL_DOMAINS = "vercel.hashiudo.ml"
   SESSION_DOMAIN = ".hashiudo.ml"
-  SESSION_DRIVER = "cookie"
-#   SESSION_DRIVER = "redis"
+#   SESSION_DRIVER = "cookie"
+  SESSION_DRIVER = "redis"
   SESSION_LIFETIME = 120
 
 [experimental]
