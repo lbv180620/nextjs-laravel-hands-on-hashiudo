@@ -14,11 +14,17 @@ ARG PHP_VERSION
 LABEL fly_launch_runtime="laravel"
 
 RUN apt-get update && apt-get install -y \
-    git curl zip unzip rsync ca-certificates vim htop cron \
+    git curl zip unzip rsync ca-certificates vim htop cron php-pear php-dev \
     php${PHP_VERSION}-pgsql php${PHP_VERSION}-bcmath \
     php${PHP_VERSION}-swoole php${PHP_VERSION}-xml php${PHP_VERSION}-mbstring \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# redis
+RUN apt-get update && apt-get install -y php-pear php-dev \
+    && pecl install redis \
+    && docker-php-ext-enable redis
+COPY ./php.ini /etc/php/{PHP_VERSION}/fpm/php.ini
 
 WORKDIR /var/www/html
 # copy application code, skipping files based on .dockerignore
