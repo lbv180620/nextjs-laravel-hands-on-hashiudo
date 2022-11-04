@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y php-pear php-dev \
     && pecl install redis \
     && docker-php-ext-enable redis
 COPY ./php.ini /etc/php/{PHP_VERSION}/fpm/php.ini
+COPY ./php.ini  /etc/php/{PHP_VERSION}/cli/php.ini
 
 WORKDIR /var/www/html
 # copy application code, skipping files based on .dockerignore
