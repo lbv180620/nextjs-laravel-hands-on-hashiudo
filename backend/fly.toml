@@ -31,9 +31,13 @@ processes = []
   LOG_CHANNEL = "errorlog"
   SANCTUM_STATEFUL_DOMAINS = "vercel.hashiudo.ml"
   SESSION_DOMAIN = ".hashiudo.ml"
-  SESSION_DRIVER = "cookie"
-#   SESSION_DRIVER = "redis"
+  CACHE_DRIVER= "redis"
+#   SESSION_DRIVER = "cookie"
+  SESSION_DRIVER = "redis"
   SESSION_LIFETIME = 120
+#   REDIS_HOST = "nextjs-laravel-hands-on-hashiudo-redis.internal"
+  REDIS_URL="redis://default:56c033d3218043928298d6e5f0e737e1@fly-nextjs-laravel-hands-on-hashiudo-redis.upstash.io"
+  REDIS_CACHE_DB=0
 
 [experimental]
   allowed_public_ports = []
