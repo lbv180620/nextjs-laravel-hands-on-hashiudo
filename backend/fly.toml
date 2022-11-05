@@ -26,7 +26,12 @@ processes = []
   APP_DEBUG = "false"
   APP_ENV = "production"
   APP_URL = "https://fly.hashiudo.ml"
-  DB_CONNECTION = "supabase"
+#   DB_CONNECTION = "supabase"
+  DB_CONNECTION = "mysql"
+  DB_HOST = "ap-northeast.connect.psdb.cloud"
+  DB_PORT = 3306
+  DB_DATABASE = "nextjs-laravel-hands-on-hashiudo-ps"
+  MYSQL_ATTR_SSL_CA = "/etc/ssl/certs/ca-certificates.crt"
   FRONTEND_URL = "https://vercel.hashiudo.ml"
   LOG_CHANNEL = "errorlog"
   SANCTUM_STATEFUL_DOMAINS = "vercel.hashiudo.ml"
@@ -68,3 +73,6 @@ processes = []
     interval = "15s"
     restart_limit = 0
     timeout = "2s"
+
+# [deploy]
+#   release_command = "php /var/www/html/artisan migrate --force"

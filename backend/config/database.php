@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Str;
 
-$db = parse_url(env('DATABASE_URL'));
+// $db = parse_url(env('DATABASE_URL'));
 
 if (getenv('REDIS_URL')) {
     $url = parse_url(getenv('REDIS_URL'));
@@ -54,7 +54,8 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            // 'url' => env('DATABASE_URL'),
+            'url' => '',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'forge'),
@@ -120,20 +121,20 @@ return [
         //     ]) : [],
         // ],
 
-        'supabase' => [
-            'driver' => 'pgsql',
-            'url' => env('DATABASE_URL'),
-            'host' => $db["host"],
-            'port' => $db["port"],
-            'database' => ltrim($db["path"], '/'),
-            'username' => $db["user"],
-            'password' => $db["pass"],
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'schema' => 'public',
-            'sslmode' => 'prefer',
-        ],
+        // 'supabase' => [
+        //     'driver' => 'pgsql',
+        //     'url' => env('DATABASE_URL'),
+        //     'host' => $db["host"],
+        //     'port' => $db["port"],
+        //     'database' => ltrim($db["path"], '/'),
+        //     'username' => $db["user"],
+        //     'password' => $db["pass"],
+        //     'charset' => 'utf8',
+        //     'prefix' => '',
+        //     'prefix_indexes' => true,
+        //     'schema' => 'public',
+        //     'sslmode' => 'prefer',
+        // ],
     ],
 
     /*
