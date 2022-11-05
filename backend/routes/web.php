@@ -20,8 +20,8 @@ Route::get('/', function () {
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
-Route::get('/test', function () {
-    Cache::put('new-key', Str::random(16));
+// Route::get('/test', function () {
+//     Cache::put('new-key', Str::random(16));
 
-    return "The new cached string is " . Cache::get('new-key');
-});
+//     return "The new cached string is " . Cache::get('new-key');
+// });
