@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException as ValidationValidationException;
@@ -35,22 +36,23 @@ class LoginController extends Controller
     /**
      * ユーザーの全件取得
      *
+     * @return AnonymousResourceCollection
      */
-    // public function fetch()
-    // {
-    //     // ログインユーザーのID取得
-    //     $id = Auth::id();
+    public function fetch(): AnonymousResourceCollection
+    {
+        // ログインユーザーのID取得
+        $id = Auth::id();
 
-    //     if (!$id) {
-    //         throw new Exception('未ログインです。');
-    //     }
+        if (!$id) {
+            throw new Exception('未ログインです。');
+        }
 
-    //     try {
-    //         $users = User::select('*')->latest()->get();
-    //     } catch (\Exception $ex) {
-    //         throw $ex;
-    //     }
+        try {
+            $users = User::select('*')->latest()->get();
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
 
-    //     return UserResource::collection($users);
-    // }
+        return UserResource::collection($users);
+    }
 }
