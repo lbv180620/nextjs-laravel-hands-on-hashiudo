@@ -58,6 +58,20 @@ class MemoSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'user_id' => 2,
+                'title' => 'タイトル2-1',
+                'body' => 'サンプルメモ2-1',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'user_id' => 2,
+                'title' => 'タイトル2-2',
+                'body' => 'サンプルメモ2-2',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }
