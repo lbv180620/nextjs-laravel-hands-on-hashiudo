@@ -7,14 +7,14 @@ import { Loading } from "@/components/molecules";
 import { Layout } from "@/components/templates";
 import { useAuth } from "@/hooks";
 import axios from "@/libs/axios";
-import { MemosResourceType, MemoType } from "@/types";
+import { UsersResourceType, UserType } from "@/types";
 
-const MemoPage: NextPage = () => {
+const UserPage: NextPage = () => {
   //* router
   const router = useRouter();
 
   //* local state
-  const [memos, setMemos] = useState<MemoType[]>([]);
+  const [users, setUsers] = useState<UserType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   //* hooks
@@ -30,10 +30,10 @@ const MemoPage: NextPage = () => {
       }
 
       await axios
-        .get("/api/memos")
-        .then((res: AxiosResponse<MemosResourceType>) => {
+        .get("/api/users")
+        .then((res: AxiosResponse<UsersResourceType>) => {
           console.log(res.data);
-          setMemos(res.data.data);
+          setUsers(res.data.data);
         })
         .catch((err: AxiosError) => {
           console.log(err.response);
@@ -49,24 +49,15 @@ const MemoPage: NextPage = () => {
 
   //* JSX
   return (
-    <Layout title="メモ一覧">
+    <Layout title="ユーザー一覧">
       <div className="mx-auto mt-32 w-2/3">
-        <div className="mx-auto w-1/2 text-center">
-          <button
-            className="mb-12 rounded-3xl bg-blue-500 py-3 px-10 text-xl text-white drop-shadow-md hover:bg-blue-400"
-            onClick={() => router.push("/memos/post")}
-            // onClick={() => void (async () => router.push('/memos/post'))()}
-          >
-            メモを追加する
-          </button>
-        </div>
-
         <div className="mt-3">
           <div className="mx-auto grid w-2/3 grid-cols-2 gap-4  ">
-            {memos?.map((memo: MemoType, idx) => (
+            {users?.map((user: UserType, idx) => (
               <div className="mb-5 bg-gray-100 p-4 shadow-lg" key={idx.toString()}>
-                <p className="mb-1 text-lg font-bold">{memo.title}</p>
-                <p className="">{memo.body}</p>
+                <p className="mb-1 text-lg font-bold">{user.name}</p>
+                <p className="">{user.email}</p>
+                <p className="">{user.role}</p>
               </div>
             ))}
           </div>
@@ -76,4 +67,4 @@ const MemoPage: NextPage = () => {
   );
 };
 
-export default MemoPage;
+export default UserPage;

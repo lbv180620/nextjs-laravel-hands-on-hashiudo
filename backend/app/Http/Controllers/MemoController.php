@@ -39,7 +39,6 @@ class MemoController extends Controller
 
     /**
      * メモの登録
-     *
      */
     public function create(MemoPostRequest $request, Memo $memo)
     {

@@ -25,7 +25,7 @@ class UserController extends Controller
         }
 
         try {
-            $users = User::select('*')->latest()->get();
+            $users = User::latest()->get();
         } catch (\Exception $ex) {
             throw $ex;
         }

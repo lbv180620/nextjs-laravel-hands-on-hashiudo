@@ -1,3 +1,9 @@
+export type UserType = {
+  name: string;
+  email: string;
+  role: string;
+};
+
 export type MemoType = {
   title: string;
   body: string;
@@ -47,8 +53,18 @@ export type UserResourceType = {
   };
 };
 
+// get('api/users')のレスポンスの型
+export type UsersResourceType = {
+  data: {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+  }[];
+};
+
 // get('/api/memos')のレスポンスの型
-export type MemoResourceType = {
+export type MemosResourceType = {
   data: {
     id: number;
     title: string;
