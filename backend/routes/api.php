@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\ForgotPasswordController;
+use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\MemoController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
@@ -33,3 +35,11 @@ Route::get('/user', function () {
     $user = Auth::user();
     return $user ? new UserResource($user) : null;
 });
+
+// パスワードリセット
+// [例1]
+Route::post('/forgot-password', ForgotPasswordController::class)->name('password.forgot');
+Route::post('/reset-password', ResetPasswordController::class)->name('password.reset');
+// [例2]
+// Route::post('password/request', [ForgotPasswordController::class, 'sendResetLinkEmail']); // パスワード再設定メール送信
+// Route::post('password/reset', [ForgotPasswordController::class, 'resetPassword']); // パスワード再設定

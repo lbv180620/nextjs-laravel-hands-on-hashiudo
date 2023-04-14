@@ -843,6 +843,10 @@ mkctrl-r-%:
 mkctrl-r:
 	docker compose exec $(ctr) php artisan make:controller $(model)Controller -r
 
+# --invokableオプションを指定すると、__invokeメソッドを含んだコントローラを生成できる
+mkctrl-i:
+	docker compose exec $(ctr) php artisan make:controller $(model)Controller -i
+
 
 # **** Routing関連 ****
 
@@ -1465,6 +1469,8 @@ serve:
 tinker:
 	docker compose exec $(ctr) php artisan tinker
 
+tinker-exe:
+	docker compose exec $(ctr) php artisan tinker --execute $(code)
 
 # APP_ENVの現在の設定値を確認
 appenv:
