@@ -560,6 +560,34 @@ client-usr:
 stop-client:
 	docker compose stop clinet
 
+# prisma
+# prisma チートシート (CLI)
+# https://qiita.com/ryskBonn92/items/c45e22ce5f37d82ec8de
+p-init:
+	docker compose exec client npx prisma init
+p-mig-dev:
+	docker compose exec client npx prisma migrate dev --name $(name)
+p-mig-deploy:
+	docker compose exec client npx prisma migrate deploy
+p-db-seed:
+	docker compose exec client npx prisma db seed
+p-gen:
+	docker compose exec client npx prisma generate
+p-studio:
+	docker compose exec client npx prisma studio
+p-fmt:
+	docker compose exec client npx prisma format
+p-validate:
+	docker compose exec client npx prisma validate
+p-introspect:
+	docker compose exec client npx prisma introspect
+p-db-pl:
+	docker compose exec client npx prisma db pull
+p-db-ps:
+	docker compose exec client npx prisma db push
+p-v:
+	docker compose exec client npx prisma version
+
 
 # ------------------------
 

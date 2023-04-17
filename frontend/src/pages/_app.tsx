@@ -1,14 +1,25 @@
-import "@styles/globals.css";
-import { RecoilRoot } from "recoil";
+/* eslint @typescript-eslint/no-unsafe-assignment: 0 */
 
-import type { AppProps } from "next/app";
+import "@styles/globals.css"
+import { NextComponentType } from "next"
+import { Session } from "next-auth"
+import { SessionProvider } from "next-auth/react"
+import { RecoilRoot } from "recoil"
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <RecoilRoot>
-      <Component {...pageProps} />;
-    </RecoilRoot>
-  );
+import type { AppProps } from "next/app"
+
+export type CustomAppProps = AppProps<{ session: Session }> & {
+  Component: NextComponentType & { requireAuth?: boolean }
 }
 
-export default MyApp;
+function MyApp({ Component, pageProps: { session, ...pageProps } }: CustomAppProps) {
+  return (
+    <SessionProvider session={session}>
+      <RecoilRoot>
+        <Component {...pageProps} />
+      </RecoilRoot>
+    </SessionProvider>
+  )
+}
+
+export default MyApp

@@ -175,6 +175,7 @@ services:
       dockerfile: ./infra/docker/frontend/node/Dockerfile
     ports:
       - ${CLIENT_PORT:-3000}:3000
+      - 5555:5555
     volumes:
       - ./frontend:/work/frontend
     environment:
@@ -184,4 +185,5 @@ services:
       - GROUP_ID=${GID}
     tty: true
     networks:
-      - frontend-net
+      # - frontend-net
+      - backend-net

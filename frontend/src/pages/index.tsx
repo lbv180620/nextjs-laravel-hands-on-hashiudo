@@ -1,5 +1,6 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { NextPage } from "next";
+import { useSession, signIn, signOut } from "next-auth/react";
 import { useForm } from "react-hook-form";
 
 import { PrimaryButton, PrimaryInput } from "@/components/atoms";
@@ -18,6 +19,23 @@ const Home: NextPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormType>();
+
+  //* NextAuth
+  const { data: session } = useSession();
+  console.log(session);
+
+  if (session) {
+    console.log(session);
+    return (
+      <div className="text-center">
+        <p>Signed in as {session.user?.name}</p>
+        <p>{session.user.mobile}</p>
+        <button className="rounded bg-blue-400 py-2 px-4 text-white" onClick={() => signOut()}>
+          Sign out
+        </button>
+      </div>
+    );
+  }
 
   return (
     <Layout title="ログイン">
@@ -66,8 +84,15 @@ const Home: NextPage = () => {
             ログイン
           </button>
         </PrimaryButton>
+        <div className="mt-8 text-center">
+          <p className="text-sm text-gray-500">Googleアカウントでサインイン</p>
+          <button className="mt-2 rounded bg-blue-400 py-2 px-4 text-white" onClick={() => signIn()}>
+            Sign in
+          </button>
+        </div>
       </FormLayout>
     </Layout>
   );
 };
+
 export default Home;
