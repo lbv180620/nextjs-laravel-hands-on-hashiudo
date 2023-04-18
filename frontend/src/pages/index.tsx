@@ -22,14 +22,12 @@ const Home: NextPage = () => {
 
   //* NextAuth
   const { data: session } = useSession();
-  console.log(session);
 
   if (session) {
     console.log(session);
     return (
       <div className="text-center">
         <p>Signed in as {session.user?.name}</p>
-        <p>{session.user.mobile}</p>
         <button className="rounded bg-blue-400 py-2 px-4 text-white" onClick={() => signOut()}>
           Sign out
         </button>
