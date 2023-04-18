@@ -19,3 +19,9 @@ Route::get('/', function () {
 });
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+Route::prefix('login')->name('login.')->group(function () {
+    Route::get('/{provider}', [LoginController::class, 'redirectToProvider'])
+        ->where('provider',  'google')
+        ->name('{provider}');
+});

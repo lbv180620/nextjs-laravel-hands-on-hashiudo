@@ -47,6 +47,10 @@ export type UserResourceType = {
   };
 };
 
+export type RedirectResourceType = {
+  redirect_url: string;
+};
+
 // get('/api/memos')のレスポンスの型
 export type MemoResourceType = {
   data: {

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException as ValidationValidationException;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
@@ -28,6 +29,15 @@ class LoginController extends Controller
         // ログイン失敗時のエラーメッセージ
         throw ValidationValidationException::withMessages([
             'loginFailed' => 'IDまたはパスワードが間違っています。',
+        ]);
+    }
+
+    public function redirectToProvider(string $provider)
+    {
+        $redirectUrl = Socialite::driver($provider)->redirect()->getTargetUrl();
+
+        return response()->json([
+            'redirect_url' => $redirectUrl,
         ]);
     }
 }
