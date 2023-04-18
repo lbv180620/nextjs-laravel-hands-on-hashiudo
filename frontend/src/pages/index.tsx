@@ -1,4 +1,5 @@
 import { ErrorMessage } from "@hookform/error-message";
+import { AxiosError, AxiosResponse } from "axios";
 import { NextPage } from "next";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useForm } from "react-hook-form";
@@ -6,7 +7,8 @@ import { useForm } from "react-hook-form";
 import { PrimaryButton, PrimaryInput } from "@/components/atoms";
 import { FormLayout, Layout } from "@/components/templates";
 import { useLogin } from "@/hooks";
-import { LoginFormType } from "@/types";
+import axios from "@/libs/axios";
+import { LoginFormType, UsersResourceType } from "@/types";
 
 const Home: NextPage = () => {
   //* hooks
@@ -25,6 +27,22 @@ const Home: NextPage = () => {
 
   if (session) {
     console.log(session);
+
+    void (async () => {
+      await axios
+        .get("/api/users")
+        .then((res: AxiosResponse<UsersResourceType>) => {
+          console.log(res.data);
+        })
+        .catch((err: AxiosError) => {
+          console.log(err.response);
+        });
+      // await axios
+      //   // CSRF保護の初期化
+      //   .get("/sanctum/csrf-cookie")
+      //   .then(async () => {});
+    })();
+
     return (
       <div className="text-center">
         <p>Signed in as {session.user?.name}</p>

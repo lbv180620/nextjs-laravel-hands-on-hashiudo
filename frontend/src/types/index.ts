@@ -44,7 +44,19 @@ export type MemoValidationResponseType = {
 export type UserResourceType = {
   data: {
     id: number;
+    name: string;
+    email: string;
+    password: string;
   };
+};
+
+export type UsersResourceType = {
+  data: {
+    id: number;
+    name: string;
+    email: string;
+    password: string;
+  }[];
 };
 
 // get('/api/memos')のレスポンスの型
