@@ -1,9 +1,13 @@
 /* eslint @typescript-eslint/require-await: 0, @typescript-eslint/no-unused-vars: 0 */
 
 // import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { AxiosError, AxiosResponse } from "axios";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+
+import axios from "@/libs/axios";
+import { UsersResourceType } from "@/types";
 
 // import prisma from "@/libs/prisma";
 
@@ -30,20 +34,38 @@ export const authOptions: NextAuthOptions = {
   //   signIn: "auth/signin",
   // },
   callbacks: {
-    // async signIn() {
-    //   console.log("サインイン");
-    //   return true;
-    // },
-    async session({ session, user }) {
-      console.log(user);
-      // if (session?.user) {
-      //   session.user.id = user.id;
-      //   session.user.mobile = user.mobile;
-      // }
-      // session.user.id = 1;
-      // session.accessToken = token.accessToken;
-      return session;
+    async signIn({ user }) {
+      await axios
+        // CSRF保護の初期化
+        .get("/sanctum/csrf-cookie")
+        .then(async () => {
+          await axios
+            .post("/login/google", {
+              params: {
+                name: user.name,
+                email: user.email,
+              },
+            })
+            .then((res: AxiosResponse<UsersResourceType>) => {
+              console.log(res.data);
+            })
+            .catch((err: AxiosError) => {
+              console.log(err.response);
+            });
+        });
+
+      return true;
     },
+    // async session({ session, user }) {
+    //   console.log(user);
+    // if (session?.user) {
+    //   session.user.id = user.id;
+    //   session.user.mobile = user.mobile;
+    // }
+    // session.user.id = 1;
+    // session.accessToken = token.accessToken;
+    // return session;
+    // },
     // async jwt({ token, account }) {
     //   console.log(`account: ${JSON.stringify(account)}`);
     //   if (account) token.accessToken = account.access_token;

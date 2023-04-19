@@ -26,22 +26,28 @@ const Home: NextPage = () => {
   const { data: session } = useSession();
 
   if (session) {
-    console.log(session);
+    // console.log(session);
 
-    void (async () => {
+    async () => {
       await axios
-        .get("/api/users")
-        .then((res: AxiosResponse<UsersResourceType>) => {
-          console.log(res.data);
-        })
-        .catch((err: AxiosError) => {
-          console.log(err.response);
+        // CSRF保護の初期化
+        .get("/sanctum/csrf-cookie")
+        .then(async () => {
+          await axios
+            .post("/api/login/google", {
+              params: {
+                name: session.user?.name,
+                email: session.user?.email,
+              },
+            })
+            .then((res: AxiosResponse<UsersResourceType>) => {
+              console.log(res.data);
+            })
+            .catch((err: AxiosError) => {
+              console.log(err.response);
+            });
         });
-      // await axios
-      //   // CSRF保護の初期化
-      //   .get("/sanctum/csrf-cookie")
-      //   .then(async () => {});
-    })();
+    };
 
     return (
       <div className="text-center">

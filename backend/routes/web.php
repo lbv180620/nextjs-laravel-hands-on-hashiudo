@@ -19,3 +19,4 @@ Route::get('/', function () {
 });
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/login/{provider}', [ProviderUserController::class, 'login'])->name('{provider}.login');

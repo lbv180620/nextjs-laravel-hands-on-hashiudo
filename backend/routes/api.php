@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MemoController;
+use App\Http\Controllers\ProviderUserController;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
