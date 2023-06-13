@@ -62,6 +62,7 @@ class LoginController extends Controller
         $user = User::create([
             'name' => $providerUser->getName(),
             'email' => $providerUser->getEmail(),
+            'avatar' => $providerUser->getAvatar(),
             'token' => $providerUser->token,
         ]);
 

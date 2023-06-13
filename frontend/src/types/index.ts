@@ -44,6 +44,9 @@ export type MemoValidationResponseType = {
 export type UserResourceType = {
   data: {
     id: number;
+    name: string;
+    email: string;
+    avatar: number;
   };
 };
 
