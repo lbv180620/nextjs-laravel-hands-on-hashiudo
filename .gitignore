@@ -120,3 +120,5 @@ _ide_helper_models.php
 .phpstorm.meta.php
 
 *.d.ts
+
+.php-cs-fixer.cache
