@@ -15,7 +15,6 @@ volumes:
       o: bind
   psysh-store:
 
-
 networks:
   backend-net:
     driver: bridge
@@ -137,14 +136,14 @@ services:
     networks:
       - backend-net
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: ["CMD", "redis-cli", "ping"]
       retries: 3
       timeout: 5s
 
   redisinsight:
     image: redislabs/redisinsight:latest
     ports:
-      - "8001:8001"
+      - "6000:6000"
     volumes:
       - ./infra/redisinsight:/db
     networks:
