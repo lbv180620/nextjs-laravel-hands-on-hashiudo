@@ -2,8 +2,16 @@
 
 namespace App\Exceptions;
 
+use App\Http\Exceptions\TestException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -36,6 +44,39 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        $this->renderable(function (Throwable $e, Request $request) {
+            if ($request->is('api/*') || $request->ajax()) {
+                // Log::error('[API Error]' . $request->method() . ': ' . $request->fullUrl());
+
+                if ($e instanceof HttpException) {
+                    $message = $e->getMessage() ?: HttpResponse::$statusTexts[$e->getStatusCode()];
+                    // Log::error($message);
+
+                    return response()->json([
+                        'message' => $message
+                    ], $e->getStatusCode());
+                }
+
+                if ($e instanceof ValidationException) {
+                    // Log::error($e->errors());
+
+                    return $this->invalidJson($request, $e);
+                }
+
+                if ($e instanceof TestException) {
+                    return new JsonResponse([
+                        'error_message' => $e->getMessage(),
+                        'error_code' => $e->getErrorCode(),
+                        'details' => $e->getDetails(),
+                    ], $e->getStatus());
+                }
+
+                // return response()->json([
+                //     'message' => 'Internal Server Error'
+                // ], 500);
+            }
         });
     }
 }

@@ -1,6 +1,6 @@
 # FROM node:16-buster as node
 # FROM node:14-buster as node
-FROM php:8.0-fpm-buster
+FROM php:8.1-fpm-buster
 SHELL ["/bin/bash", "-oeux", "pipefail", "-c"]
 
 # timezone environment

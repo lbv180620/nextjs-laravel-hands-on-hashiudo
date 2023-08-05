@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\ErrorEnums\TestErrorEnum;
+use App\Http\Exceptions\TestException;
 use App\Http\Requests\MemoPostRequest;
 use App\Http\Resources\MemoResource;
 use App\Models\Memo;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class MemoController extends Controller
@@ -23,9 +26,13 @@ class MemoController extends Controller
         $id = Auth::id();
 
         if (!$id) {
-            throw new Exception('未ログインです。');
+            // throw new Exception('未ログインです。');
+            // $testErrorEnum = new TestErrorEnum();
+            // throw new TestException('未ログインです', 401);
+            // throw new TestException(TestErrorEnum::UNAUTH->message(), TestErrorEnum::UNAUTH->value);
+            // throw new TestException(TestErrorEnum::UNAUTH);
+            abort(404);
         }
-
         try {
             $memos = Memo::where('user_id', $id)
                 ->latest()
