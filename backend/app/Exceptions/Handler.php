@@ -4,9 +4,7 @@ namespace App\Exceptions;
 
 use App\Http\Exceptions\TestException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -51,16 +49,16 @@ class Handler extends ExceptionHandler
                 // Log::error('[API Error]' . $request->method() . ': ' . $request->fullUrl());
 
                 if ($e instanceof HttpException) {
-                    $message = $e->getMessage() ?: HttpResponse::$statusTexts[$e->getStatusCode()];
-                    // Log::error($message);
+                    $code = HttpResponse::$statusTexts[$e->getStatusCode()];
+                    $message = $e->getMessage() ?: __($code);
+                    // Log::error($code);
 
                     return response()->json([
-                        'errors' => [
+                        'error' => [
                             'message' => $message,
-                            'code' => $e->getStatusCode(),
+                            'code' => $code,
                             'details' => [],
                         ]
-                        // 'message' => $message
                     ], $e->getStatusCode());
                 }
 
@@ -71,8 +69,8 @@ class Handler extends ExceptionHandler
                 }
 
                 if ($e instanceof TestException) {
-                    return new JsonResponse([
-                        'errors' => [
+                    return response()->json([
+                        'error' => [
                             'message' => $e->getMessage(),
                             'code' => $e->getErrorCode(),
                             'details' => $e->getDetails(),
@@ -80,9 +78,13 @@ class Handler extends ExceptionHandler
                     ], $e->getStatusCode());
                 }
 
-                // return response()->json([
-                //     'message' => 'Internal Server Error'
-                // ], 500);
+                return response()->json([
+                    'error' => [
+                        'message' => __('Internal Server Error'),
+                        'code' => 'Internal Server Error',
+                        'details' => [],
+                    ]
+                ], 500);
             }
         });
     }
