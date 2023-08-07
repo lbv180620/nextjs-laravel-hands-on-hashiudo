@@ -55,7 +55,12 @@ class Handler extends ExceptionHandler
                     // Log::error($message);
 
                     return response()->json([
-                        'message' => $message
+                        'errors' => [
+                            'message' => $message,
+                            'code' => $e->getStatusCode(),
+                            'details' => [],
+                        ]
+                        // 'message' => $message
                     ], $e->getStatusCode());
                 }
 
@@ -67,10 +72,12 @@ class Handler extends ExceptionHandler
 
                 if ($e instanceof TestException) {
                     return new JsonResponse([
-                        'error_message' => $e->getMessage(),
-                        'error_code' => $e->getErrorCode(),
-                        'details' => $e->getDetails(),
-                    ], $e->getStatus());
+                        'errors' => [
+                            'message' => $e->getMessage(),
+                            'code' => $e->getErrorCode(),
+                            'details' => $e->getDetails(),
+                        ]
+                    ], $e->getStatusCode());
                 }
 
                 // return response()->json([

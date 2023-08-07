@@ -26,7 +26,7 @@ class TestException extends RuntimeException
         return $this->testErrorEnum->value;
     }
 
-    public function getStatus(): int
+    public function getStatusCode(): int
     {
         return $this->testErrorEnum->status();
     }
