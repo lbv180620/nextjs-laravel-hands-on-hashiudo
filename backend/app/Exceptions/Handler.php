@@ -55,8 +55,11 @@ class Handler extends ExceptionHandler
 
                     return response()->json([
                         'error' => [
+                            'url' => $request->fullUrl(),
                             'message' => $message,
-                            'code' => $code,
+                            'code' => str_replace(' ', '', $code),
+                            'id' => "",
+                            'status' => $e->getStatusCode(),
                             'details' => [],
                         ]
                     ], $e->getStatusCode());
@@ -71,8 +74,10 @@ class Handler extends ExceptionHandler
                 if ($e instanceof TestException) {
                     return response()->json([
                         'error' => [
+                            'url' => $request->fullUrl(),
                             'message' => $e->getMessage(),
                             'code' => $e->getErrorCode(),
+                            'id' => $e->getErrorId(),
                             'details' => $e->getDetails(),
                         ]
                     ], $e->getStatusCode());
@@ -80,8 +85,10 @@ class Handler extends ExceptionHandler
 
                 return response()->json([
                     'error' => [
+                        'url' => $request->fullUrl(),
                         'message' => __('Internal Server Error'),
-                        'code' => 'Internal Server Error',
+                        'code' => 'InternalServerError',
+                        'id' => "",
                         'details' => [],
                     ]
                 ], 500);

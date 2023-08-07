@@ -8,13 +8,13 @@ use Illuminate\Http\Response;
 
 enum TestErrorEnum: string
 {
-    case UNAUTH = "unauthorized";
+    case Unauthorized = "ET4001";
     case InvalidFormData = "invalid format data";
 
     public function message(): string
     {
         return match ($this) {
-            self::UNAUTH => '未ログインです',
+            self::Unauthorized => '未ログインです',
             self::InvalidFormData => '不正な値が入力されています。',
         };
     }
@@ -22,7 +22,7 @@ enum TestErrorEnum: string
     public function status(): int
     {
         return match ($this) {
-            self::UNAUTH => Response::HTTP_UNAUTHORIZED,
+            self::Unauthorized => Response::HTTP_UNAUTHORIZED,
             self::InvalidFormData => 422,
         };
     }
@@ -30,7 +30,7 @@ enum TestErrorEnum: string
     public function details(): array
     {
         return match ($this) {
-            self::UNAUTH => [],
+            self::Unauthorized => [],
             self::InvalidFormData => [
                 'field' => 'name',
                 'message' => 'The name field is required.',

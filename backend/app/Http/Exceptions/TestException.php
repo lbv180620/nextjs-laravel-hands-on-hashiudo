@@ -23,12 +23,17 @@ class TestException extends RuntimeException
 
     public function getErrorCode(): string
     {
-        return $this->testErrorEnum->value;
+        return $this->testErrorEnum->name;
     }
 
     public function getStatusCode(): int
     {
         return $this->testErrorEnum->status();
+    }
+
+    public function getErrorId(): string
+    {
+        return $this->testErrorEnum->value;
     }
 
     public function getDetails(): array
