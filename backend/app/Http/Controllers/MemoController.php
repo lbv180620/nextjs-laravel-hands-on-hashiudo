@@ -26,12 +26,8 @@ class MemoController extends Controller
         $id = Auth::id();
 
         if (!$id) {
-            // throw new Exception('未ログインです。');
-            // $testErrorEnum = new TestErrorEnum();
-            // throw new TestException('未ログインです', 401);
-            // throw new TestException(TestErrorEnum::UNAUTH->message(), TestErrorEnum::UNAUTH->value);
             // throw new TestException(TestErrorEnum::Unauthorized);
-            abort(500);
+            abort(404);
         }
         try {
             $memos = Memo::where('user_id', $id)

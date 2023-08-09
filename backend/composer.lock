@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c738a44c9bbb50184631f1c5574a108",
+    "content-hash": "8c306bac1c1ab2afc17d058511b5df67",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2210,6 +2210,53 @@
                 }
             ],
             "time": "2022-07-30T15:51:26+00:00"
+        },
+        {
+            "name": "polidog/object-to-array",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/polidog/object-to-array.git",
+                "reference": "f225d085a032c4ea2ca3a2523fc28dd157f05558"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/polidog/object-to-array/zipball/f225d085a032c4ea2ca3a2523fc28dd157f05558",
+                "reference": "f225d085a032c4ea2ca3a2523fc28dd157f05558",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.8",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Polidog\\ObjectToArray\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "polidog",
+                    "email": "polidogs@gmail.com"
+                }
+            ],
+            "description": "php object to array",
+            "support": {
+                "issues": "https://github.com/polidog/object-to-array/issues",
+                "source": "https://github.com/polidog/object-to-array/tree/1.0.0"
+            },
+            "time": "2022-07-05T00:28:25+00:00"
         },
         {
             "name": "psr/container",

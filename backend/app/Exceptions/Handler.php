@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Http\Exceptions\TestException;
+use App\Http\Responders\ApiErrorResponder;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -45,6 +46,7 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (Throwable $e, Request $request) {
+
             if ($request->is('api/*') || $request->ajax()) {
                 // Log::error('[API Error]' . $request->method() . ': ' . $request->fullUrl());
 
@@ -53,16 +55,14 @@ class Handler extends ExceptionHandler
                     $message = $e->getMessage() ?: __($code);
                     // Log::error($code);
 
-                    return response()->json([
-                        'error' => [
-                            'url' => $request->fullUrl(),
-                            'message' => $message,
-                            'code' => str_replace(' ', '', $code),
-                            'id' => "",
-                            'status' => $e->getStatusCode(),
-                            'details' => [],
-                        ]
-                    ], $e->getStatusCode());
+                    return new ApiErrorResponder(
+                        $request->fullUrl(),
+                        $message,
+                        str_replace(' ', '', $code),
+                        "",
+                        [],
+                        $e->getStatusCode(),
+                    );
                 }
 
                 if ($e instanceof ValidationException) {
@@ -72,26 +72,24 @@ class Handler extends ExceptionHandler
                 }
 
                 if ($e instanceof TestException) {
-                    return response()->json([
-                        'error' => [
-                            'url' => $request->fullUrl(),
-                            'message' => $e->getMessage(),
-                            'code' => $e->getErrorCode(),
-                            'id' => $e->getErrorId(),
-                            'details' => $e->getDetails(),
-                        ]
-                    ], $e->getStatusCode());
+                    return new ApiErrorResponder(
+                        $request->fullUrl(),
+                        $e->getMessage(),
+                        $e->getErrorCode(),
+                        $e->getErrorId(),
+                        $e->getDetails(),
+                        $e->getStatusCode(),
+                    );
                 }
 
-                return response()->json([
-                    'error' => [
-                        'url' => $request->fullUrl(),
-                        'message' => __('Internal Server Error'),
-                        'code' => 'InternalServerError',
-                        'id' => "",
-                        'details' => [],
-                    ]
-                ], 500);
+                return new ApiErrorResponder(
+                    $request->fullUrl(),
+                    __('Internal Server Error'),
+                    'InternalServerError',
+                    'InternalServerError',
+                    [],
+                    500,
+                );
             }
         });
     }
