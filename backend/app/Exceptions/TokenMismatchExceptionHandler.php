@@ -18,7 +18,7 @@ class TokenMismatchExceptionHandler
                     __('CSRF Token Mismatch'),
                     'CSRF_Token_Mismatch'
                 ),
-                419
+                419,
             );
         }
 
