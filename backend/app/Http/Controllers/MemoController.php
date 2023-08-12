@@ -28,9 +28,10 @@ final class MemoController extends Controller
         $id = Auth::id();
 
         if (!$id) {
-            throw new TestException(TestErrorEnum::UNAUTHORIZED);
+            // throw new TestException(TestErrorEnum::UNAUTHORIZED);
             // throw new TestException(TestErrorEnum::INVALID_FORMAT_DATA);
             // abort(404);
+            abort(418);
             // abort(405);
             // abort(419);
             // abort(422);
