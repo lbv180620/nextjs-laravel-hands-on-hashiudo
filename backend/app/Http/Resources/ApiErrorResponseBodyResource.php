@@ -36,8 +36,8 @@ final class ApiErrorResponseBodyResource extends JsonResource
                 'url' => $this->url,
                 'message' => $this->message,
                 'code' => $this->code,
-                'id' => $this->id,
                 'details' => $this->details,
+                'id' => $this->id,
             ]
         ];
     }

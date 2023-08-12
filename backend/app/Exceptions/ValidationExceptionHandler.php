@@ -21,7 +21,7 @@ class ValidationExceptionHandler
             return response()->json(
                 new ApiErrorResponseBodyResource(
                     $request->fullUrl(),
-                    $message,
+                    __($message),
                     str_replace(' ', '_', $code),
                     [
                         'fields' => $e->errors()
