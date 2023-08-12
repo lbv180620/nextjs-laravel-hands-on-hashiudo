@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Exceptions\CustomErrorHandler;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,7 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(UrlGenerator $url)
     {
-        //
         if (env('APP_SCHEME') == 'https') {
             $url->forceScheme('https');
             $this->app['request']->server->set('HTTPS', true);

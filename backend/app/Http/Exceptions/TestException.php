@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Exceptions;
 
 use App\Http\ErrorEnums\TestErrorEnum;
 use RuntimeException;
 
-class TestException extends RuntimeException
+final class TestException extends RuntimeException
 {
     protected TestErrorEnum $testErrorEnum;
 
@@ -23,7 +25,7 @@ class TestException extends RuntimeException
 
     public function getErrorCode(): string
     {
-        return $this->testErrorEnum->name;
+        return $this->testErrorEnum->code();
     }
 
     public function getStatusCode(): int

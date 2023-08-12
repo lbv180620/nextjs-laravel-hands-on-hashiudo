@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Providers;
+
+use App\Exceptions\HttpExceptionHandler;
+use App\Exceptions\MethodNotAllowedHttpExceptionHandler;
+use App\Exceptions\ModelNotFoundExceptionHandler;
+use App\Exceptions\NotFoundHttpExceptionHandler;
+use App\Exceptions\TestExceptionHandler;
+use App\Exceptions\TokenMismatchExceptionHandler;
+use Illuminate\Support\ServiceProvider;
+
+class HandlerServiceProvider extends ServiceProvider
+{
+    /**
+     * Register services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+        $this->app->bind(HttpExceptionHandler::class);
+        $this->app->bind(MethodNotAllowedHttpExceptionHandler::class);
+        $this->app->bind(ModelNotFoundExceptionHandler::class);
+        $this->app->bind(NotFoundHttpExceptionHandler::class);
+        $this->app->bind(TokenMismatchExceptionHandler::class);
+        $this->app->bind(TestExceptionHandler::class);
+    }
+
+    /**
+     * Bootstrap services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        //
+    }
+}

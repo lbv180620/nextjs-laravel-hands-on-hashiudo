@@ -8,30 +8,38 @@ use Illuminate\Http\Response;
 
 enum TestErrorEnum: string
 {
-    case Unauthorized = "ET4001";
-    case InvalidFormData = "invalid format data";
+    case UNAUTHORIZED = "ET4001";
+    case INVALID_FORMAT_DATA = "ET4002";
 
     public function message(): string
     {
         return match ($this) {
-            self::Unauthorized => '未ログインです',
-            self::InvalidFormData => '不正な値が入力されています。',
+            self::UNAUTHORIZED => '未ログインです',
+            self::INVALID_FORMAT_DATA => '不正な値が入力されています',
+        };
+    }
+
+    public function code(): string
+    {
+        return match ($this) {
+            self::UNAUTHORIZED => ucwords(strtolower(self::UNAUTHORIZED->name), '_'),
+            self::INVALID_FORMAT_DATA => ucwords(strtolower(self::INVALID_FORMAT_DATA->name), '_'),
         };
     }
 
     public function status(): int
     {
         return match ($this) {
-            self::Unauthorized => Response::HTTP_UNAUTHORIZED,
-            self::InvalidFormData => 422,
+            self::UNAUTHORIZED => Response::HTTP_UNAUTHORIZED,
+            self::INVALID_FORMAT_DATA => 422,
         };
     }
 
     public function details(): array
     {
         return match ($this) {
-            self::Unauthorized => [],
-            self::InvalidFormData => [
+            self::UNAUTHORIZED => [],
+            self::INVALID_FORMAT_DATA => [
                 'field' => 'name',
                 'message' => 'The name field is required.',
             ]

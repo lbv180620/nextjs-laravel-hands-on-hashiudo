@@ -16,23 +16,23 @@ final class ApiErrorResponder implements Responsable
     private string $url;
     private string $message;
     private string $code;
+    private int $statusCode;
     private string $id;
     private array $details;
-    private int $statusCode;
 
-    public function __construct(string $url, string $message, string $code, string $id, array $details, int $statusCode = 400)
+    public function __construct(string $url, string $message, string $code, int $statusCode = 400, string $id = '', array $details = [])
     {
         $this->url = $url;
         $this->message = $message;
         $this->code = $code;
+        $this->statusCode = $statusCode;
         $this->id = $id;
         $this->details = $details;
-        $this->statusCode = $statusCode;
     }
 
     public function toResponse($request): JsonResponse
     {
-        return new JsonResponse(
+        return response()->json(
             new ApiErrorResource($this->__toArray()),
             $this->statusCode
         );

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\ErrorEnums\TestErrorEnum;
@@ -13,7 +15,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class MemoController extends Controller
+final class MemoController extends Controller
 {
     /**
      * メモの全件取得
@@ -26,8 +28,12 @@ class MemoController extends Controller
         $id = Auth::id();
 
         if (!$id) {
-            // throw new TestException(TestErrorEnum::Unauthorized);
-            abort(404);
+            throw new TestException(TestErrorEnum::UNAUTHORIZED);
+            // throw new TestException(TestErrorEnum::INVALID_FORMAT_DATA);
+            // abort(404);
+            // abort(405);
+            // abort(419);
+            // abort(422);
         }
         try {
             $memos = Memo::where('user_id', $id)
