@@ -15,6 +15,7 @@ class HttpExceptionHandler
         if ($e instanceof HttpException) {
             $code = HttpResponse::$statusTexts[$e->getStatusCode()];
             $message = $e->getMessage() ?: __($code);
+            // Log::error($code);
 
             return response()->json(
                 new ApiErrorResponseBodyResource(

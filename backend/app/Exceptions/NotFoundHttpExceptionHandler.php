@@ -15,6 +15,7 @@ class NotFoundHttpExceptionHandler
         if ($e instanceof NotFoundHttpException) {
             $code = HttpResponse::$statusTexts[$e->getStatusCode()];
             $message = $e->getMessage() ?: __($code);
+            // Log::error($code);
 
             return response()->json(
                 new ApiErrorResponseBodyResource(
