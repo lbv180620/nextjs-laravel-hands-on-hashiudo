@@ -10,7 +10,7 @@ use Throwable;
 
 class MethodNotAllowedHttpExceptionHandler
 {
-    public function handle(Throwable $e, Request $request)
+    public function handle(Request $request, Throwable $e)
     {
         if ($e instanceof MethodNotAllowedException) {
             $code = HttpResponse::$statusTexts[$e->getStatusCode()];

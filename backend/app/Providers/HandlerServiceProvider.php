@@ -8,6 +8,7 @@ use App\Exceptions\ModelNotFoundExceptionHandler;
 use App\Exceptions\NotFoundHttpExceptionHandler;
 use App\Exceptions\TestExceptionHandler;
 use App\Exceptions\TokenMismatchExceptionHandler;
+use App\Exceptions\ValidationExceptionHandler;
 use Illuminate\Support\ServiceProvider;
 
 class HandlerServiceProvider extends ServiceProvider
@@ -26,6 +27,7 @@ class HandlerServiceProvider extends ServiceProvider
         $this->app->bind(NotFoundHttpExceptionHandler::class);
         $this->app->bind(TokenMismatchExceptionHandler::class);
         $this->app->bind(TestExceptionHandler::class);
+        $this->app->bind(ValidationExceptionHandler::class);
     }
 
     /**

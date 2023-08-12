@@ -9,7 +9,7 @@ use Throwable;
 
 class TestExceptionHandler
 {
-    public function handle(Throwable $e, Request $request)
+    public function handle(Request $request, Throwable $e)
     {
         if ($e instanceof TestException) {
             return response()->json(
@@ -17,8 +17,8 @@ class TestExceptionHandler
                     $request->fullUrl(),
                     $e->getMessage(),
                     $e->getErrorCode(),
-                    $e->getErrorId(),
                     $e->getDetails(),
+                    $e->getErrorId(),
                 ),
                 $e->getStatusCode(),
             );

@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Resources\ApiErrorResponseBodyResource;
 use App\Http\Responders\ApiErrorResponder;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Response;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Response;
 
 abstract class ApiErrorResponseRequest extends FormRequest
 {
@@ -31,17 +33,22 @@ abstract class ApiErrorResponseRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator)
-    {
-        $response = new ApiErrorResponder(
-            '',
-            '',
-            '',
-            Response::HTTP_UNPROCESSABLE_ENTITY,
-            '',
-            $validator->errors()->toArray(),
-        );
+    // protected function failedValidation(Validator $validator)
+    // {
+    //     // dd($validator->errors());
+    //     $response = response()->json(
+    //         new ApiErrorResponseBodyResource(
+    //             '',
+    //             '',
+    //             '',
+    //             [
+    //                 'fields' => $validator->errors()->toArray(),
+    //             ],
+    //         ),
+    //         Response::HTTP_UNPROCESSABLE_ENTITY,
+    //     );
 
-        throw new HttpResponseException($response);
-    }
+
+    //     throw new HttpResponseException($response);
+    // }
 }

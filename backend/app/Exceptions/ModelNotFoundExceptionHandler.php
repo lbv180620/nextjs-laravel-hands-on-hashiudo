@@ -10,7 +10,7 @@ use Throwable;
 
 class ModelNotFoundExceptionHandler
 {
-    public function handle(Throwable $e, Request $request)
+    public function handle(Request $request, Throwable $e)
     {
         if ($e instanceof ModelNotFoundException) {
             return response()->json(

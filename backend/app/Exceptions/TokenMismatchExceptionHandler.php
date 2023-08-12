@@ -9,7 +9,7 @@ use Throwable;
 
 class TokenMismatchExceptionHandler
 {
-    public function handle(Throwable $e, Request $request)
+    public function handle(Request $request, Throwable $e)
     {
         if ($e instanceof TokenMismatchException) {
             return response()->json(

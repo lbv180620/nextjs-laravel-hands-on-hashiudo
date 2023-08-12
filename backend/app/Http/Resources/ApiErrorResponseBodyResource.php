@@ -14,13 +14,13 @@ final class ApiErrorResponseBodyResource extends JsonResource
     private string $id;
     private array $details;
 
-    public function __construct(string $url, string $message, string $code, string $id = '', array $details = [])
+    public function __construct(string $url, string $message, string $code, array $details = [], string $id = '')
     {
         $this->url = $url;
         $this->message = $message;
         $this->code = $code;
-        $this->id = $id;
         $this->details = $details;
+        $this->id = $id;
     }
 
     /**

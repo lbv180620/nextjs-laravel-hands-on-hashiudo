@@ -2,16 +2,9 @@
 
 namespace App\Exceptions;
 
-use App\Http\Exceptions\TestException;
-use App\Http\Resources\ApiErrorResponseBodyResource;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -49,13 +42,15 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
+
         $exceptionHandlers = [
-            TestExceptionHandler::class,
-            TokenMismatchExceptionHandler::class,
+            HttpExceptionHandler::class,
             ModelNotFoundExceptionHandler::class,
             MethodNotAllowedHttpExceptionHandler::class,
             NotFoundHttpExceptionHandler::class,
-            HttpExceptionHandler::class,
+            TestExceptionHandler::class,
+            TokenMismatchExceptionHandler::class,
+            ValidationExceptionHandler::class,
         ];
 
         if ($request->is('api/*') || $request->is('login') || $request->ajax()) {
@@ -63,17 +58,12 @@ class Handler extends ExceptionHandler
 
             foreach ($exceptionHandlers as $handlerClass) {
                 $handler = app($handlerClass);
-                if ($handler->handle($e, $request)) {
-                    return $handler->handle($e, $request);
+                if ($handler->handle($request, $e)) {
+                    return $handler->handle($request, $e);
                 }
             }
         }
 
-        if ($e instanceof ValidationException) {
-            // Log::error($e->errors());
-
-            return $this->invalidJson($request, $e);
-        }
 
         return parent::render($request, $e);
     }
