@@ -74,12 +74,12 @@ final class MemoController extends Controller
             throw $ex;
         }
 
-        return response()->success(
-            Response::HTTP_CREATED,
-            $request->fullUrl(),
-            [
-                'memo_id' => $memo->id,
-            ]
-        );
+        $status = Response::HTTP_CREATED;
+        $url = $request->fullUrl();
+        $details = [
+            'memo_id' => $memo->id,
+        ];
+
+        return response()->success(...compact('status', 'url', 'details'));
     }
 }

@@ -17,10 +17,10 @@ final class ModelNotFoundExceptionHandler
             // Log::error('[API Error]' . $request->method() . ': ' . $request->fullUrl());
 
             if ($e instanceof ModelNotFoundException) {
-                return response()->httpError(
-                    Response::HTTP_NOT_FOUND,
-                    $request->fullUrl(),
-                );
+                $status = Response::HTTP_NOT_FOUND;
+                $url = $request->fullUrl();
+
+                return response()->httpError(...compact('status', 'url'));
             }
         }
 

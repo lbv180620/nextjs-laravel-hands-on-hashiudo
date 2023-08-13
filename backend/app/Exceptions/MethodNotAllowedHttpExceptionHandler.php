@@ -11,11 +11,11 @@ class MethodNotAllowedHttpExceptionHandler
     public function handle(Request $request, Throwable $e)
     {
         if ($e instanceof MethodNotAllowedException) {
-            return response()->httpError(
-                $e->getStatusCode(),
-                $request->fullUrl(),
-                $e->getMessage(),
-            );
+            $status = $e->getStatusCode();
+            $url = $request->fullUrl();
+            $message = $e->getMessage();
+
+            return response()->httpError(...compact('status', 'url', 'message'));
         }
 
         return null;

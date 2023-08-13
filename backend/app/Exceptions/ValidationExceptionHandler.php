@@ -16,6 +16,10 @@ final class ValidationExceptionHandler
             // Log::error('[API Error]' . $request->method() . ': ' . $request->fullUrl());
 
             if ($e instanceof ValidationException) {
+                $status = $e->status;
+                $url = $request->fullUrl();
+                $message = $e->getMessage();
+
                 $errors = $e->errors();
                 // Log::error($e->errors());
 
@@ -29,12 +33,7 @@ final class ValidationExceptionHandler
                     }
                 }
 
-                return response()->httpError(
-                    $e->status,
-                    $request->fullUrl(),
-                    $e->getMessage(),
-                    $details,
-                );
+                return response()->httpError(...compact('status', 'url', 'message', 'details'));
             }
         }
 
