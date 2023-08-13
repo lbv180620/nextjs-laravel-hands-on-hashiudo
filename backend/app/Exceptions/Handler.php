@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -53,17 +52,12 @@ class Handler extends ExceptionHandler
             ValidationExceptionHandler::class,
         ];
 
-        if ($request->is('api/*') || $request->is('login') || $request->ajax()) {
-            // Log::error('[API Error]' . $request->method() . ': ' . $request->fullUrl());
-
-            foreach ($exceptionHandlers as $handlerClass) {
-                $handler = app($handlerClass);
-                if ($handler->handle($request, $e)) {
-                    return $handler->handle($request, $e);
-                }
+        foreach ($exceptionHandlers as $handlerClass) {
+            $handler = app($handlerClass);
+            if ($handler->handle($request, $e)) {
+                return $handler->handle($request, $e);
             }
         }
-
 
         return parent::render($request, $e);
     }

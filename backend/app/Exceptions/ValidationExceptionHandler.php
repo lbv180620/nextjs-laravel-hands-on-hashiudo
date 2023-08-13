@@ -4,42 +4,38 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
-use App\Http\Resources\ApiErrorResponseBodyResource;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Throwable;
 
 final class ValidationExceptionHandler
 {
     public function handle(Request $request, Throwable $e,)
     {
-        if ($e instanceof ValidationException) {
-            $code = HttpResponse::$statusTexts[$e->status];
-            $message = $e->getMessage() ?: __($code);
-            $errors = $e->errors();
-            // Log::error($code);
-            // Log::error($e->errors());
+        if ($request->is('api/*') || $request->is('login') || $request->ajax()) {
+            // Log::error('[API Error]' . $request->method() . ': ' . $request->fullUrl());
 
-            $details = [];
-            foreach ($errors as $field => $msgs) {
-                foreach ($msgs as $msg) {
-                    $details[] = [
-                        'field' => $field,
-                        'message' => $msg,
-                    ];
+            if ($e instanceof ValidationException) {
+                $errors = $e->errors();
+                // Log::error($e->errors());
+
+                $details = [];
+                foreach ($errors as $field => $msgs) {
+                    foreach ($msgs as $msg) {
+                        $details[] = [
+                            'field' => $field,
+                            'message' => $msg,
+                        ];
+                    }
                 }
-            }
 
-            return response()->json(
-                new ApiErrorResponseBodyResource(
+                return response()->httpError(
+                    $e->status,
                     $request->fullUrl(),
-                    __($message),
-                    str_replace(' ', '_', $code),
+                    $e->getMessage(),
                     $details,
-                ),
-                $e->status
-            );
+                );
+            }
         }
 
         return null;

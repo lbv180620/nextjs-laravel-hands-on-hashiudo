@@ -7,7 +7,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\ValidationException as ValidationValidationException;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -26,7 +26,7 @@ class LoginController extends Controller
         }
 
         // ログイン失敗時のエラーメッセージ
-        throw ValidationValidationException::withMessages([
+        throw ValidationException::withMessages([
             'loginFailed' => 'IDまたはパスワードが間違っています。',
         ]);
     }

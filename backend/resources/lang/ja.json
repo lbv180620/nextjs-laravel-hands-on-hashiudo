@@ -1,4 +1,5 @@
 {
     "Not Found": "見つかりませんでした",
-    "The given data was invalid.": "指定されたデータは無効でした"
+    "The given data was invalid.": "指定されたデータは無効でした",
+    "Created": "'メモの登録に成功しました'"
 }

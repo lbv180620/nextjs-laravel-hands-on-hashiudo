@@ -9,8 +9,8 @@ use App\Http\Exceptions\TestException;
 use App\Http\Requests\MemoPostRequest;
 use App\Http\Resources\MemoResource;
 use App\Models\Memo;
-use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 final class MemoController extends Controller
@@ -26,8 +26,8 @@ final class MemoController extends Controller
         $id = Auth::id();
 
         if (!$id) {
-            throw new TestException(TestErrorEnum::UNAUTHORIZED);
-            // throw new TestException(TestErrorEnum::INVALID_FORMAT_DATA);
+            // throw new TestException(TestErrorEnum::UNAUTHORIZED);
+            throw new TestException(TestErrorEnum::INVALID_FORMAT_DATA);
             // abort(404);
             // abort(418);
             // abort(405);
@@ -56,7 +56,8 @@ final class MemoController extends Controller
             // $memo = new Memo();
 
             // パラメータセット
-            $memo->user_id = Auth::id();
+            // $memo->user_id = Auth::id();
+            $memo->user_id = 1;
             // $memo->title = $request->title;
             // $memo->body = $request->body;
             $memo->fill($request->all());
@@ -73,8 +74,14 @@ final class MemoController extends Controller
             throw $ex;
         }
 
-        return response()->json([
-            'message' => 'メモの登録に成功しました。',
-        ], 201);
+        $code = Response::$statusTexts[Response::HTTP_CREATED];
+
+        return response()->success(
+            $request->fullUrl(),
+            Response::HTTP_CREATED,
+            [
+                'memo_id' => $memo->id,
+            ]
+        );
     }
 }

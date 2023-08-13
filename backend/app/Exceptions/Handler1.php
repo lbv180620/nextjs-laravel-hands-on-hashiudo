@@ -82,8 +82,8 @@ class Handler extends ExceptionHandler
                             $request->fullUrl(),
                             $e->getMessage(),
                             $e->getErrorCode(),
-                            $e->getErrorId(),
                             $e->getDetails(),
+                            $e->getErrorId(),
                         ),
                         $e->getStatusCode(),
                     );
@@ -105,6 +105,7 @@ class Handler extends ExceptionHandler
     {
         if ($request->is('api/*') || $request->is('login') || $request->ajax()) {
             if ($e instanceof NotFoundHttpException) {
+                dd($e->getMessage());
                 $code = HttpResponse::$statusTexts[$e->getStatusCode()];
                 $message = $e->getMessage() ?: __($code);
 

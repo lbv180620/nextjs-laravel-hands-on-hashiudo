@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 use App\Http\Exceptions\TestException;
-use App\Http\Resources\ApiErrorResponseBodyResource;
 use Illuminate\Http\Request;
 use Throwable;
 
@@ -11,17 +10,18 @@ class TestExceptionHandler
 {
     public function handle(Request $request, Throwable $e)
     {
-        if ($e instanceof TestException) {
-            return response()->json(
-                new ApiErrorResponseBodyResource(
+        if ($request->is('api/*') || $request->is('login') || $request->ajax()) {
+            // Log::error('[API Error]' . $request->method() . ': ' . $request->fullUrl());
+            if ($e instanceof TestException) {
+                return response()->error(
+                    $e->getStatusCode(),
                     $request->fullUrl(),
                     $e->getMessage(),
                     $e->getErrorCode(),
                     $e->getDetails(),
                     $e->getErrorId(),
-                ),
-                $e->getStatusCode(),
-            );
+                );
+            }
         }
 
         return null;
