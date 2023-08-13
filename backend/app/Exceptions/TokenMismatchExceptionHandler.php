@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exceptions;
 
 use App\Http\Resources\ApiErrorResponseBodyResource;
@@ -7,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Throwable;
 
-class TokenMismatchExceptionHandler
+final class TokenMismatchExceptionHandler
 {
     public function handle(Request $request, Throwable $e)
     {

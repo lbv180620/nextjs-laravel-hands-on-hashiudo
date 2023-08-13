@@ -33,22 +33,22 @@ abstract class ApiErrorResponseRequest extends FormRequest
         ];
     }
 
-    // protected function failedValidation(Validator $validator)
-    // {
-    //     // dd($validator->errors());
-    //     $response = response()->json(
-    //         new ApiErrorResponseBodyResource(
-    //             '',
-    //             '',
-    //             '',
-    //             [
-    //                 'fields' => $validator->errors()->toArray(),
-    //             ],
-    //         ),
-    //         Response::HTTP_UNPROCESSABLE_ENTITY,
-    //     );
+    protected function failedValidation(Validator $validator)
+    {
+        // dd($validator->errors());
+        $response = response()->json(
+            new ApiErrorResponseBodyResource(
+                '',
+                '',
+                '',
+                [
+                    'fields' => $validator->errors()->toArray(),
+                ],
+            ),
+            Response::HTTP_UNPROCESSABLE_ENTITY,
+        );
 
 
-    //     throw new HttpResponseException($response);
-    // }
+        throw new HttpResponseException($response);
+    }
 }

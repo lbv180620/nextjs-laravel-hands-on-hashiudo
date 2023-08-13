@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\Exceptions\HttpExceptionHandler;
@@ -11,7 +13,7 @@ use App\Exceptions\TokenMismatchExceptionHandler;
 use App\Exceptions\ValidationExceptionHandler;
 use Illuminate\Support\ServiceProvider;
 
-class HandlerServiceProvider extends ServiceProvider
+final class HandlerServiceProvider extends ServiceProvider
 {
     /**
      * Register services.

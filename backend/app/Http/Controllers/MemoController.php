@@ -10,9 +10,7 @@ use App\Http\Requests\MemoPostRequest;
 use App\Http\Resources\MemoResource;
 use App\Models\Memo;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 final class MemoController extends Controller
@@ -28,10 +26,10 @@ final class MemoController extends Controller
         $id = Auth::id();
 
         if (!$id) {
-            // throw new TestException(TestErrorEnum::UNAUTHORIZED);
+            throw new TestException(TestErrorEnum::UNAUTHORIZED);
             // throw new TestException(TestErrorEnum::INVALID_FORMAT_DATA);
             // abort(404);
-            abort(418);
+            // abort(418);
             // abort(405);
             // abort(419);
             // abort(422);

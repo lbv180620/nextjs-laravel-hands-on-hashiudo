@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exceptions;
 
 use App\Http\Resources\ApiErrorResponseBodyResource;
@@ -8,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
-class NotFoundHttpExceptionHandler
+final class NotFoundHttpExceptionHandler
 {
     public function handle(Request $request, Throwable $e)
     {

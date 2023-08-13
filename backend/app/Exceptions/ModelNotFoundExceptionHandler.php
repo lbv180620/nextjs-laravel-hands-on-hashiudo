@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exceptions;
 
 use App\Http\Resources\ApiErrorResponseBodyResource;
@@ -8,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Throwable;
 
-class ModelNotFoundExceptionHandler
+final class ModelNotFoundExceptionHandler
 {
     public function handle(Request $request, Throwable $e)
     {
