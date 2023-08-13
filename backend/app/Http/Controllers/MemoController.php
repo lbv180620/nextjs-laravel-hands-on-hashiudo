@@ -74,11 +74,9 @@ final class MemoController extends Controller
             throw $ex;
         }
 
-        $code = Response::$statusTexts[Response::HTTP_CREATED];
-
         return response()->success(
-            $request->fullUrl(),
             Response::HTTP_CREATED,
+            $request->fullUrl(),
             [
                 'memo_id' => $memo->id,
             ]
