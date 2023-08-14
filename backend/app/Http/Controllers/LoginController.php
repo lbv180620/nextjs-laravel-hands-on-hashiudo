@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Enums\SuccessEnums\AuthSuccessEnum;
@@ -13,7 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 // use Illuminate\Validation\ValidationException;
 
-class LoginController extends Controller
+final class LoginController extends Controller
 {
     /**
      * ログイン処理

@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Exceptions\CustomErrorHandler;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\ServiceProvider;
 

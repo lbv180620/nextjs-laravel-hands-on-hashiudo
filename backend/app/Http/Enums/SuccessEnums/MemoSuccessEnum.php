@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Enums\SuccessEnums;
 
 use App\Http\Enums\BaseEnumInterface;
-use App\Models\Memo;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 
 enum MemoSuccessEnum: string implements BaseEnumInterface
