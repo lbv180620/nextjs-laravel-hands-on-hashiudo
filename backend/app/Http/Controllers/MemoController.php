@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\ErrorEnums\TestErrorEnum;
+use App\Http\Enums\ErrorEnums\TestErrorEnum;
+use App\Http\Enums\SuccessEnums\MemoSuccessEnum;
 use App\Http\Exceptions\TestException;
 use App\Http\Requests\MemoPostRequest;
 use App\Http\Resources\MemoResource;
 use App\Models\Memo;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 final class MemoController extends Controller
@@ -74,12 +74,6 @@ final class MemoController extends Controller
             throw $ex;
         }
 
-        $status = Response::HTTP_CREATED;
-        $url = $request->fullUrl();
-        $details = [
-            'memo_id' => $memo->id,
-        ];
-
-        return response()->success(...compact('status', 'url', 'details'));
+        return response()->success(enum: MemoSuccessEnum::MEMO_POST_SUCCESS, url: $request->fullUrl(), options: ['id' => $memo->id]);
     }
 }

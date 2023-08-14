@@ -2,20 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Http\ErrorEnums;
+namespace App\Http\Enums\ErrorEnums;
 
+use App\Http\Enums\BaseEnumInterface;
 use Illuminate\Http\Response;
 
-enum TestErrorEnum: string
+enum TestErrorEnum: string implements BaseEnumInterface
 {
     case UNAUTHORIZED = "ET4001";
     case INVALID_FORMAT_DATA = "ET4002";
+    case LOGIN_FAILED = "ET4003";
 
     public function message(): string
     {
         return match ($this) {
             self::UNAUTHORIZED => '未ログインです',
             self::INVALID_FORMAT_DATA => '不正な値が入力されています',
+            self::LOGIN_FAILED => 'IDまたはパスワードが間違っています',
         };
     }
 
@@ -24,6 +27,7 @@ enum TestErrorEnum: string
         return match ($this) {
             self::UNAUTHORIZED => ucwords(strtolower(self::UNAUTHORIZED->name), '_'),
             self::INVALID_FORMAT_DATA => ucwords(strtolower(self::INVALID_FORMAT_DATA->name), '_'),
+            self::LOGIN_FAILED => ucwords(strtolower(self::LOGIN_FAILED->name), '_'),
         };
     }
 
@@ -31,18 +35,29 @@ enum TestErrorEnum: string
     {
         return match ($this) {
             self::UNAUTHORIZED => Response::HTTP_UNAUTHORIZED,
-            self::INVALID_FORMAT_DATA => 422,
+            self::INVALID_FORMAT_DATA => Response::HTTP_UNPROCESSABLE_ENTITY,
+            self::LOGIN_FAILED => Response::HTTP_UNAUTHORIZED
         };
     }
 
-    public function details(): array
+    public function details(?array $options): array
     {
         return match ($this) {
             self::UNAUTHORIZED => [],
             self::INVALID_FORMAT_DATA => [
                 'field' => 'name',
                 'message' => 'The name field is required.',
-            ]
+            ],
+            self::LOGIN_FAILED => [],
+        };
+    }
+
+    public function id(): string
+    {
+        return match ($this) {
+            self::UNAUTHORIZED => self::UNAUTHORIZED->value,
+            self::INVALID_FORMAT_DATA => self::INVALID_FORMAT_DATA->value,
+            self::LOGIN_FAILED => self::LOGIN_FAILED->value,
         };
     }
 }

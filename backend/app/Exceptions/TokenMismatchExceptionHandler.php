@@ -16,12 +16,7 @@ final class TokenMismatchExceptionHandler
             // Log::error('[API Error]' . $request->method() . ': ' . $request->fullUrl());
 
             if ($e instanceof TokenMismatchException) {
-                $status = 419;
-                $url =  $request->fullUrl();
-                $message = __('CSRF Token Mismatch');
-                $code = 'CSRF_Token_Mismatch';
-
-                return response()->error(...compact('status', 'url', 'message', 'code'));
+                return response()->httpError(status: $e->status, url: $request->fullUrl(), message: $e->getMessage());
             }
         }
 

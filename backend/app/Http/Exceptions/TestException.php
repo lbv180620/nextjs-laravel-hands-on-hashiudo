@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Exceptions;
 
-use App\Http\ErrorEnums\TestErrorEnum;
+use App\Http\Enums\ErrorEnums\TestErrorEnum;
 use RuntimeException;
 
 final class TestException extends RuntimeException
@@ -16,6 +16,11 @@ final class TestException extends RuntimeException
         parent::__construct($testErrorEnum->message());
 
         $this->testErrorEnum = $testErrorEnum;
+    }
+
+    public function getErrorEnum(): TestErrorEnum
+    {
+        return $this->testErrorEnum;
     }
 
     public function getErrorMessage(): string

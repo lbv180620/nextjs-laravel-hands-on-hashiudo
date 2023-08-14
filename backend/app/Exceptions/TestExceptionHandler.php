@@ -14,14 +14,7 @@ class TestExceptionHandler
             // Log::error('[API Error]' . $request->method() . ': ' . $request->fullUrl());
 
             if ($e instanceof TestException) {
-                $status = $e->getStatusCode();
-                $url = $request->fullUrl();
-                $message = $e->getMessage();
-                $code = $e->getErrorCode();
-                $details = $e->getDetails();
-                $id = $e->getErrorId();
-
-                return response()->error(...compact('status', 'url', 'message', 'code', 'details', 'id'));
+                return response()->error(enum: $e->getErrorEnum(), url: $request->fullUrl());
             }
         }
 
