@@ -23,28 +23,28 @@ final class TestException extends RuntimeException
         return $this->testErrorEnum;
     }
 
-    public function getErrorMessage(): string
-    {
-        return $this->testErrorEnum->message();
-    }
+    // public function getErrorMessage(): string
+    // {
+    //     return $this->testErrorEnum->message();
+    // }
 
-    public function getErrorCode(): string
-    {
-        return $this->testErrorEnum->code();
-    }
+    // public function getErrorCode(): string
+    // {
+    //     return $this->testErrorEnum->code();
+    // }
 
-    public function getStatusCode(): int
-    {
-        return $this->testErrorEnum->status();
-    }
+    // public function getStatusCode(): int
+    // {
+    //     return $this->testErrorEnum->status();
+    // }
 
-    public function getErrorId(): string
-    {
-        return $this->testErrorEnum->value;
-    }
+    // public function getErrorId(): string
+    // {
+    //     return $this->testErrorEnum->value;
+    // }
 
-    public function getDetails(): array
-    {
-        return $this->testErrorEnum->details();
-    }
+    // public function getDetails(): array
+    // {
+    //     return $this->testErrorEnum->details();
+    // }
 }

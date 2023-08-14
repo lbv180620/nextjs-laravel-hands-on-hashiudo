@@ -38,21 +38,6 @@ final class ApiResponseServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-        Response::macro('success', function (BaseEnumInterface $enum, string $url = '', array $options = []) {
-            $code = HttpFoundationResponse::$statusTexts[$enum->status()];
-            $message = $enum->message() ?: __($code);
-
-            return response()->json(
-                new ApiSuccessResponseBodyResource(
-                    $url,
-                    $message,
-                    $code,
-                    $enum->details($options)
-                ),
-                $enum->status()
-            );
-        });
-
         Response::macro('httpError', function (int $status = HttpResponse::HTTP_BAD_REQUEST, string $url = '', string $message = '', $details = [], string $id = '') {
             $code = HttpFoundationResponse::$statusTexts[$status];
             $message = $message ?: __($code);
@@ -60,17 +45,16 @@ final class ApiResponseServiceProvider extends ServiceProvider
 
             return response()->json(
                 new ApiErrorResponseBodyResource(
-                    $url,
-                    __($message),
-                    str_replace(' ', '_', $code),
-                    $details,
-                    $id,
+                    url: $url,
+                    message: __($message),
+                    code: str_replace(' ', '_', $code),
+                    details: $details,
+                    id: $id,
                 ),
-                $status,
+                status: $status,
             );
         });
 
-        // Response::macro('error', function (int $status = HttpResponse::HTTP_BAD_REQUEST, string $url = '', string $message, string $code, array $details = [], string $id = '') {
         Response::macro('error', function (BaseEnumInterface $enum, string $url = '', array $options = []) {
             return response()->json(
                 new ApiErrorResponseBodyResource(
@@ -80,7 +64,22 @@ final class ApiResponseServiceProvider extends ServiceProvider
                     details: $enum->details($options),
                     id: $enum->id(),
                 ),
-                $enum->status(),
+                status: $enum->status(),
+            );
+        });
+
+        Response::macro('success', function (BaseEnumInterface $enum, string $url = '', array $options = []) {
+            $code = HttpFoundationResponse::$statusTexts[$enum->status()];
+            $message = $enum->message() ?: __($code);
+
+            return response()->json(
+                new ApiSuccessResponseBodyResource(
+                    url: $url,
+                    message: $message,
+                    code: $code,
+                    details: $enum->details($options)
+                ),
+                status: $enum->status()
             );
         });
     }
