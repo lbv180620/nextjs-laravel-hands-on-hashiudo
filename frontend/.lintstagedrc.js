@@ -14,6 +14,6 @@ const removeIgnoredFiles = async (files) => {
 module.exports = {
   "**/*.{ts,tsx,js,jsx}": async (files) => {
     const filesToLint = await removeIgnoredFiles(files);
-    return [`eslint --max-warnings=-1 ${filesToLint}`];
+    return [`eslint --max-warnings=0 ${filesToLint}`];
   },
 };
