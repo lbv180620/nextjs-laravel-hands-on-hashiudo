@@ -1,4 +1,4 @@
-// モデル
+// エンティティ
 
 export type UserType = {
   id: number;
@@ -67,6 +67,10 @@ export type ErrorResponseBodyType<T = never[]> = {
     code: string;
     details: T;
   };
+};
+
+export type ErrorResponseDetailsType = {
+  [key: string]: never;
 };
 
 export type SuccessResponseBodyType<T = never[]> = {
