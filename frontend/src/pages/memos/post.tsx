@@ -6,15 +6,15 @@ import { useForm } from "react-hook-form";
 
 import { PrimaryButton, PrimaryInput, PrimaryTextarea } from "@/components/atoms";
 import { FormLayout, Layout } from "@/components/templates";
-import { useAuth, useMemoPost } from "@/hooks";
-import { MemoFormType } from "@/types";
+import { useAuth, useMemoCreate } from "@/hooks";
+import { MemoCreateRequestType } from "@/types";
 
 const PostPage: NextPage = () => {
   //* router
   const router = useRouter();
 
   //* hooks
-  const { createMemo, validation } = useMemoPost();
+  const { createMemo, validation } = useMemoCreate();
   const { checkLoggedIn } = useAuth();
 
   //* react-hook-form
@@ -22,7 +22,7 @@ const PostPage: NextPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<MemoFormType>();
+  } = useForm<MemoCreateRequestType>();
 
   //* DidMount
   useEffect(() => {

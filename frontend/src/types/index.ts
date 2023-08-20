@@ -1,13 +1,34 @@
+// モデル
+
+export type UserType = {
+  id: number;
+  name: string;
+  email: string;
+};
+
 export type MemoType = {
+  id: number;
   title: string;
   body: string;
 };
 
-// POSTデータの型
-export type LoginFormType = {
+// ----------------------------------------------------------
+
+// リクエスト
+
+export type LoginRequestDataType = {
   email: string;
   password: string;
 };
+
+export type MemoCreateRequestType = {
+  title: string;
+  body: string;
+};
+
+// ----------------------------------------------------------
+
+// バリデーション
 
 // バリデーションメッセージの型
 export type LoginValidationType = {
@@ -22,12 +43,6 @@ export type LoginValidationResponseType = {
   };
 };
 
-// POSTデータの型
-export type MemoFormType = {
-  title: string;
-  body: string;
-};
-
 // バリデーションメッセージの型
 export type MemoValidationType = {
   title?: string;
@@ -40,27 +55,9 @@ export type MemoValidationResponseType = {
   };
 };
 
-// post('/login')のレスポンスの型
-export type UserResourceType = {
-  data: {
-    id: number;
-  };
-};
-
-export type RedirectResourceType = {
-  redirect_url: string;
-};
-
-// get('/api/memos')のレスポンスの型
-export type MemoResourceType = {
-  data: {
-    id: number;
-    title: string;
-    body: string;
-  }[];
-};
-
 // ----------------------------------------------------------
+
+// レスポンス
 
 export type ErrorResponseBodyType<T = never[]> = {
   success: {
@@ -81,14 +78,14 @@ export type SuccessResponseBodyType<T = never[]> = {
   };
 };
 
-export type LoginSuccessResponseDataType = {
-  id: number;
-};
+export type LoginSuccessResponseDataType = UserType;
 
 export type LogoutSuccessResponseDataType = never[];
 
-export type LoginUserFetchSuccessResponseDataType = {
-  id: number;
-  name: string;
-  email: string;
+export type LoginUserFetchSuccessResponseDataType = UserType;
+
+export type RedirectUrlFetchSuccessDataType = {
+  redirect_url: string;
 };
+
+export type MemoListFetchSuccessResponseDataType = MemoType[];

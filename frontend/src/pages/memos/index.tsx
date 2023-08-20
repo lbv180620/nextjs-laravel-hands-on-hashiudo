@@ -7,7 +7,12 @@ import { Loading } from "@/components/molecules";
 import { Layout } from "@/components/templates";
 import { useAuth, useLogout } from "@/hooks";
 import axios from "@/libs/axios";
-import { LoginUserFetchResponseIF, MemoResourceType, MemoType } from "@/types";
+import {
+  LoginUserFetchSuccessResponseDataType,
+  MemoListFetchSuccessResponseDataType,
+  MemoType,
+  SuccessResponseBodyType,
+} from "@/types";
 
 const MemoPage: NextPage = () => {
   //* router
@@ -30,14 +35,14 @@ const MemoPage: NextPage = () => {
         return;
       }
 
-      const me = await axios.get<LoginUserFetchResponseIF>("api/me");
+      const me = await axios.get<SuccessResponseBodyType<LoginUserFetchSuccessResponseDataType>>("api/me");
       console.log(me.data);
 
       await axios
         .get("/api/memos")
-        .then((res: AxiosResponse<MemoResourceType>) => {
+        .then((res: AxiosResponse<SuccessResponseBodyType<MemoListFetchSuccessResponseDataType>>) => {
           console.log(res.data);
-          setMemos(res.data.data);
+          setMemos(res.data.success.data);
         })
         .catch((err: AxiosError) => {
           console.log(err.response);

@@ -36,7 +36,11 @@ final class LoginController extends Controller
         if ($this->auth->guard()->attempt($credentials)) {
             $request->session()->regenerate();
 
-            return response()->success(enum: AuthSuccessEnum::LOGIN_SUCCESS, options: ['id' => $request->user()->id]);
+            return response()->success(enum: AuthSuccessEnum::LOGIN_SUCCESS, options: [
+                'id' => $request->user()->id,
+                'name' => $request->user()->name,
+                'email' => $request->user()->email,
+            ]);
         }
 
         // ログイン失敗時のエラーメッセージ

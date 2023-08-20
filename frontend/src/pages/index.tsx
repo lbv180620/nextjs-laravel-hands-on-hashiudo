@@ -9,7 +9,7 @@ import { PrimaryButton, PrimaryInput } from "@/components/atoms";
 import { FormLayout, Layout } from "@/components/templates";
 import { useLogin } from "@/hooks";
 import axios from "@/libs/axios";
-import { LoginFormType, RedirectResourceType } from "@/types";
+import { LoginRequestDataType, RedirectUrlFetchSuccessDataType, SuccessResponseBodyType } from "@/types";
 
 const Home: NextPage = () => {
   //* router
@@ -27,16 +27,16 @@ const Home: NextPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormType>();
+  } = useForm<LoginRequestDataType>();
 
   //* Socialite
   const signIn = useCallback(async () => {
     setIsLoading(true);
     await axios
       .get("/login/google")
-      .then(async (res: AxiosResponse<RedirectResourceType>) => {
+      .then(async (res: AxiosResponse<SuccessResponseBodyType<RedirectUrlFetchSuccessDataType>>) => {
         console.log(res.data);
-        await router.push(res.data.redirect_url);
+        await router.push(res.data.success.data.redirect_url);
       })
       .catch((err: AxiosError) => {
         console.log(err.response);

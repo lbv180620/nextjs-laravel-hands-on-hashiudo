@@ -1,1 +1,1 @@
-export { useUserState, useLoginUserState } from "./userAtom";
+export { useLoginUserState } from "./userAtom";

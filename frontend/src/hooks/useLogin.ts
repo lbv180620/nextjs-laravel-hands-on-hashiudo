@@ -2,10 +2,10 @@ import { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 
-import { useUserState } from "@/atoms";
+import { useLoginUserState } from "@/atoms";
 import axios from "@/libs/axios";
 import {
-  LoginFormType,
+  LoginRequestDataType,
   LoginSuccessResponseDataType,
   LoginValidationResponseType,
   LoginValidationType,
@@ -17,7 +17,7 @@ export const useLogin = () => {
   const router = useRouter();
 
   //* global state
-  const { setUser } = useUserState();
+  const { setLoginUser } = useLoginUserState();
 
   //* local state
   // バリデーションメッセージのstate
@@ -26,7 +26,7 @@ export const useLogin = () => {
   //* api
   // ログイン
   const login = useCallback(
-    async (data: LoginFormType) => {
+    async (data: LoginRequestDataType) => {
       // バリデーションメッセージの初期化
       setValidation({
         email: "",
@@ -43,7 +43,7 @@ export const useLogin = () => {
             .post("/login", data)
             .then(async (res: AxiosResponse<SuccessResponseBodyType<LoginSuccessResponseDataType>>) => {
               console.log(res.data);
-              setUser(res.data.success.data);
+              setLoginUser(res.data.success.data);
               await router.push("/memos");
             })
             .catch((err: AxiosError<LoginValidationResponseType>) => {
@@ -69,7 +69,7 @@ export const useLogin = () => {
             });
         });
     },
-    [router, setUser]
+    [router, setLoginUser]
   );
 
   return { login, validation };

@@ -1,4 +1,4 @@
 export { useLogin } from "./useLogin";
 export { useLogout } from "./useLogout";
-export { useMemoPost } from "./useMemoPost";
+export { useMemoCreate } from "./useMemoCreate";
 export { useAuth } from "./useAuth";

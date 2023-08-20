@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 
 import axios from "@/libs/axios";
-import { MemoFormType, MemoValidationResponseType, MemoValidationType } from "@/types";
+import { MemoCreateRequestType, MemoValidationResponseType, MemoValidationType } from "@/types";
 
-export const useMemoPost = () => {
+export const useMemoCreate = () => {
   //* router
   const router = useRouter();
 
@@ -14,7 +14,7 @@ export const useMemoPost = () => {
 
   // メモの登録
   const createMemo = useCallback(
-    async (data: MemoFormType) => {
+    async (data: MemoCreateRequestType) => {
       // バリデーションメッセージの初期化
       setValidation({});
 

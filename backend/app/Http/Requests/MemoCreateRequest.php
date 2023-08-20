@@ -6,7 +6,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-final class MemoPostRequest extends FormRequest
+final class MemoCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

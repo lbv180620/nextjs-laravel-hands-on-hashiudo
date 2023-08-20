@@ -7,10 +7,8 @@ namespace App\Http\Controllers;
 use App\Http\Enums\ErrorEnums\AuthErrorEnum;
 use App\Http\Enums\SuccessEnums\MemoSuccessEnum;
 use App\Http\Exceptions\AuthException;
-use App\Http\Requests\MemoPostRequest;
-use App\Http\Resources\MemoResource;
+use App\Http\Requests\MemoCreateRequest;
 use App\Models\Memo;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 
 final class MemoController extends Controller
@@ -18,39 +16,33 @@ final class MemoController extends Controller
     /**
      * メモの全件取得
      *
-     * @return AnonymousResourceCollection
      */
-    public function fetch(): AnonymousResourceCollection
+    public function fetch()
     {
         // ログインユーザーのID取得
         $id = Auth::id();
-        // $id = request()->user()->id;
 
         if (!$id) {
             throw new AuthException(AuthErrorEnum::UNAUTHORIZED);
-            // abort(404);
-            // abort(418);
-            // abort(405);
-            // abort(419);
-            // abort(422);
         }
 
         try {
             $memos = Memo::where('user_id', $id)
                 ->latest()
+                ->select('id', 'title', 'body')
                 ->get();
         } catch (\Exception $ex) {
             throw $ex;
         }
 
-        return MemoResource::collection($memos);
+        return response()->success(enum: MemoSuccessEnum::MEMO_LIST_FETCH_SUCCESS, options: $memos->toArray());
     }
 
     /**
      * メモの登録
      *
      */
-    public function create(MemoPostRequest $request, Memo $memo)
+    public function create(MemoCreateRequest $request, Memo $memo)
     {
         // $id = null;
         $id = request()->user()->id;
@@ -70,6 +62,6 @@ final class MemoController extends Controller
             throw $ex;
         }
 
-        return response()->success(enum: MemoSuccessEnum::MEMO_POST_SUCCESS, options: ['id' => $memo->id]);
+        return response()->success(enum: MemoSuccessEnum::MEMO_CREATE_SUCCESS, options: ['id' => $memo->id]);
     }
 }

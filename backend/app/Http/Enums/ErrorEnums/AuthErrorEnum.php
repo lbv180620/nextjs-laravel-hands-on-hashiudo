@@ -44,7 +44,7 @@ enum AuthErrorEnum: string implements BaseEnumInterface
         };
     }
 
-    public function details(?array $options): array
+    public function details(): array
     {
         return match ($this) {
             self::UNAUTHORIZED => [],

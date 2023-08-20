@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Enums\SuccessEnums\AuthSuccessEnum;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -15,9 +17,7 @@ final class SocialLoginController extends Controller
     {
         $redirectUrl = Socialite::driver($provider)->redirect()->getTargetUrl();
 
-        return response()->json([
-            'redirect_url' => $redirectUrl,
-        ]);
+        return response()->success(enum: AuthSuccessEnum::REDIRECT_URL_FETCH_SUCCESS, options: ['redirect_url' => $redirectUrl]);
     }
 
     public function handleProviderCallback(Request $request, string $provider)
@@ -34,7 +34,7 @@ final class SocialLoginController extends Controller
 
         if ($user) {
             Auth::login($user, true);
-            return redirect()->away(config('client.url') . '/memos');
+            return redirect()->away(config('client.url') . '/memos', Response::HTTP_FOUND);
         }
 
         $user = User::create([
@@ -45,6 +45,6 @@ final class SocialLoginController extends Controller
 
         Auth::login($user, true);
 
-        return redirect()->away(config('client.url') . '/memos');
+        return redirect()->away(config('client.url') . '/memos', Response::HTTP_FOUND);
     }
 }

@@ -35,11 +35,7 @@ enum DataFetchSuccessEnum: string implements BaseEnumInterface
     public function data(?array $options): array
     {
         return match ($this) {
-            self::LOGIN_USER_FETCH_SUCCESS => $options ? [
-                'id' => $options['id'] ?? '',
-                'name' => $options['name'] ?? '',
-                'email' => $options['email'] ?? '',
-            ] : [],
+            self::LOGIN_USER_FETCH_SUCCESS => $options ?? [],
         };
     }
 
