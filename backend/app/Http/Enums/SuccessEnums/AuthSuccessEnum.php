@@ -10,11 +10,13 @@ use Illuminate\Http\Response;
 enum AuthSuccessEnum: string implements BaseEnumInterface
 {
     case LOGIN_SUCCESS = "ST2001";
+    case LOGOUT_SUCCESS = "ST2002";
 
     public function message(): string
     {
         return match ($this) {
-            self::LOGIN_SUCCESS => 'ログインに成功しました',
+            self::LOGIN_SUCCESS => 'ログインに成功しました。',
+            self::LOGOUT_SUCCESS => 'ログアウトに成功しました。',
         };
     }
 
@@ -22,6 +24,7 @@ enum AuthSuccessEnum: string implements BaseEnumInterface
     {
         return match ($this) {
             self::LOGIN_SUCCESS => ucwords(strtolower(self::LOGIN_SUCCESS->name), '_'),
+            self::LOGOUT_SUCCESS => ucwords(strtolower(self::LOGOUT_SUCCESS->name), '_'),
         };
     }
 
@@ -29,15 +32,17 @@ enum AuthSuccessEnum: string implements BaseEnumInterface
     {
         return match ($this) {
             self::LOGIN_SUCCESS => Response::HTTP_OK,
+            self::LOGOUT_SUCCESS => Response::HTTP_OK,
         };
     }
 
-    public function details(?array $options): array
+    public function data(?array $options): array
     {
         return match ($this) {
             self::LOGIN_SUCCESS => $options ? [
                 'user_id' => $options['id'] ?? '',
             ] : [],
+            self::LOGOUT_SUCCESS => []
         };
     }
 
@@ -45,6 +50,7 @@ enum AuthSuccessEnum: string implements BaseEnumInterface
     {
         return match ($this) {
             self::LOGIN_SUCCESS => self::LOGIN_SUCCESS->value,
+            self::LOGOUT_SUCCESS => self::LOGOUT_SUCCESS->value,
         };
     }
 }

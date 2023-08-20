@@ -45,6 +45,7 @@ final class Handler extends ExceptionHandler
     {
 
         $exceptionHandlers = [
+            AuthExceptionHandler::class,
             HttpExceptionHandler::class,
             ModelNotFoundExceptionHandler::class,
             MethodNotAllowedHttpExceptionHandler::class,

@@ -35,9 +35,9 @@ abstract class ApiErrorResponseRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        // dd($validator->errors());
         $response = response()->json(
             new ApiErrorResponseBodyResource(
+                400,
                 '',
                 '',
                 '',

@@ -47,6 +47,10 @@ export type UserResourceType = {
   };
 };
 
+export type RedirectResourceType = {
+  redirect_url: string;
+};
+
 // get('/api/memos')のレスポンスの型
 export type MemoResourceType = {
   data: {
@@ -55,3 +59,44 @@ export type MemoResourceType = {
     body: string;
   }[];
 };
+
+export interface BaseSuccessResponseIF {
+  success: {
+    status: number;
+    message: string;
+    code: string;
+    // data: { [key: string]: never };
+  };
+}
+
+export interface LoginResponseIF extends BaseSuccessResponseIF {
+  success: {
+    status: number;
+    message: string;
+    code: string;
+    data: {
+      id: number;
+    };
+  };
+}
+
+export interface LogoutResponseIF extends BaseSuccessResponseIF {
+  success: {
+    status: number;
+    message: string;
+    code: string;
+  };
+}
+
+export interface LoginUserFetchResponseIF extends BaseSuccessResponseIF {
+  success: {
+    status: number;
+    message: string;
+    code: string;
+    data: {
+      id: number;
+      name: string;
+      email: string;
+    };
+  };
+}

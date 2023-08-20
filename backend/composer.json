@@ -13,6 +13,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "2.x",
+        "laravel/socialite": "^5.8",
         "laravel/tinker": "^2.5",
         "polidog/object-to-array": "^1.0"
     },

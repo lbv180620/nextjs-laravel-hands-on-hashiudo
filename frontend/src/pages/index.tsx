@@ -1,16 +1,26 @@
 import { ErrorMessage } from "@hookform/error-message";
+import { AxiosError, AxiosResponse } from "axios";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { PrimaryButton, PrimaryInput } from "@/components/atoms";
 import { FormLayout, Layout } from "@/components/templates";
 import { useLogin } from "@/hooks";
-import { LoginFormType } from "@/types";
+import axios from "@/libs/axios";
+import { LoginFormType, RedirectResourceType } from "@/types";
 
 const Home: NextPage = () => {
+  //* router
+  const router = useRouter();
+
   //* hooks
   // ログイン関係
   const { login, validation } = useLogin();
+
+  //* local state
+  const [isLoading, setIsLoading] = useState(false);
 
   //* react-hook-form
   const {
@@ -18,6 +28,23 @@ const Home: NextPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormType>();
+
+  //* Socialite
+  const signIn = useCallback(async () => {
+    setIsLoading(true);
+    await axios
+      .get("/login/google")
+      .then(async (res: AxiosResponse<RedirectResourceType>) => {
+        console.log(res.data);
+        await router.push(res.data.redirect_url);
+      })
+      .catch((err: AxiosError) => {
+        console.log(err.response);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [router]);
 
   return (
     <Layout title="ログイン">
@@ -66,6 +93,12 @@ const Home: NextPage = () => {
             ログイン
           </button>
         </PrimaryButton>
+        <div className="mt-8 text-center">
+          <p className="text-sm text-gray-500">Googleアカウントでサインイン</p>
+          <button className="mt-2 rounded bg-blue-400 py-2 px-4 text-white" onClick={() => signIn()}>
+            Sign in
+          </button>
+        </div>
       </FormLayout>
     </Layout>
   );

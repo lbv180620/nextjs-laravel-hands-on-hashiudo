@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+final class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,16 +23,15 @@ class LoginRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
             'email' => ['required', 'email:rfc'],
             'password' => ['required', 'regex:/\A([a-zA-z0-9]{8,})+\z/u'],
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'required' => '必須入力です。',

@@ -13,7 +13,7 @@ final class ModelNotFoundExceptionHandler
 {
     public function handle(Request $request, Throwable $e)
     {
-        if ($request->is('api/*') || $request->is('login') || $request->ajax()) {
+        if ($request->is('api/*') || $request->is('login') || $request->is('login/*') || $request->is('logout') || $request->ajax()) {
             // Log::error('[API Error]' . $request->method() . ': ' . $request->fullUrl());
 
             if ($e instanceof ModelNotFoundException) {

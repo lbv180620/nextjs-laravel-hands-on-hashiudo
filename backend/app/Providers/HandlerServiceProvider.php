@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Exceptions\AuthExceptionHandler;
 use App\Exceptions\HttpExceptionHandler;
 use App\Exceptions\MethodNotAllowedHttpExceptionHandler;
 use App\Exceptions\ModelNotFoundExceptionHandler;
@@ -23,6 +24,7 @@ final class HandlerServiceProvider extends ServiceProvider
     public function register()
     {
         //
+        $this->app->bind(AuthExceptionHandler::class);
         $this->app->bind(HttpExceptionHandler::class);
         $this->app->bind(MethodNotAllowedHttpExceptionHandler::class);
         $this->app->bind(ModelNotFoundExceptionHandler::class);

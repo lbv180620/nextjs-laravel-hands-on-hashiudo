@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Enums\ErrorEnums\TestErrorEnum;
+use App\Http\Enums\ErrorEnums\AuthErrorEnum;
+// use App\Http\Enums\ErrorEnums\TestErrorEnum;
 use App\Http\Enums\SuccessEnums\MemoSuccessEnum;
-use App\Http\Exceptions\TestException;
+use App\Http\Exceptions\AuthException;
+// use App\Http\Exceptions\TestException;
 use App\Http\Requests\MemoPostRequest;
 use App\Http\Resources\MemoResource;
 use App\Models\Memo;
@@ -24,16 +26,19 @@ final class MemoController extends Controller
     {
         // ログインユーザーのID取得
         $id = Auth::id();
+        // $id = request()->user()->id;
 
         if (!$id) {
+            throw new AuthException(AuthErrorEnum::UNAUTHORIZED);
             // throw new TestException(TestErrorEnum::UNAUTHORIZED);
-            throw new TestException(TestErrorEnum::INVALID_FORMAT_DATA);
+            // throw new TestException(TestErrorEnum::INVALID_FORMAT_DATA);
             // abort(404);
             // abort(418);
             // abort(405);
             // abort(419);
             // abort(422);
         }
+
         try {
             $memos = Memo::where('user_id', $id)
                 ->latest()
@@ -51,29 +56,24 @@ final class MemoController extends Controller
      */
     public function create(MemoPostRequest $request, Memo $memo)
     {
+        // $id = null;
+        $id = request()->user()->id;
+
+        if (!$id) {
+            throw new AuthException(AuthErrorEnum::UNAUTHORIZED);
+        }
+
         try {
-            // モデルのインスタンス化
-            // $memo = new Memo();
-
             // パラメータセット
-            // $memo->user_id = Auth::id();
-            $memo->user_id = 1;
-            // $memo->title = $request->title;
-            // $memo->body = $request->body;
+            $memo->user_id = $id;
+            // $memo->user_id = 1;
             $memo->fill($request->all());
-
             // モデルの保存
             $memo->save();
-
-            // Memo::create([
-            //     'user_id' => Auth::id(),
-            //     'title' => $request->input('title'),
-            //     'body' => $request->input('body'),
-            // ]);
         } catch (\Exception $ex) {
             throw $ex;
         }
 
-        return response()->success(enum: MemoSuccessEnum::MEMO_POST_SUCCESS, url: $request->fullUrl(), options: ['id' => $memo->id]);
+        return response()->success(enum: MemoSuccessEnum::MEMO_POST_SUCCESS, options: ['id' => $memo->id]);
     }
 }

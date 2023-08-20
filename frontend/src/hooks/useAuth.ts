@@ -1,31 +1,31 @@
 import { useCallback } from "react";
 
-import { useUserState } from "@/atoms";
+import { useLoginUserState } from "@/atoms";
 import axios from "@/libs/axios";
-import { UserResourceType } from "@/types";
+import { LoginUserFetchResponseIF } from "@/types";
 
 export const useAuth = () => {
   //* global state
-  const { user, setUser } = useUserState();
+  const { loginUser, setLoginUser } = useLoginUserState();
 
   const checkLoggedIn: () => Promise<boolean> = useCallback(async () => {
-    if (user) {
+    if (loginUser) {
       return true;
     }
 
     try {
-      const res = await axios.get<UserResourceType>("api/user");
+      const res = await axios.get<LoginUserFetchResponseIF>("api/me");
 
-      if (!res.data.data) {
+      if (!res.data.success.data) {
         return false;
       }
 
-      setUser(res.data.data);
+      setLoginUser(res.data.success.data);
       return true;
     } catch {
       return false;
     }
-  }, [setUser, user]);
+  }, [setLoginUser, loginUser]);
 
   return { checkLoggedIn };
 };

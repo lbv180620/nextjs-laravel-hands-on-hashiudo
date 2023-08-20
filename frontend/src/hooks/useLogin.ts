@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 
 import { useUserState } from "@/atoms";
 import axios from "@/libs/axios";
-import { LoginFormType, LoginValidationResponseType, UserResourceType, LoginValidationType } from "@/types";
+import { LoginFormType, LoginValidationResponseType, LoginValidationType, LoginResponseIF } from "@/types";
 
 export const useLogin = () => {
   //* router
@@ -35,9 +35,9 @@ export const useLogin = () => {
           // ログイン処理
           await axios
             .post("/login", data)
-            .then(async (res: AxiosResponse<UserResourceType>) => {
+            .then(async (res: AxiosResponse<LoginResponseIF>) => {
               console.log(res.data);
-              setUser(res.data.data);
+              setUser(res.data.success.data);
               await router.push("/memos");
             })
             .catch((err: AxiosError<LoginValidationResponseType>) => {

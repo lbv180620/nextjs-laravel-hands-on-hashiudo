@@ -4,38 +4,42 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Enums\ErrorEnums\AuthErrorEnum;
 use App\Http\Enums\SuccessEnums\AuthSuccessEnum;
-use App\Http\Enums\TestErrorEnum;
-use App\Http\Exceptions\TestException;
+use App\Http\Exceptions\AuthenticationException;
+use App\Http\Exceptions\AuthException;
 use App\Http\Requests\LoginRequest;
-// use App\Http\Resources\UserResource;
+use Illuminate\Auth\AuthManager;
 use Illuminate\Http\JsonResponse;
-// use Illuminate\Http\Request;
-// use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
-// use Illuminate\Validation\ValidationException;
 
 final class LoginController extends Controller
 {
     /**
+     * @param AuthManager $auth
+     */
+    public function __construct(private readonly AuthManager $auth)
+    {
+    }
+
+    /**
      * ログイン処理
      *
      * @param LoginRequest $request
+     * @return JsonResponse
+     * @throws AuthenticationException
      */
-    public function login(LoginRequest $request): JsonResponse
+    public function __invoke(LoginRequest $request): JsonResponse
     {
-        // ログイン成功時
-        if (Auth::attempt($request->all())) {
-            $request->session()->regenerate();
-            // return new UserResource(Auth::user());
+        $credentials = $request->only(['email', 'password']);
 
-            return response()->success(enum: AuthSuccessEnum::LOGIN_SUCCESS, url: $request->fullUrl(), options: ['id' => Auth::id()]);
+        // ログイン成功時
+        if ($this->auth->guard()->attempt($credentials)) {
+            $request->session()->regenerate();
+
+            return response()->success(enum: AuthSuccessEnum::LOGIN_SUCCESS, options: ['id' => $request->user()->id]);
         }
 
         // ログイン失敗時のエラーメッセージ
-        // throw ValidationException::withMessages([
-        //     'loginFailed' => 'IDまたはパスワードが間違っています。',
-        // ]);
-        throw new TestException(TestErrorEnum::LOGIN_FAILED);
+        throw new AuthException(AuthErrorEnum::LOGIN_FAILED);
     }
 }

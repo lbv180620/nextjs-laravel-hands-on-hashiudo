@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 
 import { Loading } from "@/components/molecules";
 import { Layout } from "@/components/templates";
-import { useAuth } from "@/hooks";
+import { useAuth, useLogout } from "@/hooks";
 import axios from "@/libs/axios";
-import { MemoResourceType, MemoType } from "@/types";
+import { LoginUserFetchResponseIF, MemoResourceType, MemoType } from "@/types";
 
 const MemoPage: NextPage = () => {
   //* router
@@ -19,6 +19,7 @@ const MemoPage: NextPage = () => {
 
   //* hooks
   const { checkLoggedIn } = useAuth();
+  const { logout } = useLogout();
 
   //* DidMount
   useEffect(() => {
@@ -28,6 +29,9 @@ const MemoPage: NextPage = () => {
         await router.push("/");
         return;
       }
+
+      const me = await axios.get<LoginUserFetchResponseIF>("api/me");
+      console.log(me.data);
 
       await axios
         .get("/api/memos")
@@ -58,6 +62,12 @@ const MemoPage: NextPage = () => {
             // onClick={() => void (async () => router.push('/memos/post'))()}
           >
             メモを追加する
+          </button>
+          <button
+            className="mt-2 ml-3 rounded-3xl bg-red-400 py-2 px-4 text-white  drop-shadow-md hover:bg-red-400"
+            onClick={logout}
+          >
+            ログアウト
           </button>
         </div>
 

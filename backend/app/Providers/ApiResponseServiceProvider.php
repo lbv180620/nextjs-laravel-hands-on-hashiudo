@@ -28,6 +28,7 @@ final class ApiResponseServiceProvider extends ServiceProvider
         $this->app->bind(BaseEnumInterface::class, AuthSuccessEnum::class);
         $this->app->bind(BaseEnumInterface::class, MemoSuccessEnum::class);
         $this->app->bind(BaseEnumInterface::class, TestErrorEnum::class);
+        $this->app->bind(BaseEnumInterface::class, AuthenticationExceptionErrorEnum::class);
     }
 
     /**
@@ -45,6 +46,7 @@ final class ApiResponseServiceProvider extends ServiceProvider
 
             return response()->json(
                 new ApiErrorResponseBodyResource(
+                    status: $status,
                     url: $url,
                     message: __($message),
                     code: str_replace(' ', '_', $code),
@@ -58,6 +60,7 @@ final class ApiResponseServiceProvider extends ServiceProvider
         Response::macro('error', function (BaseEnumInterface $enum, string $url = '', array $options = []) {
             return response()->json(
                 new ApiErrorResponseBodyResource(
+                    status: $enum->status(),
                     url: $url,
                     message: $enum->message(),
                     code: $enum->code(),
@@ -68,16 +71,16 @@ final class ApiResponseServiceProvider extends ServiceProvider
             );
         });
 
-        Response::macro('success', function (BaseEnumInterface $enum, string $url = '', array $options = []) {
+        Response::macro('success', function (BaseEnumInterface $enum, array $options = []) {
             $code = HttpFoundationResponse::$statusTexts[$enum->status()];
             $message = $enum->message() ?: __($code);
 
             return response()->json(
                 new ApiSuccessResponseBodyResource(
-                    url: $url,
+                    status: $enum->status(),
                     message: $message,
                     code: $code,
-                    details: $enum->details($options)
+                    data: $enum->data($options)
                 ),
                 status: $enum->status()
             );

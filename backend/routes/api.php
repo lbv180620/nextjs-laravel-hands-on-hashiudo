@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\MeController;
 use App\Http\Controllers\MemoController;
 use App\Http\Resources\UserResource;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +16,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::get('/me', MeController::class);
+// Route::group(['middleware' => ['auth:sanctum']], function () {
+// });
 
 // メモ全件取得
 Route::get('/memos', [MemoController::class, 'fetch'])->name('fetch');

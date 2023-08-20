@@ -8,17 +8,17 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 final class ApiSuccessResponseBodyResource extends JsonResource
 {
-    private string $url;
+    private int $status;
     private string $message;
     private string $code;
-    private array $details;
+    private array $data;
 
-    public function __construct(string $url, string $message, string $code, array $details = [])
+    public function __construct(int $status, string $message, string $code, array $data = [])
     {
-        $this->url = $url;
+        $this->status = $status;
         $this->message = $message;
         $this->code = $code;
-        $this->details = $details;
+        $this->data = $data;
     }
 
     /**
@@ -31,10 +31,10 @@ final class ApiSuccessResponseBodyResource extends JsonResource
     {
         return [
             'success' => [
-                'url' => $this->url,
+                'status' => $this->status,
                 'message' => $this->message,
                 'code' => $this->code,
-                'details' => $this->details,
+                'data' => $this->data,
             ]
         ];
     }

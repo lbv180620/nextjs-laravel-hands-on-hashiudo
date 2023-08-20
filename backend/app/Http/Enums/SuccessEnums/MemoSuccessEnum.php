@@ -32,7 +32,7 @@ enum MemoSuccessEnum: string implements BaseEnumInterface
         };
     }
 
-    public function details(?array $options): array
+    public function data(?array $options): array
     {
         return match ($this) {
             self::MEMO_POST_SUCCESS => $options ? [
