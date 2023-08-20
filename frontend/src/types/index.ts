@@ -60,43 +60,35 @@ export type MemoResourceType = {
   }[];
 };
 
-export interface BaseSuccessResponseIF {
-  success: {
-    status: number;
-    message: string;
-    code: string;
-    // data: { [key: string]: never };
-  };
-}
+// ----------------------------------------------------------
 
-export interface LoginResponseIF extends BaseSuccessResponseIF {
+export type ErrorResponseBodyType<T = never[]> = {
   success: {
     status: number;
+    url: string;
     message: string;
     code: string;
-    data: {
-      id: number;
-    };
+    details: T;
   };
-}
+};
 
-export interface LogoutResponseIF extends BaseSuccessResponseIF {
+export type SuccessResponseBodyType<T = never[]> = {
   success: {
     status: number;
     message: string;
     code: string;
+    data: T;
   };
-}
+};
 
-export interface LoginUserFetchResponseIF extends BaseSuccessResponseIF {
-  success: {
-    status: number;
-    message: string;
-    code: string;
-    data: {
-      id: number;
-      name: string;
-      email: string;
-    };
-  };
-}
+export type LoginSuccessResponseDataType = {
+  id: number;
+};
+
+export type LogoutSuccessResponseDataType = never[];
+
+export type LoginUserFetchSuccessResponseDataType = {
+  id: number;
+  name: string;
+  email: string;
+};

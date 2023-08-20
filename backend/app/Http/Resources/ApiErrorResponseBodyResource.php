@@ -9,16 +9,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 final class ApiErrorResponseBodyResource extends JsonResource
 {
     private int $status;
-    private string $url;
     private string $message;
     private string $code;
     private string $id;
     private array $details;
 
-    public function __construct(int $status, string $url, string $message, string $code, array $details = [], string $id = '')
+    public function __construct(int $status, string $message, string $code, array $details = [], string $id = '')
     {
         $this->status = $status;
-        $this->url = $url;
         $this->message = $message;
         $this->code = $code;
         $this->details = $details;
@@ -36,7 +34,6 @@ final class ApiErrorResponseBodyResource extends JsonResource
         return [
             'error' => [
                 'status' => $this->status,
-                'url' => $this->url,
                 'message' => $this->message,
                 'code' => $this->code,
                 'details' => $this->details,

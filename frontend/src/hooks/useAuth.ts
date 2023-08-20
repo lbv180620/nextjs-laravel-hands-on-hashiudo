@@ -2,7 +2,7 @@ import { useCallback } from "react";
 
 import { useLoginUserState } from "@/atoms";
 import axios from "@/libs/axios";
-import { LoginUserFetchResponseIF } from "@/types";
+import { SuccessResponseBodyType, LoginUserFetchSuccessResponseDataType } from "@/types";
 
 export const useAuth = () => {
   //* global state
@@ -14,7 +14,7 @@ export const useAuth = () => {
     }
 
     try {
-      const res = await axios.get<LoginUserFetchResponseIF>("api/me");
+      const res = await axios.get<SuccessResponseBodyType<LoginUserFetchSuccessResponseDataType>>("api/me");
 
       if (!res.data.success.data) {
         return false;

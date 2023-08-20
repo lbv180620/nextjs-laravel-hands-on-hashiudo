@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Enums\ErrorEnums\AuthErrorEnum;
-// use App\Http\Enums\ErrorEnums\TestErrorEnum;
 use App\Http\Enums\SuccessEnums\MemoSuccessEnum;
 use App\Http\Exceptions\AuthException;
-// use App\Http\Exceptions\TestException;
 use App\Http\Requests\MemoPostRequest;
 use App\Http\Resources\MemoResource;
 use App\Models\Memo;
@@ -30,8 +28,6 @@ final class MemoController extends Controller
 
         if (!$id) {
             throw new AuthException(AuthErrorEnum::UNAUTHORIZED);
-            // throw new TestException(TestErrorEnum::UNAUTHORIZED);
-            // throw new TestException(TestErrorEnum::INVALID_FORMAT_DATA);
             // abort(404);
             // abort(418);
             // abort(405);

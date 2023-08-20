@@ -16,7 +16,7 @@ final class TokenMismatchExceptionHandler
             // Log::error('[API Error]' . $request->method() . ': ' . $request->fullUrl());
 
             if ($e instanceof TokenMismatchException) {
-                return response()->httpError(status: $e->status, url: $request->fullUrl(), message: $e->getMessage());
+                return response()->httpError(status: $e->status, message: $e->getMessage());
             }
         }
 

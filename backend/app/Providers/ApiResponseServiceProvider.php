@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Http\Enums\BaseEnumInterface;
-use App\Http\Enums\ErrorEnums\TestErrorEnum;
 use App\Http\Enums\SuccessEnums\AuthSuccessEnum;
 use App\Http\Enums\SuccessEnums\MemoSuccessEnum;
 use App\Http\Resources\ApiErrorResponseBodyResource;
@@ -27,7 +26,6 @@ final class ApiResponseServiceProvider extends ServiceProvider
         //
         $this->app->bind(BaseEnumInterface::class, AuthSuccessEnum::class);
         $this->app->bind(BaseEnumInterface::class, MemoSuccessEnum::class);
-        $this->app->bind(BaseEnumInterface::class, TestErrorEnum::class);
         $this->app->bind(BaseEnumInterface::class, AuthenticationExceptionErrorEnum::class);
     }
 
@@ -39,7 +37,7 @@ final class ApiResponseServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-        Response::macro('httpError', function (int $status = HttpResponse::HTTP_BAD_REQUEST, string $url = '', string $message = '', $details = [], string $id = '') {
+        Response::macro('httpError', function (int $status = HttpResponse::HTTP_BAD_REQUEST, string $message = '', $details = [], string $id = '') {
             $code = HttpFoundationResponse::$statusTexts[$status];
             $message = $message ?: __($code);
             // Log::error($code);
@@ -47,7 +45,6 @@ final class ApiResponseServiceProvider extends ServiceProvider
             return response()->json(
                 new ApiErrorResponseBodyResource(
                     status: $status,
-                    url: $url,
                     message: __($message),
                     code: str_replace(' ', '_', $code),
                     details: $details,
@@ -57,11 +54,10 @@ final class ApiResponseServiceProvider extends ServiceProvider
             );
         });
 
-        Response::macro('error', function (BaseEnumInterface $enum, string $url = '', array $options = []) {
+        Response::macro('error', function (BaseEnumInterface $enum, array $options = []) {
             return response()->json(
                 new ApiErrorResponseBodyResource(
                     status: $enum->status(),
-                    url: $url,
                     message: $enum->message(),
                     code: $enum->code(),
                     details: $enum->details($options),

@@ -13,7 +13,7 @@ final class HttpExceptionHandler
     public function handle(Request $request, Throwable $e)
     {
         if ($e instanceof HttpException) {
-            return response()->httpError(status: $e->getStatusCode(), url: $request->fullUrl(), message: $e->getMessage());
+            return response()->httpError(status: $e->getStatusCode(), message: $e->getMessage());
         }
 
         return null;

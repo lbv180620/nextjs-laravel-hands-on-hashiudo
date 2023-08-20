@@ -49,8 +49,10 @@ enum AuthErrorEnum: string implements BaseEnumInterface
         return match ($this) {
             self::UNAUTHORIZED => [],
             self::INVALID_FORMAT_DATA => [
-                'field' => 'name',
-                'message' => 'The name field is required.',
+                [
+                    'field' => 'name',
+                    'message' => 'The name field is required.',
+                ],
             ],
             self::LOGIN_FAILED => [],
             self::ALREADY_AUTHENTICATED => [],

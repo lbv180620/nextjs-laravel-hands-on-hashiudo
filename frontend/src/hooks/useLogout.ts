@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useCallback } from "react";
 
 import axios from "@/libs/axios";
-import { LogoutResponseIF } from "@/types";
+import { SuccessResponseBodyType, LogoutSuccessResponseDataType } from "@/types";
 
 export const useLogout = () => {
   //* router
@@ -19,7 +19,7 @@ export const useLogout = () => {
         // ログアウト処理
         await axios
           .post("/logout")
-          .then(async (res: AxiosResponse<LogoutResponseIF>) => {
+          .then(async (res: AxiosResponse<SuccessResponseBodyType<LogoutSuccessResponseDataType>>) => {
             console.log(res.data);
             alert(res.data.success.message);
             await router.push("/");

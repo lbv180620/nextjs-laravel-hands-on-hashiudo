@@ -14,7 +14,7 @@ class AuthExceptionHandler
             // Log::error('[API Error]' . $request->method() . ': ' . $request->fullUrl());
 
             if ($e instanceof AuthException) {
-                return response()->error(enum: $e->getErrorEnum(), url: $request->fullUrl());
+                return response()->error(enum: $e->getErrorEnum());
             }
         }
 

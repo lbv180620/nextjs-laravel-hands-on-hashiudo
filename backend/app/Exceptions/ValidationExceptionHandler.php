@@ -29,7 +29,7 @@ final class ValidationExceptionHandler
                     }
                 }
 
-                return response()->httpError(status: $e->status, url: $request->fullUrl(), message: $e->getMessage(), details: $details);
+                return response()->httpError(status: $e->status, message: $e->getMessage(), details: $details);
             }
         }
 

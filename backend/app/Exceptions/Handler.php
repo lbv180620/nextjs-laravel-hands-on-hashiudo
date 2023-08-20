@@ -50,7 +50,6 @@ final class Handler extends ExceptionHandler
             ModelNotFoundExceptionHandler::class,
             MethodNotAllowedHttpExceptionHandler::class,
             NotFoundHttpExceptionHandler::class,
-            TestExceptionHandler::class,
             TokenMismatchExceptionHandler::class,
             ValidationExceptionHandler::class,
         ];
