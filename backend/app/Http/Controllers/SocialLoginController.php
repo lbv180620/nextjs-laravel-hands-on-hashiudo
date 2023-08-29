@@ -34,6 +34,14 @@ final class SocialLoginController extends Controller
 
         if ($user) {
             Auth::login($user, true);
+
+            // セッションに認証情報を格納
+            $request->session()->put('auth', [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ]);
+
             return redirect()->away(config('client.url') . '/memos', Response::HTTP_FOUND);
         }
 
@@ -44,6 +52,13 @@ final class SocialLoginController extends Controller
         ]);
 
         Auth::login($user, true);
+
+        // セッションに認証情報を格納
+        $request->session()->put('auth', [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+        ]);
 
         return redirect()->away(config('client.url') . '/memos', Response::HTTP_FOUND);
     }

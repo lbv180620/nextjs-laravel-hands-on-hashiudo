@@ -19,13 +19,6 @@ final class MeController extends Controller
     {
         $user = $request->user();
 
-        // return new JsonResponse([
-        //     'data' => [
-        //         'id' => $user->id,
-        //         'name' => $user->name,
-        //         'email' => $user->email,
-        //     ],
-        // ]);
         return response()->success(enum: DataFetchSuccessEnum::LOGIN_USER_FETCH_SUCCESS, options: [
             'id' => $user->id,
             'name' => $user->name,

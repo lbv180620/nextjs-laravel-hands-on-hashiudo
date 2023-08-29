@@ -38,6 +38,9 @@ const MemoPage: NextPage = () => {
       const me = await axios.get<SuccessResponseBodyType<LoginUserFetchSuccessResponseDataType>>("api/me");
       console.log(me.data);
 
+      const sessionData = await axios.get("api/session/auth");
+      console.log(sessionData.data);
+
       await axios
         .get("/api/memos")
         .then((res: AxiosResponse<SuccessResponseBodyType<MemoListFetchSuccessResponseDataType>>) => {
